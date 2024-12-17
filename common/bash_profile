@@ -1,0 +1,62 @@
+### Subversion ###
+if [ -d "/opt/subversion" ]
+then
+  export SVN_HOME="/opt/subversion"
+  echo $PATH | grep --quiet "$SVN_HOME/bin"
+  if [ ! $? == 0 ] ; then PATH=$SVN_HOME/bin:$PATH ; fi
+fi
+
+### asdf ###
+if [ -d "${HOME}/.asdf" ]; then
+  source ${HOME}/.asdf/asdf.sh
+
+  ### Python ###
+  if [ -d "${HOME}/.asdf/installs/python" ]; then
+    export PYTHONPATH="..:${PYTHONPATH}"
+  fi
+fi
+
+### Java ###
+export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+# export JAVA_HOME-$(/usr/libexec/java_home -v "22")
+export JAVA_HOME=$(/usr/libexec/java_home -v "23")
+
+### Apache Ant ###
+if [ -d "/usr/local/ant" ]
+then
+  export ANT_HOME="/usr/local/ant"
+  echo $PATH | grep --quiet "$ANT_HOME/bin"
+  if [ ! $? == 0 ] ; then PATH=$PATH:$ANT_HOME/bin ; fi
+  export ANT_OPTS="-Dfile.encoding=UTF-8 -Xmx512m -Xss256k"
+fi
+
+### Clang Static Analyzer ###
+echo $PATH | grep --quiet "/usr/local/checker/bin"
+if [ ! $? == 0 ] ; then PATH=$PATH:/usr/local/checker/bin ; fi
+
+### default interactive shell is now zsh... messages are suppressed ###
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+### bashrc Read ###
+source ~/.bashrc
+
+### Self-Command Read ###
+export PATH="$PATH:${HOME}/bin"
+
+
+##
+# Settings created by Aoki Atsushi below
+##
+
+
+### terminal color settings ###
+export CLICOLOR=1
+export LSCOLORS=exfxcxdxbxegedabagacad
+export TERM=xterm-color
+
+### prompt string settings ###
+# Full prompt with username, hostname, and current directory
+# export PS1='\033[01;31m\u\033[00m@\033[01;32m\h\033[00m:\033[01;34m\w\033[00m\$ '
+# Simplified prompt with current directory only
+# export PS1='\033[01;34m\W\033[00m\$ '
+export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
