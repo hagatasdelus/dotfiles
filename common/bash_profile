@@ -44,11 +44,6 @@ source ~/.bashrc
 export PATH="$PATH:${HOME}/bin"
 
 
-##
-# Settings created by Aoki Atsushi below
-##
-
-
 ### terminal color settings ###
 export CLICOLOR=1
 export LSCOLORS=exfxcxdxbxegedabagacad
@@ -59,4 +54,6 @@ export TERM=xterm-color
 # export PS1='\033[01;31m\u\033[00m@\033[01;32m\h\033[00m:\033[01;34m\w\033[00m\$ '
 # Simplified prompt with current directory only
 # export PS1='\033[01;34m\W\033[00m\$ '
+# Full prompt with full path of current directory
+# export PS1='\033[01;34m\w\033[00m\$ '
 export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '

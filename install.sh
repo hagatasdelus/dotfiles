@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # dotfilesのディレクトリ
-DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/dotfiles"
+DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/common"
 BACKUP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/backup"
 
 # バックアップ関数
