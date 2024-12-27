@@ -13,3 +13,5 @@
 !/README.md
 !/LICENSE
 !.gitignore
+!/scripts/close_sns_apps_in_macos.sh
+
