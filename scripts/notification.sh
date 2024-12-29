@@ -6,15 +6,15 @@ set -o pipefail
 FAILED_TITLE='Failed'
 SUCCESS_TITLE='Success'
 
-if [ $# -eq 0 ]; then
-    osascript -e "display notification \"Please specify the command\" with title \"${FAILED_TITLE}\" sound name \"Sosumi\""
-    exit 1
-fi
-
 OLD_COMMAND_LINE="$@"
 NEW_COMMAND_LINE=''
 NUMBER_OF_ARGUMENTS=$#
-ARGUMENT_COUNTER=1
+ARGUMENT_INDEX=1
+
+if [ ${NUMBER_OF_ARGUMENTS} -eq 0 ]; then
+    osascript -e "display notification \"Please specify the command\" with title \"${FAILED_TITLE}\" sound name \"Sosumi\""
+    exit 1
+fi
 
 for EACH_ARGUMENT in ${OLD_COMMAND_LINE}
 do
@@ -24,10 +24,10 @@ do
         NEW_COMMAND_LINE+="${EACH_ARGUMENT}"
     fi
     
-    if [ ${ARGUMENT_COUNTER} -lt ${NUMBER_OF_ARGUMENTS} ]; then
+    if [ ${ARGUMENT_INDEX} -lt ${NUMBER_OF_ARGUMENTS} ]; then
         NEW_COMMAND_LINE+=" "
     fi
-    ARGUMENT_COUNTER=$((ARGUMENT_COUNTER + 1))
+    ARGUMENT_INDEX=$((ARGUMENT_INDEX + 1))
 done
 
 echo "+ ${NEW_COMMAND_LINE}"
