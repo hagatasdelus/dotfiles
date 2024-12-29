@@ -4,6 +4,7 @@ alias b2a="sh ~/bin/b2a.sh"
 alias nvim="~/nvim-macos-x86_64/bin/nvim"
 alias nv="~/nvim-macos-x86_64/bin/nvim"
 alias closesns="sh ~/bin/close_sns_apps_in_macos.sh"
+alias ntf="sh ~/bin/notification.sh"
 
 
 
