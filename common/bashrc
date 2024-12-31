@@ -22,6 +22,11 @@ alias ll='ls -l'
 # alias java_home-v='sh ~/bin/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
+
+if [ -f ~/.bashrc.local ]; then
+    source ~/.bashrc.local
+fi
+
 ##
 # End of .bashrc
 ##
