@@ -1,25 +1,20 @@
-alias nl="nl -ba -s ': '"
-alias tree="sh ~/bin/tree.sh"
-alias b2a="sh ~/bin/b2a.sh"
-alias nvim="~/nvim-macos-x86_64/bin/nvim"
-alias nv="~/nvim-macos-x86_64/bin/nvim"
-alias closesns="sh ~/bin/close_sns_apps_in_macos.sh"
-alias ntf="sh ~/bin/notification.sh"
-
-
-
-
 ### alias ###
+alias nl='nl -ba -s ": "'
+alias tree='sh ~/bin/tree.sh'
+alias b2a='sh ~/bin/b2a.sh'
+alias nvim='~/nvim-macos-x86_64/bin/nvim'
+alias vi='~/nvim-macos-x86_64/bin/nvim'
+alias nv='~/nvim-macos-x86_64/bin/nvim'
+alias closesns='sh ~/bin/close_sns_apps_in_macos.sh'
+alias ntf='sh ~/bin/notification.sh'
 alias edit='open -a "Visual Studio Code" '
+alias la='ls -A'
 alias h='history'
 alias h2='history 20'
 alias la='ls -laO'
 alias ll='ls -l'
-# alias nl='nl -b a -s ": " '
-# alias tree='sh ~/bin/tree.sh'
 # alias auth='sh ~/bin/auth.sh'
-# alias b2a='sh ~/bin/b2a.sh'
-# alias java_home-v='sh ~/bin/java_home-v.sh'
+alias java_home-v='sh ~/bin/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
 
