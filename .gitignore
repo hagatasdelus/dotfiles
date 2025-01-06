@@ -12,6 +12,7 @@
 !.gitignore
 !/scripts/close_sns_apps_in_macos.sh
 !/common/chrome-theme/
+!/common/config/nvim/
 
 /*
 /.**
