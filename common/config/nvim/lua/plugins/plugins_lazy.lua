@@ -12,6 +12,12 @@ return {
         priority = 1000,
     },
     {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000, 
+        config = true,
+        opts = {},
+    },
+    {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
         dependencies = {

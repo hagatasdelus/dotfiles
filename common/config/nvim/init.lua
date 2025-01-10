@@ -15,3 +15,4 @@ vim.o.clipboard = 'unnamed'
 vim.o.whichwrap = 'b,s,h,l,[,],<,>,~'
 vim.o.hlsearch = true
 
+vim.opt.termguicolors = true
