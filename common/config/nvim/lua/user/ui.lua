@@ -1,3 +1,3 @@
 -- colorscheme
 vim.cmd.colorscheme "catppuccin-frappe"
--- vim.cmd.colorscheme "tokyonight-storm"
+-- vim.cmd.colorscheme "tokyonight-night"
