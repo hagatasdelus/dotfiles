@@ -17,6 +17,8 @@ alias ll='ls -l'
 alias java_home-v='sh ~/bin/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
+alias git-commit-setup='~/.config/git/scripts/setup-commit-template.sh'
+
 
 if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
