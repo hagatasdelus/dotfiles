@@ -1,0 +1,45 @@
+:: () (#Issue)
+# Vim Editor から抜けたい場合は、q! せずに上記の「:: ()」などを全て消去してから :wq で抜けてください
+# ==== Commit Messages(Template) ====
+# :emoji: #Issue番号 変更内容
+# 例) :+1: #438 コメント追加
+#       👍 #438 コメント追加
+# ==== Prefix ====
+# fix: バグ修正
+# hotfix: クリティカルなバグ修正
+# add: 新規機能・新規ファイル追加
+# feat: feature
+# update: バグではない機能修正
+# change: 仕様変更による機能修正
+# docs: ドキュメントのみ修正
+# disable: 無効化
+# remove(delete): ファイル削除、コードの一部を取り除く
+# rename: ファイル名の変更
+# upgrade: バージョンアップ
+# revert: 修正取り消し
+# style: 空白、セミコロン、行、コーディングフォーマットなどの修正
+# refactor(clean,improve): リファクタリング
+# test: テスト追加や間違っていたテストの修正
+# chore: ビルドツールやライブラリで自動生成されたものをコミットするとき(その他)
+
+# ==== Emojis ====
+# 🎉  :tada: 初めてのコミット
+# ✏️  :pencil2: ドキュメントを書く(add)
+# 🐛  :bug: バグ修正(fix)
+# 👍  :+1: 機能改善(update)
+# ✨  :sparkles: 部分的な機能追加(add,change)
+# 🎨  :art: デザイン変更のみ(style,upgrade)
+# 🚨  :rotating_light: テスト(test)
+# 💩  :hankey: 非推奨追加（Deprecation）
+# 💢  :anger: コンフリクト
+# 🚧  :construction: WIP
+# 📝  :memo: 文言修正
+# ♻️  :recycle: リファクタリング(refactor,clean,improve)
+# 🔥  :fire: 不要な機能・使われなくなった機能の削除(remove,delete)
+# 💚  :green_heart: テストやCIの修正・改善(test,update,change)
+# 👕  :shirt: Lintエラーの修正やコードスタイルの修正(update,change)
+# 🚀  :rocket: パフォーマンス改善
+# 🆙  :up: 依存パッケージなどのアップデート(chore)
+# 👮  :cop: セキュリティ関連の改善(hotfix)
+# ⚙   :gear: config変更
+# 📚  :books: ドキュメント(docs)

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+## https://qiita.com/narumi_888/items/e425f29b84da6b72ad62
+GNU_SED=true
+sed --version 1>/dev/null 2>/dev/null || GNU_SED=false
+echo "GNU sed?: ${GNU_SED}"
+
+## ステージされたファイル名と Branch 名から Issue 番号を取得
+COMMIT_MSG_FILE=$1
+ISSUE_NUMBER=$(git rev-parse --abbrev-ref HEAD | grep -Eo "^[a-zA-Z0-9_]+/.*[/_-]#?[0-9]+" | grep -Eo "[0-9]+")
+STAGED_FILES=$(git diff --cached --name-only | tr '\n' ',' | sed 's/,$//' | sed 's/[\/&]/\\&/g')
+
+if [ -n "${ISSUE_NUMBER}" ]; then
+    if [ "${GNU_SED}" == "true" ]; then
+        sed -i "1 s|() (#Issue)|(${STAGED_FILES}) (#${ISSUE_NUMBER}) |" ${COMMIT_MSG_FILE}
+    else
+        sed -i "" "1 s|() (#Issue)|(${STAGED_FILES}) (#${ISSUE_NUMBER}) |" ${COMMIT_MSG_FILE}
+    fi
+    exit 0
+fi
+
+read -p "Issue 番号がブランチ名にないため置換できません。そのまま続行しますか? (y/N): " YM < /dev/tty
+case "${YM}" in
+    [yY]*)
+        if [ "${GNU_SED}" == "true" ]; then
+            sed -i "1 s|() (#Issue)|(${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
+        else
+            sed -i "" "1 s|() (#Issue)|(${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
+        fi;;
+    *) echo "abort." ; exit 1 ;;
+esac
+
+exit 0
