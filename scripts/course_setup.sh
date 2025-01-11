@@ -1,4 +1,5 @@
 #/bin/bash -xe
+# -*- coding: utf-8 -*-
 
 if [ $# -lt 1 ]; then
     echo "Error: Specify one or more course names" >&2
