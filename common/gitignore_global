@@ -2,5 +2,6 @@
 .vscode
 .venv
 .bashrc.local
+__gi*
 
 
