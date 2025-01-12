@@ -1,15 +1,55 @@
 syntax on
 
-set number
-set autoindent	
+language en_US.UTF-8
+" language ja_JP.UTF-8
+
+set fileencoding=utf-8
+set noswapfile
+" set helplang=ja
+set hidden
+
+" set cursorline
+" set cursorcolumn
+
+set clipboard+=unnamedplus
+
+set wildmenu
+set cmdheight=1
+set laststatus=2
+set showcmd
 set confirm
-set tabstop=4
+
+set hlsearch
+set incsearch
+set matchtime=1
+
 set shiftwidth=4
+set tabstop=4
 set expandtab
+set autoindent
+set smartindent
+
+set number
+set relativenumber
+set wrap
+set showtabline=2
+set visualbell
+set showmatch
+
+set winblend=0
+set pumblend=0
+set showtabline=2
+set signcolumn=yes
 set splitright
-set clipboard=unnamed
-set whichwrap+=h,l,b,s,<,>,[,]
-set hls
+
+set whichwrap=b,s,h,l,[,],<,>,~
+
+set cursorline
+
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_virtual_text_prefix = ''
+let g:diagnostic_enable_underline = 1
+
 
 " Color
 " hi Search cterm=NONE ctermfg=black ctermbg=191
