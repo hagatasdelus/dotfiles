@@ -52,6 +52,17 @@ set whichwrap=b,s,h,l,[,],<,>,~
 
 " Move betwenn windows
 nnoremap <Return><Return> <c-w><c-w>
+inoremap jj <ESC>
+
+nnoremap ss ^
+xnoremap ss ^
+onoremap ss ^
+
+nnoremap ;; $
+xnoremap ;; $
+onoremap ;; $
+
+
 
 cnoreabbrev tn tabnew
 cnoreabbrev vs vsplit
