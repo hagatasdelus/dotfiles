@@ -43,6 +43,9 @@ source ~/.bashrc
 ### Self-Command Read ###
 export PATH="$PATH:${HOME}/bin"
 
+### Homebrew ###
+export PATH="/usr/local/bin:$PATH"
+
 
 ### terminal color settings ###
 export CLICOLOR=1
