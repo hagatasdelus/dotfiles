@@ -1,4 +1,4 @@
-:: () (#Issue)
+
 # Vim Editor から抜けたい場合は、q! せずに上記の「:: ()」などを全て消去してから :wq で抜けてください
 # ==== Commit Messages(Template) ====
 # :emoji: #Issue番号 変更内容
