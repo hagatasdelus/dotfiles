@@ -4,6 +4,9 @@
 ;; Use C-h C-h to get an overview of all help commands.  All you
 ;; need to know about Emacs (what commands exist, what functions do,
 ;; what variables specify), the help system can provide.
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
 
 ;;; Slime for common lisp
 (load (expand-file-name "~/.roswell/helper.el"))  ; slime 起動スクリプト
