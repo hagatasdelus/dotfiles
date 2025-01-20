@@ -34,7 +34,7 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 ;; Automatically pair parentheses
-(electric-pair-mode t)
+; (electric-pair-mode t)
 
 ;;; LSP Support
 (unless (package-installed-p 'eglot)
