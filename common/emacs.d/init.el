@@ -4,10 +4,19 @@
 ;; Use C-h C-h to get an overview of all help commands.  All you
 ;; need to know about Emacs (what commands exist, what functions do,
 ;; what variables specify), the help system can provide.
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
+;(require 'package)
+;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;(package-initialize)
 
+;; set SBCL as the default common lisp processer
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
+;; add ~/.emacs.d/slime to load-path
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
+;; load SLIME
+(require 'slime)
+(slime-setup '(slime-repl slime-fancy slime-banner))
+
+(add-to-list 'auto-mode-alist '("\\.lisp\\'" . lisp-mode))
 ;;; Slime for common lisp
 ; (load (expand-file-name "~/.roswell/helper.el"))  ; slime 起動スクリプト
 ;; (setq slime-lisp-implementations
