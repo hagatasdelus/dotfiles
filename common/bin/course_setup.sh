@@ -1,12 +1,15 @@
 #/bin/bash -xe
 # -*- coding: utf-8 -*-
 
-if [ $# -lt 1 ]; then
+COMMAND_LINE="$@"
+NUMBER_OF_ARGUMENTS=$#
+
+if [ ${NUMBER_OF_ARGUMENTS} -lt 1 ]; then
     echo "Error: Specify one or more course names" >&2
     exit 1
 fi
 
-for COURSE in "$@"
+for COURSE in ${COMMAND_LINE}
 do
     mkdir -p "${COURSE}/授業資料" "${COURSE}/レポート" "${COURSE}/テスト" "${COURSE}/過去問"
 

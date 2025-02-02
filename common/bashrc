@@ -11,7 +11,7 @@ alias h='history'
 alias h2='history 20'
 alias la='ls -laO'
 alias ll='ls -l'
-# alias auth='sh ~/bin/auth.sh'
+alias cl='printf "\33c\e[3J"'
 alias java_home-v='sh ~/bin/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
