@@ -2,6 +2,8 @@
 vim.cmd('cnoreabbrev tn tabnew')
 vim.cmd('cnoreabbrev vs vsplit')
 
+vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.format()]])
+
 -- FileType specific settings
 local set_file_type_settings = function(ft, settings)
     vim.api.nvim_create_autocmd('FileType', {

@@ -1,16 +1,16 @@
 return {
     -- colorscheme
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        lazy = false,
-        priority = 1000,
-    },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-    },
+    -- {
+    --     "catppuccin/nvim",
+    --     name = "catppuccin",
+    --     lazy = false,
+    --     priority = 1000,
+    -- },
+    -- {
+    --     "folke/tokyonight.nvim",
+    --     lazy = false,
+    --     priority = 1000,
+    -- },
     {
         "ellisonleao/gruvbox.nvim",
         priority = 1000, 
@@ -71,6 +71,66 @@ return {
         opts = {},
     },
     {
-
+        "folke/noice.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "rcarriga/nvim-notify",
+        },
+        opts = {
+            lsp = {
+                overrice = {
+                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                    ["vim.lsp.util.stylize_markdown"] = true,
+                    ["cmp.entry.get_documentation"] = true,
+                },
+            },
+        },
+        presets = {
+            bottom_search = true,
+            command_palette = true,
+            long_message_to_split = true,
+            inc_rename = false,
+            lsp_doc_border = false,
+        },
     },
+    -- Editorial Enhancement
+    {
+        "RRethy/nvim-treesitter-textsubjects",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require('nvim-treesitter.configs').setup({
+                textsubjects = {
+                    enable = true,
+                    prev_selection = ',', -- (Optional) keymap to select the previous selection
+                    keymaps = {
+                        ['.'] = 'textsubjects-smart',
+                        [';'] = 'textsubjects-container-outer',
+                        ['i;'] = { 'textsubjects-container-inner', desc = "Select inside containers (classes, functions, etc,)" },
+                    },
+                },
+            })
+        end
+    },
+    {
+        "Wansmer/treesj",
+        keys = { '<space>m', '<space>j', '<space>s' },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter"
+        },
+        config = function()
+            require('treesj').setup({
+                -- config
+            })
+        end
+    },
+    {
+        "lewis6991/gitsigns.nvim",
+    },
+    {
+        "sindrets/diffview.nvim",
+    },
+    -- lsp
 }
