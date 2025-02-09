@@ -1,8 +1,8 @@
 ### alias ###
 alias nl='nl -ba -s ": "'
 alias tree='sh ~/bin/tree.sh'
-alias nv='~/nvim-macos-x86_64/bin/nvim'
-alias nvim='~/nvim-macos-x86_64/bin/nvim'
+alias nv='~/.local/bin/nvim-macos-x86_64/bin/nvim'
+alias nvim='~/.local/bin/nvim-macos-x86_64/bin/nvim'
 alias closesns='sh ~/bin/close_sns_apps_in_macos.sh'
 alias ntf='sh ~/bin/notification.sh'
 alias edit='open -a "Visual Studio Code" '
