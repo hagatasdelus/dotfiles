@@ -53,6 +53,8 @@ map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
 map("n", "<leader>hd", "<Cmd>DiffviewOpen HEAD~1<CR>", opts)
 map("n", "<leader>hf", "<Cmd>DiffviewFileHistory %<CR>", opts)
 
+map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
+
 -- map('n', 'un', ':<C-u>Unite buffer<CR>', opt )
 -- map('n', 'fgr', ':<cmd>Telescope live_grep<CR>', opts)
 -- map('n', 'term', ':ToggleTerm', opts)

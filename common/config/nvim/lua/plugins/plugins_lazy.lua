@@ -13,7 +13,7 @@ return {
     -- },
     {
         "ellisonleao/gruvbox.nvim",
-        priority = 1000, 
+        priority = 1000,
         config = true,
         opts = {},
     },
@@ -46,7 +46,9 @@ return {
             "lewis6991/gitsigns.nvim",
             "nvim-tree/nvim-web-devicons",
         },
-        init = function() vim.g.barbar_auto_setup = false end,
+        init = function()
+            vim.g.barbar_auto_setup = false
+        end,
         opts = {
             animation = true,
             tabpages = true,
@@ -101,30 +103,33 @@ return {
             "nvim-treesitter/nvim-treesitter",
         },
         config = function()
-            require('nvim-treesitter.configs').setup({
+            require("nvim-treesitter.configs").setup({
                 textsubjects = {
                     enable = true,
-                    prev_selection = ',', -- (Optional) keymap to select the previous selection
+                    prev_selection = ",", -- (Optional) keymap to select the previous selection
                     keymaps = {
-                        ['.'] = 'textsubjects-smart',
-                        [';'] = 'textsubjects-container-outer',
-                        ['i;'] = { 'textsubjects-container-inner', desc = "Select inside containers (classes, functions, etc,)" },
+                        ["."] = "textsubjects-smart",
+                        [";"] = "textsubjects-container-outer",
+                        ["i;"] = {
+                            "textsubjects-container-inner",
+                            desc = "Select inside containers (classes, functions, etc,)",
+                        },
                     },
                 },
             })
-        end
+        end,
     },
     {
         "Wansmer/treesj",
-        keys = { '<space>m', '<space>j', '<space>s' },
+        keys = { "<space>m", "<space>j", "<space>s" },
         dependencies = {
-            "nvim-treesitter/nvim-treesitter"
+            "nvim-treesitter/nvim-treesitter",
         },
         config = function()
-            require('treesj').setup({
+            require("treesj").setup({
                 -- config
             })
-        end
+        end,
     },
     {
         "lewis6991/gitsigns.nvim",
@@ -132,5 +137,7 @@ return {
     {
         "sindrets/diffview.nvim",
     },
-    -- lsp
+    {
+        "kdheepak/lazygit.nvim",
+    },
 }
