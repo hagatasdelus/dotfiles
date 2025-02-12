@@ -1,8 +1,6 @@
 ### alias ###
 alias nl='nl -ba -s ": "'
 alias tree='sh ~/bin/tree.sh'
-alias nv='~/.local/bin/nvim-macos-x86_64/bin/nvim'
-alias nvim='~/.local/bin/nvim-macos-x86_64/bin/nvim'
 alias closesns='sh ~/bin/close_sns_apps_in_macos.sh'
 alias ntf='sh ~/bin/notification.sh'
 alias edit='open -a "Visual Studio Code" '
@@ -17,6 +15,9 @@ alias path='echo $PATH | tr ":" "\n"'
 
 alias git-commit-setup='~/.config/git/scripts/setup-commit-template.sh'
 
+source "/Users/horinakayoshiki/.deno/env"
+
+eval "$(/Users/horinakayoshiki/.local/bin/mise activate bash)"
 
 if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
