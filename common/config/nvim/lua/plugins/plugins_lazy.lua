@@ -41,6 +41,58 @@ return {
         cmd = "Neotree",
     },
     {
+        "echasnovski/mini.indentscope",
+        config = function()
+            require("mini.indentscope").setup({
+                symbol = "▏",
+            })
+        end,
+        event = "BufRead",
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        event = {
+            "BufRead",
+            "BufNewFile",
+            "InsertEnter",
+        },
+        build = ":TSUpdate",
+        config = function()
+            local configs = require("nvim-treesitter.configs")
+            configs.setup({
+                ensure_installed = {
+                    "awk",
+                    "bash",
+                    "c",
+                    "cpp",
+                    "csv",
+                    "diff",
+                    "html",
+                    "htmldjango",
+                    "java",
+                    "javascript",
+                    "json",
+                    "lua",
+                    "markdown",
+                    "python",
+                    "rust",
+                    "sql",
+                    "ssh_config",
+                    "typescript",
+                    "toml",
+                    "vim",
+                    "xml",
+                    "regex",
+                    "vimdoc",
+                },
+                sync_install = false,
+                auto_install = true,
+                highlight = { enable = true },
+                indent = { enable = true },
+            })
+        end,
+    },
+    {
         "romgrk/barbar.nvim",
         dependencies = {
             "lewis6991/gitsigns.nvim",
