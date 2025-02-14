@@ -19,15 +19,19 @@ if [ -n "${ISSUE_NUMBER}" ]; then
     exit 0
 fi
 
-read -p "Issue 番号がブランチ名にないため置換できません。そのまま続行しますか? (y/N): " YM < /dev/tty
-case "${YM}" in
-    [yY]*)
-        if [ "${GNU_SED}" == "true" ]; then
-            sed -i "1 s|:: () (#Issue) |:: (${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
-        else
-            sed -i "" "1 s|:: () (#Issue) |:: (${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
-        fi;;
-    *) echo "abort." ; exit 1 ;;
+read -p "Issue 番号がブランチ名にないため置換できません。そのまま続行しますか? (y/N): " ANS </dev/tty
+case "${ANS}" in
+[yY]*)
+    if [ "${GNU_SED}" == "true" ]; then
+        sed -i "1 s|:: () (#Issue) |:: (${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
+    else
+        sed -i "" "1 s|:: () (#Issue) |:: (${STAGED_FILES}) |" ${COMMIT_MSG_FILE}
+    fi
+    ;;
+*)
+    echo "Abort."
+    exit 1
+    ;;
 esac
 
 exit 0
