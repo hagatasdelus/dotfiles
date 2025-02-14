@@ -1,4 +1,4 @@
 {
-  "path": "cz-emoji-japanese",
-  "skipQuestions": ["scope"]
+    "path": "cz-emoji-japanese",
+    "skipQuestions": ["scope"]
 }
