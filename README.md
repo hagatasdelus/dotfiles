@@ -1,2 +1,12 @@
+<div align="center">
+
+<img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/1f331.svg" alt="eyecatch" height="100" >
+
 # dotfiles
-dotfiles for hagatasdelus
+
+This is a repository of dotfiles for hagatasdelus.
+
+<br>
+<br>
+
+</div>
