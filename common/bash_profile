@@ -29,6 +29,11 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 source ~/.bashrc
 
 ### Self-Command Read ###
+export ARCH=$(uname -m)
+export CUSTOM_SCRIPTS_PATH="${HOME}/scripts"
+export LOCALBIN="${HOME}/.local/bin"
+export SCRIPTS_PATH="${HOME}/.scripts"
+export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 export PATH="$PATH:${HOME}/bin"
 
 ### Homebrew ###
@@ -36,6 +41,7 @@ export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 
 PATH=${HOMEBREW_X86_64_BIN}:${HOMEBREW_ARM_BIN}:${PATH}
+PATH=${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
 ### Deno ###
 export DENO_INSTALL="${HOME}/.deno"
