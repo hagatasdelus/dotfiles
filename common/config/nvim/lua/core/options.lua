@@ -10,7 +10,7 @@ vim.opt.hidden = true          -- バッファを切り替えるときに
 --ファイルを保存しなくてもOKに
 
 -- カーソルと表示
--- vim.opt.cursorline = true -- カーソルがある行を強調
+vim.opt.cursorline = true -- カーソルがある行を強調
 -- vim.opt.cursorcolumn = true -- カーソルがある列を強調
 
 -- クリップボード共有
@@ -58,13 +58,10 @@ vim.opt.splitright = true  -- splitは右に表示
 vim.cmd("highlight LineNr guifg=#8a70ac")
 
 -- カーソルの形状
-vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
+-- vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 
 -- カーソル移動
 vim.opt.whichwrap = "b,s,h,l,[,],<,>,~"
-
--- 行の強調
-vim.opt.cursorline = true -- カーソルがある行を強調
 
 -- signcolumnの優先順位（エラー/警告/ヒントの表示順）
 vim.diagnostic.config({ severity_sort = true })
