@@ -1,6 +1,6 @@
 ### alias ###
 alias nl='nl -ba -s ": "'
-alias tree='sh ~/.scripts/tree-symbolic.sh'
+alias tree='sh ~/.scripts/bin/tree'
 alias closesns='sh ~/.scripts/macos_close_sns_apps.sh'
 alias notify='sh ~/.scripts/notification.sh'
 alias edit='open -a "Visual Studio Code" '
