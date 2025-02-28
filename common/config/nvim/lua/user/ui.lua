@@ -1,5 +1,5 @@
--- colorscheme
+vim.o.background = "dark"
 -- vim.cmd.colorscheme "catppuccin-frappe"
 -- vim.cmd.colorscheme "tokyonight-night"
-vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme gruvbox]])
+-- vim.cmd([[colorscheme gruvbox]])
+vim.cmd("colorscheme kanagawa")
