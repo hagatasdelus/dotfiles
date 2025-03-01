@@ -24,8 +24,8 @@ return {
         "rebelot/kanagawa.nvim",
         lazy = false,
         priority = 1000,
-        config = function()
-            require("kanagawa").setup({
+        opts = function()
+            return {
                 theme = "wave",
                 background = {
                     dark = "dragon",
@@ -67,7 +67,11 @@ return {
                         FloatTitle = { bg = "none" },
                     }
                 end,
-            })
+            }
+        end,
+        config = function(_, opts)
+            local kanagawa = require("kanagawa")
+            kanagawa.setup(opts)
         end,
     },
 }
