@@ -1,3 +1,7 @@
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+export XDG_CONFIG_HOME=${HOME}/.config
+
 ### Subversion ###
 if [ -d "/opt/subversion" ]; then
     export SVN_HOME="/opt/subversion"
@@ -22,40 +26,26 @@ fi
 echo $PATH | grep --quiet "/usr/local/checker/bin"
 if [ ! $? == 0 ]; then PATH=$PATH:/usr/local/checker/bin; fi
 
-### default interactive shell is now zsh... messages are suppressed ###
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-### bashrc Read ###
-source ~/.bashrc
-
 ### Self-Command Read ###
 export ARCH=$(uname -m)
 export CUSTOM_SCRIPTS_PATH="${HOME}/scripts"
 export LOCALBIN="${HOME}/.local/bin"
 export SCRIPTS_PATH="${HOME}/.scripts"
 export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
-# export PATH="$PATH:${HOME}/bin"
 
 ### Homebrew ###
 export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 
-# PATH=${HOMEBREW_X86_64_BIN}:${HOMEBREW_ARM_BIN}
 PATH=${HOMEBREW_X86_64_BIN}:${HOMEBREW_ARM_BIN}:${LOCALBIN}:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:${PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
 ### Deno ###
 export DENO_INSTALL="${HOME}/.deno"
 export PATH="${DENO_INSTALL}/bin:$PATH"
-source "/Users/horinakayoshiki/.deno/env"
-
-### Pnpm ###
-# export PNPM_HOME="/Users/horinakayoshiki/Library/pnpm"
+. "${HOME}/.deno/env"
 
 ### Mise ###
 export PATH="${HOME}/.local/share/mise/shims:$PATH"
-
-### LazyGit ###
-export XDG_CONFIG_HOME=${HOME}/.config
 
 ### terminal color settings ###
 export CLICOLOR=1
@@ -71,3 +61,7 @@ export TERM=screen-256color
 # Full prompt with full path of current directory
 # export PS1='\033[01;34m\w\033[00m\$ '
 export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+
+### bashrc Read ###
+. ~/.bashrc
+
