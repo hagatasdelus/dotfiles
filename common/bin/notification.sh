@@ -7,7 +7,6 @@ FAILED_TITLE='Failed'
 SUCCESS_TITLE='Success'
 
 NUMBER_OF_ARGUMENTS=$#
-ARGUMENT_INDEX=1
 
 if [ ${NUMBER_OF_ARGUMENTS} -eq 0 ]; then
     osascript -e 'display notification "Please specify the command" with title "${FAILED_TITLE}" sound name "Sosumi"'
