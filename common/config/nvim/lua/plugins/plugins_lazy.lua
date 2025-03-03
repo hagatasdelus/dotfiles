@@ -1,22 +1,4 @@
 return {
-    -- colorscheme
-    -- {
-    --     "catppuccin/nvim",
-    --     name = "catppuccin",
-    --     lazy = false,
-    --     priority = 1000,
-    -- },
-    -- {
-    --     "folke/tokyonight.nvim",
-    --     lazy = false,
-    --     priority = 1000,
-    -- },
-    -- {
-    --     "ellisonleao/gruvbox.nvim",
-    --     priority = 1000,
-    --     config = true,
-    --     opts = {},
-    -- },
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",

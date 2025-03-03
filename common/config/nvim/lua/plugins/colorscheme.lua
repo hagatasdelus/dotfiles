@@ -1,25 +1,25 @@
 return {
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        lazy = false,
-        priority = 1000,
-    },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-    },
-    {
-        "ellisonleao/gruvbox.nvim",
-        priority = 1000,
-        lazy = false,
-        config = function()
-            require("gruvbox").setup({
-                contrast = "soft",
-            })
-        end,
-    },
+    -- {
+    --     "catppuccin/nvim",
+    --     name = "catppuccin",
+    --     lazy = false,
+    --     priority = 1000,
+    -- },
+    -- {
+    --     "folke/tokyonight.nvim",
+    --     lazy = false,
+    --     priority = 1000,
+    -- },
+    -- {
+    --     "ellisonleao/gruvbox.nvim",
+    --     priority = 1000,
+    --     lazy = false,
+    --     config = function()
+    --         require("gruvbox").setup({
+    --             contrast = "soft",
+    --         })
+    --     end,
+    -- },
     {
         "rebelot/kanagawa.nvim",
         lazy = false,
