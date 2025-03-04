@@ -3,10 +3,10 @@ vim.cmd("language en_US.UTF-8") -- 表示言語を英語にする
 -- vim.cmd("language ja_JP.UTF-8") -- 表示言語を日本語にする
 
 -- ファイル
-vim.opt.fileencoding = "utf-8" -- エンコーディングをUTF-8に設定
-vim.opt.swapfile = false       -- スワップファイルを作成しない
+-- vim.opt.fileencoding = "utf-8" -- エンコーディングをUTF-8に設定
+vim.opt.swapfile = false -- スワップファイルを作成しない
 -- vim.opt.helplang = "ja" -- ヘルプファイルの言語は日本語
-vim.opt.hidden = true          -- バッファを切り替えるときに
+vim.opt.hidden = true    -- バッファを切り替えるときに
 --ファイルを保存しなくてもOKに
 
 -- カーソルと表示
