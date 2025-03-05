@@ -56,8 +56,8 @@ map("n", "<leader>hf", "<Cmd>DiffviewFileHistory %<CR>", opts)
 map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
 
 -- Close Buffers
-map("n", "<leader>dt", "<Cmd>BDelete this<CR>", extend_opts("Close Current Buffer"))
-map("n", "<leader>wa", "<Cmd>BWipeout! all<CR>", extend_opts("Close All Buffer"))
+map("n", "<leader>tc", "<Cmd>BDelete this<CR>", extend_opts("Close Current Buffer"))
+map("n", "<leader>ac", "<Cmd>BWipeout! all<CR>", extend_opts("Close All Buffer"))
 
 -- Gitsigns
 local gitsigns = require("gitsigns")
