@@ -106,7 +106,7 @@ return {
     },
     {
         "numToStr/Comment.nvim",
-        opts = {},
+        opts = true,
     },
     {
         "folke/noice.nvim",
@@ -169,12 +169,31 @@ return {
     },
     {
         "lewis6991/gitsigns.nvim",
-    },
-    {
-        "sindrets/diffview.nvim",
+        opts = function()
+            return {
+                signcolumn = true,
+                numhl = true,
+                attach_to_untracked = true,
+            }
+        end,
+        config = function(_, opts)
+            local gitsigns = require("gitsigns")
+            gitsigns.setup(opts)
+        end,
     },
     {
         "kdheepak/lazygit.nvim",
+        lazy = true,
+        cmd = {
+            "LazyGit",
+            "LazyGitConfig",
+            "LazyGitCurrentFile",
+            "LazyGitFilter",
+            "LazyGitFilterCurrentFile",
+        },
+        keys = {
+            { "<leader>lg", "<Cmd>LazyGit<CR>", desc = "LazyGit" },
+        },
     },
     {
         "vim-denops/denops.vim",
