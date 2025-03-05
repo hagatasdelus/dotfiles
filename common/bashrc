@@ -1,8 +1,8 @@
 ### alias ###
 alias nl='nl -ba -s ": "'
-alias tree='sh ~/.scripts/bin/tree'
-alias closesns='sh ~/.scripts/macos_close_sns_apps.sh'
-alias notify='sh ~/.scripts/notification.sh'
+alias tree='${HOME}/.scripts/bin/tree'
+alias closesns='sh ${HOME}/.scripts/macos_close_sns_apps.sh'
+alias notify='sh ${HOME}/.scripts/notification.sh'
 alias edit='open -a "Visual Studio Code" '
 alias la='ls -A'
 alias h='history'
@@ -10,12 +10,12 @@ alias h2='history 20'
 alias la='ls -laO'
 alias ll='ls -l'
 alias cl='printf "\33c\e[3J"'
-alias java_home-v='sh ~/.scripts/java_home-v.sh'
+alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
-alias git-commit-setup='~/.config/git/scripts/setup-commit-template.sh'
+alias git-commit-setup='${HOME}/.config/git/scripts/setup-commit-template.sh'
 
-source "/Users/horinakayoshiki/.deno/env"
+source "${HOME}/.deno/env"
 
 eval "$(${HOME}/.local/bin/mise activate bash)"
 
