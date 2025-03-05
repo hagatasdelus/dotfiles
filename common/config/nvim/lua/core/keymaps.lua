@@ -55,20 +55,40 @@ map("n", "<leader>hf", "<Cmd>DiffviewFileHistory %<CR>", opts)
 
 map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
 
+-- Close Buffers
+map("n", "<leader>dt", "<Cmd>BDelete this<CR>", extend_opts("Close Current Buffer"))
+map("n", "<leader>wa", "<Cmd>BWipeout! all<CR>", extend_opts("Close All Buffer"))
+
+-- Gitsigns
+local gitsigns = require("gitsigns")
+map("n", "]g", gitsigns.next_hunk, extend_opts("Next Git Hunk"))
+map("n", "[g", gitsigns.prev_hunk, extend_opts("Previous Git Hunk"))
+map("n", "<C-g><C-a>", gitsigns.stage_hunk, extend_opts("Stage Git Hunk"))
+map("n", "<C-g><C-d>", function()
+    gitsigns.diffthis("~")
+end, extend_opts("Diff Current File"))
+map("n", "<C-g><C-p>", gitsigns.preview_hunk, extend_opts("Preview Git Hunk"))
+map("n", "<C-g><C-q>", gitsigns.setqflist, extend_opts("Set Quickfix List"))
+map("n", "<C-g><C-r>", gitsigns.undo_stage_hunk, extend_opts("Undo Stage Hunk"))
+map("n", "<C-g>a", gitsigns.stage_buffer, extend_opts("Stage Buffer"))
+
+map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
+map({ "n", "x" }, "<C-g><C-v>", gitsigns.blame_line, extend_opts("Blame Line"))
+
 -- map('n', 'un', ':<C-u>Unite buffer<CR>', opt )
 -- map('n', 'fgr', ':<cmd>Telescope live_grep<CR>', opts)
 -- map('n', 'term', ':ToggleTerm', opts)
 -- map('n', '<space>jj', '<C-\\><C-n>', opts)
 -- map('n', 'gx', '<Plug>(openbrowser-smart-search)', opts)
 
--- LSP関連のキーマッピングと設定
+-- LSP-related key mapping and configuration
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
-        -- バッファローカルでのLSP設定
+        -- Buffer local LSP configuration
         vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-        -- バッファローカルなキーマッピング
+        -- Buffer-local key mapping
         map("n", "gD", vim.lsp.buf.declaration, extend_opts("Go to declaration", ev.buf))
         map("n", "gd", vim.lsp.buf.definition, extend_opts("Go to definition", ev.buf))
         map("n", "K", vim.lsp.buf.hover, extend_opts("Hover", ev.buf))
@@ -93,7 +113,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "]d", vim.diagnostic.goto_next, extend_opts("Go to next diagnostic", ev.buf))
         map("n", "<leader>q", vim.diagnostic.setloclist, extend_opts("Set diagnostic loclist", ev.buf))
 
-        -- Lspsaga キーマッピング
+        -- Lspsaga key mappings
         map("n", "<leader>lf", "<Cmd>Lspsaga finder<cr>", extend_opts("Lspsaga Finder show references", ev.buf))
         map("n", "<leader>lh", "<Cmd>Lspsaga hover_doc<cr>", extend_opts("Lspsaga Hover Doc", ev.buf))
         map("n", "<leader>lo", "<Cmd>Lspsaga outline<cr>", extend_opts("Lspsaga Outline", ev.buf))
