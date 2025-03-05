@@ -79,7 +79,6 @@ return {
     {
         "romgrk/barbar.nvim",
         dependencies = {
-            "lewis6991/gitsigns.nvim",
             "nvim-tree/nvim-web-devicons",
         },
         init = function()
@@ -135,9 +134,6 @@ return {
     -- Editorial Enhancement
     {
         "RRethy/nvim-treesitter-textsubjects",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
         config = function()
             require("nvim-treesitter.configs").setup({
                 textsubjects = {
@@ -158,9 +154,6 @@ return {
     {
         "Wansmer/treesj",
         keys = { "<space>m", "<space>j", "<space>s" },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
         config = function()
             require("treesj").setup({
                 -- config
