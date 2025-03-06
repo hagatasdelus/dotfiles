@@ -160,46 +160,4 @@ return {
             })
         end,
     },
-    {
-        "lewis6991/gitsigns.nvim",
-        opts = function()
-            return {
-                signcolumn = true,
-                numhl = true,
-                attach_to_untracked = true,
-            }
-        end,
-        config = function(_, opts)
-            local gitsigns = require("gitsigns")
-            gitsigns.setup(opts)
-        end,
-    },
-    {
-        "kdheepak/lazygit.nvim",
-        lazy = true,
-        cmd = {
-            "LazyGit",
-            "LazyGitConfig",
-            "LazyGitCurrentFile",
-            "LazyGitFilter",
-            "LazyGitFilterCurrentFile",
-        },
-        keys = {
-            { "<leader>lg", "<Cmd>LazyGit<CR>", desc = "LazyGit" },
-        },
-    },
-    {
-        "vim-denops/denops.vim",
-        lazy = false,
-    },
-    {
-        "kat0h/bufpreview.vim",
-        build = "deno task prepare",
-        ft = {
-            "markdown",
-        },
-        dependencies = {
-            "vim-denops/denops.vim",
-        },
-    },
 }
