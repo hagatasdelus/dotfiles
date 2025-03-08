@@ -103,8 +103,4 @@ return {
         },
         opts = {},
     },
-    {
-        "numToStr/Comment.nvim",
-        opts = true,
-    },
 }
