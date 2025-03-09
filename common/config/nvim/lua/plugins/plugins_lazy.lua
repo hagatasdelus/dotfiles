@@ -91,7 +91,4 @@ return {
         },
         version = "^1.0.0",
     },
-    {
-        "kazhala/close-buffers.nvim",
-    },
 }
