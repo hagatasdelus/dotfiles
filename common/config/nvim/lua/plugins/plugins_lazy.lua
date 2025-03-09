@@ -94,13 +94,4 @@ return {
     {
         "kazhala/close-buffers.nvim",
     },
-    {
-        "folke/which-key.nvim",
-        lazy = true,
-        event = "VeryLazy",
-        cmd = {
-            "WhichKey",
-        },
-        opts = {},
-    },
 }
