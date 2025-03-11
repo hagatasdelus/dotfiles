@@ -1,4 +1,4 @@
--- lazy.nvim の repo の設定
+-- config of lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -11,7 +11,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         lazypath,
     })
 
-    -- エラーが発生したらエラ〜メッセージを表示して終了させる
+    --  If an error occurs, display the error message and exit.
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
@@ -39,5 +39,5 @@ local opts = {
     log = { level = "info" },
 }
 
--- lazy.nvim のセットアップ
+-- lazy.nvim setup
 require("lazy").setup(plugins, opts)
