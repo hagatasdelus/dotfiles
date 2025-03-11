@@ -1,6 +1,6 @@
--- return {
---     {
---         "github/copilot.nvim",
---         lazy=false,
---     },
--- }
+return {
+    --     {
+    --         "github/copilot.nvim",
+    --         lazy=false,
+    --     },
+}
