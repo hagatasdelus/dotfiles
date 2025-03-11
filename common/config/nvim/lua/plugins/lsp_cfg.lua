@@ -49,11 +49,31 @@ return {
             local lsp_config = require("lspconfig")
             -- lsp_servers table setup
             for _, lsp_server in ipairs(lsp_servers) do
-                lsp_config[lsp_server].setup({
-                    root_dir = function(fname)
-                        return lsp_config.util.find_git_ancestor(fname) or vim.fn.getcwd()
-                    end,
-                })
+                if lsp_server == "lua_ls" then
+                    -- Should be corrected in future
+                    lsp_config[lsp_server].setup({
+                        settings = {
+                            Lua = {
+                                diagnostics = {
+                                    globals = { "vim" },
+                                },
+                                workspace = {
+                                    -- library = vim.api.nvim_get_runtime_file("", true),
+                                    checkThirdParty = "Disable",
+                                },
+                            },
+                        },
+                        root_dir = function(fname)
+                            return lsp_config.util.find_git_ancestor(fname) or vim.fn.getcwd()
+                        end,
+                    })
+                else
+                    lsp_config[lsp_server].setup({
+                        root_dir = function(fname)
+                            return lsp_config.util.find_git_ancestor(fname) or vim.fn.getcwd()
+                        end,
+                    })
+                end
             end
         end,
         cmd = "Mason",
