@@ -214,3 +214,13 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+### Deno ###
+/.idea/
+/.vscode/
+
+/node_modules
+
+.env
+*.orig
+*.pyc
+*.swp
