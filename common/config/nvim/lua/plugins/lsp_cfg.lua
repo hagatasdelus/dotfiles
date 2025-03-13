@@ -13,7 +13,6 @@ local lsp_servers = {
 }
 
 local formatters = {
-    "djlint",
     "stylua",
     "shfmt",
     "prettier",
@@ -25,11 +24,6 @@ local diagnostics = {
 }
 
 return {
-    -- lsp icons like vscode
-    {
-        "onsails/lspkind.nvim",
-        event = "InsertEnter",
-    },
     -- mason / mason-lspconfig / lspconfig
     {
         "williamboman/mason.nvim",
@@ -100,7 +94,6 @@ return {
 
     -- none-ls
     {
-        -- "jose-elias-alvarez/null-ls.nvim",
         "nvimtools/none-ls.nvim",
         requires = "nvim-lua/plenary.nvim",
         config = function()
@@ -125,40 +118,5 @@ return {
             })
         end,
         event = { "BufReadPre", "BufNewFile" },
-    },
-
-    -- lspsaga
-    {
-        "nvimdev/lspsaga.nvim",
-        config = function()
-            require("lspsaga").setup({
-                symbol_in_winbar = {
-                    separator = "  ",
-                },
-            })
-        end,
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-            "nvim-tree/nvim-web-devicons",
-        },
-        event = { "BufRead", "BufNewFile" },
-    },
-
-    -- mason-nvim-dap
-    {
-        "jay-babu/mason-nvim-dap.nvim",
-        dependencies = {
-            "williamboman/mason.nvim",
-            "mfussenegger/nvim-dap",
-        },
-        opts = {
-            ensure_installed = {
-                "python",
-                "js",
-                "javadbg",
-                "javatest",
-            },
-            handlers = {},
-        },
     },
 }
