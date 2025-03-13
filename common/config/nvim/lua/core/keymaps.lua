@@ -35,7 +35,7 @@ map("n", "<leader>,", "<Cmd>BufferPrevious<CR>", opts)
 map("n", "<leader>.", "<Cmd>BufferNext<CR>", opts)
 
 -- Re-order to previous/next
-map("n", "<leader>>", ":BufferMovePrevious<CR>", opts)
+map("n", "<leader>>", "<Cmd>BufferMovePrevious<CR>", opts)
 map("n", "<leader><", "<Cmd>BufferMoveNext<CR>", opts)
 
 -- Goto buffer in position...
@@ -56,8 +56,10 @@ map("n", "<leader>hf", "<Cmd>DiffviewFileHistory %<CR>", opts)
 map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
 
 -- Close Buffers
-map("n", "<leader>tc", "<Cmd>BDelete this<CR>", extend_opts("Close Current Buffer"))
-map("n", "<leader>ac", "<Cmd>BWipeout! all<CR>", extend_opts("Close All Buffer"))
+-- barbar.nvim
+map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
+map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
+map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
 
 -- Gitsigns
 local gitsigns = require("gitsigns")
