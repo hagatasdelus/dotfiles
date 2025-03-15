@@ -73,7 +73,6 @@ map("n", "<C-g>a", gitsigns.stage_buffer, extend_opts("Stage Buffer"))
 map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
 map({ "n", "x" }, "<C-g><C-v>", gitsigns.blame_line, extend_opts("Blame Line"))
 
--- map('n', 'un', ':<C-u>Unite buffer<CR>', opt )
 -- map('n', 'fgr', ':<cmd>Telescope live_grep<CR>', opts)
 -- map('n', 'term', ':ToggleTerm', opts)
 -- map('n', '<space>jj', '<C-\\><C-n>', opts)
