@@ -48,10 +48,10 @@ map(
 -- map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", opts)
 -- map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", opts)
 -- map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
--- -- Close Buffers
--- map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
--- map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
--- map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
+-- -- close-buffers
+map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
+map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
+map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
 
 -- bufferline
 
