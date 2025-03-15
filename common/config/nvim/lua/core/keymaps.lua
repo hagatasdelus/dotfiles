@@ -18,10 +18,10 @@ local function extend_opts(desc, buffer)
 end
 
 -- Key mappings
-map("n", "<CR><CR>", "<C-w><C-w>", extend_opts(""))
-map("i", "jj", "<ESC>", opts)
-map("", "ss", "^", opts)
-map("", ";;", "$", opts)
+map("n", "<CR><CR>", "<C-w><C-w>", extend_opts("Move Split Windows"))
+map("i", "jj", "<ESC>", extend_opts("Shift to Normal Mode"))
+map("", "ss", "^", extend_opts("Move Head of Line"))
+map("", ";;", "$", extend_opts("Move End of Line"))
 map("n", "<leader>nn", "<Cmd>Neotree toggle<CR>", extend_opts("Neotree Toggle"))
 map(
     "n",
@@ -30,36 +30,33 @@ map(
     extend_opts("Neotree reveal")
 )
 
+-- barbar
 -- Move to previous/next
-map("n", "<leader>,", "<Cmd>BufferPrevious<CR>", opts)
-map("n", "<leader>.", "<Cmd>BufferNext<CR>", opts)
+-- map("n", "<leader>,", "<Cmd>BufferPrevious<CR>", opts)
+-- map("n", "<leader>.", "<Cmd>BufferNext<CR>", opts)
+-- -- Re-order to previous/next
+-- map("n", "<leader>>", "<Cmd>BufferMovePrevious<CR>", opts)
+-- map("n", "<leader><", "<Cmd>BufferMoveNext<CR>", opts)
+-- -- Goto buffer in position...
+-- map("n", "<leader>1", "<Cmd>BufferGoto 1<CR>", opts)
+-- map("n", "<leader>2", "<Cmd>BufferGoto 2<CR>", opts)
+-- map("n", "<leader>3", "<Cmd>BufferGoto 3<CR>", opts)
+-- map("n", "<leader>4", "<Cmd>BufferGoto 4<CR>", opts)
+-- map("n", "<leader>5", "<Cmd>BufferGoto 5<CR>", opts)
+-- map("n", "<leader>6", "<Cmd>BufferGoto 6<CR>", opts)
+-- map("n", "<leader>7", "<Cmd>BufferGoto 7<CR>", opts)
+-- map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", opts)
+-- map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", opts)
+-- map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
+-- -- Close Buffers
+-- map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
+-- map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
+-- map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
 
--- Re-order to previous/next
-map("n", "<leader>>", "<Cmd>BufferMovePrevious<CR>", opts)
-map("n", "<leader><", "<Cmd>BufferMoveNext<CR>", opts)
+-- bufferline
 
--- Goto buffer in position...
-map("n", "<leader>1", "<Cmd>BufferGoto 1<CR>", opts)
-map("n", "<leader>2", "<Cmd>BufferGoto 2<CR>", opts)
-map("n", "<leader>3", "<Cmd>BufferGoto 3<CR>", opts)
-map("n", "<leader>4", "<Cmd>BufferGoto 4<CR>", opts)
-map("n", "<leader>5", "<Cmd>BufferGoto 5<CR>", opts)
-map("n", "<leader>6", "<Cmd>BufferGoto 6<CR>", opts)
-map("n", "<leader>7", "<Cmd>BufferGoto 7<CR>", opts)
-map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", opts)
-map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", opts)
-map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
-
-map("n", "<leader>hd", "<Cmd>DiffviewOpen HEAD~1<CR>", opts)
-map("n", "<leader>hf", "<Cmd>DiffviewFileHistory %<CR>", opts)
-
+-- LazyGit
 map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
-
--- Close Buffers
--- barbar.nvim
-map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
-map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
-map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
 
 -- Gitsigns
 local gitsigns = require("gitsigns")
@@ -73,7 +70,6 @@ map("n", "<C-g><C-p>", gitsigns.preview_hunk, extend_opts("Preview Git Hunk"))
 map("n", "<C-g><C-q>", gitsigns.setqflist, extend_opts("Set Quickfix List"))
 map("n", "<C-g><C-r>", gitsigns.undo_stage_hunk, extend_opts("Undo Stage Hunk"))
 map("n", "<C-g>a", gitsigns.stage_buffer, extend_opts("Stage Buffer"))
-
 map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
 map({ "n", "x" }, "<C-g><C-v>", gitsigns.blame_line, extend_opts("Blame Line"))
 
