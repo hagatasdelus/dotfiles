@@ -6,7 +6,6 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 local function extend_opts(desc, buffer)
-	-- return vim.tbl_extend('force', opts, { desc = desc })
 	local final_opts = vim.tbl_extend("force", opts, {})
 	if desc then
 		final_opts.desc = desc
@@ -22,6 +21,10 @@ map("n", "<CR><CR>", "<C-w><C-w>", extend_opts("Move Split Windows"))
 map("i", "jj", "<ESC>", extend_opts("Shift to Normal Mode"))
 map("", "ss", "^", extend_opts("Move Head of Line"))
 map("", ";;", "$", extend_opts("Move End of Line"))
+-- terminal mode
+map("t", [[<ESC>]], [[<C-\><C-n>]], opts)
+
+-- neo-tree
 map("n", "<leader>nn", "<Cmd>Neotree toggle<CR>", extend_opts("Neotree Toggle"))
 map(
 	"n",
@@ -56,7 +59,7 @@ map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Bu
 -- bufferline
 
 -- LazyGit
-map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
+-- map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
 
 -- Gitsigns
 map("n", "]g", "<Cmd>Gitsigns next_hunk<CR>", extend_opts("Next Git Hunk"))
