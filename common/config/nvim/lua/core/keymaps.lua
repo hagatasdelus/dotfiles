@@ -58,9 +58,6 @@ map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Bu
 
 -- bufferline
 
--- LazyGit
--- map("n", "<leader>gg", "<Cmd>LazyGit<CR>", extend_opts("LazyGit"))
-
 -- Gitsigns
 map("n", "]g", "<Cmd>Gitsigns next_hunk<CR>", extend_opts("Next Git Hunk"))
 map("n", "[g", "<Cmd>Gitsigns prev_hunk<CR>", extend_opts("Previous Git Hunk"))
@@ -72,11 +69,6 @@ map("n", "<C-g><C-r>", "<Cmd>Gitsigns undo_stage_hunk<CR>", extend_opts("Undo St
 map("n", "<C-g>a", "<Cmd>Gitsigns stage_buffer<CR>", extend_opts("Stage Buffer"))
 map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
 map({ "n", "x" }, "<C-g><C-v>", "<Cmd>Gitsigns blame_line<CR>", extend_opts("Blame Line"))
-
--- map('n', 'fgr', ':<cmd>Telescope live_grep<CR>', opts)
--- map('n', 'term', ':ToggleTerm', opts)
--- map('n', '<space>jj', '<C-\\><C-n>', opts)
--- map('n', 'gx', '<Plug>(openbrowser-smart-search)', opts)
 
 -- LSP-related key mapping and configuration
 vim.api.nvim_create_autocmd("LspAttach", {
