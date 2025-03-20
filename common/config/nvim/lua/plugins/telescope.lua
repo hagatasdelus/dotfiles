@@ -44,11 +44,11 @@ return {
 				end,
 				desc = "Help Tags",
 			},
-            {
-                ",,",
-                "<Cmd>Telescope smart_open<CR>",
-                desc = "Smart Open",
-            },
+			{
+				",,",
+				"<Cmd>Telescope smart_open<CR>",
+				desc = "Smart Open",
+			},
 		},
 		config = function()
 			local telescope = require("telescope")
@@ -60,21 +60,36 @@ return {
 			local new_maker = function(filepath, bufnr, opts)
 				opts = opts or {}
 				local expand_filepath = vim.fn.expand(filepath)
-				local async = require("plenary.async")
+				-- local async = require("plenary.async")
 
-				async.void(function()
-					local err, stat = async.uv.fs_stat(expand_filepath)
-					if err or not stat then
-						return
-					end
+				local stat = vim.loop.fs_stat(expand_filepath)
 
-					-- 100KB以上のファイルはプレビューしない
-					if stat.size > 100000 then
-						return
-					else
-						return previewers.buffer_previewer_maker(filepath, bufnr, opts)
-					end
-				end)
+				if not stat then
+					return
+				end
+
+				-- 100KB以上のファイルはプレビューしない
+				if stat.size > 100000 then
+					vim.schedule(function()
+						vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "File too large to preview" })
+					end)
+				else
+					previewers.buffer_previewer_maker(filepath, bufnr, opts)
+				end
+
+				-- async.void(function()
+				-- 	local err, stat = async.uv.fs_stat(expand_filepath)
+				-- 	assert(not err, err)
+				-- 	if not stat then
+				-- 		return
+				-- 	end
+				--
+				-- 	if stat.size > 100000 then
+				-- 		return
+				-- 	else
+				-- 		return previewers.buffer_previewer_maker(filepath, bufnr, opts)
+				-- 	end
+				-- end)
 			end
 
 			telescope.setup({
@@ -113,10 +128,9 @@ return {
 					mapping = {
 						-- insert mode
 						i = {
-							["<C-j>"] = actions.move_selection_next, -- 次の項目へ
-							["<C-k>"] = actions.move_selection_previous, -- 前の項目へ
-							["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- quickfixリストへ送信
-							["<ESC>"] = actions.close, -- 閉じる
+							["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist, -- 選択項目をquickfix listに送信して開く
+							["<C-l>"] = actions.send_to_loclist + actions.open_loclist, -- 検索結果全体をlocation listに送信して開く
+							["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- 検索結果全体をquickfix listに送信して開く
 							["<CR>"] = function(prompt_bufnr) -- Enterキーの挙動
 								require("telescope.actions").select_default(prompt_bufnr)
 								vim.cmd.stopinsert() -- インサートモードを抜ける
@@ -126,6 +140,8 @@ return {
 						n = {
 							["<ESC>"] = actions.close, -- 閉じる
 							["q"] = actions.close, -- 閉じる
+							["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+							["<C-l>"] = actions.send_to_loclist + actions.open_loclist,
 							["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- quickfixリストへ送信
 						},
 					},
