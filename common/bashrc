@@ -19,6 +19,8 @@ source "${HOME}/.deno/env"
 
 eval "$(${HOME}/.local/bin/mise activate bash)"
 
+eval "$(starship init bash)"
+
 if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
 fi
