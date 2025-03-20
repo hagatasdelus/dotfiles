@@ -29,7 +29,7 @@ return {
                         StatusLine = { link = "Normal" },
                         StatusLineNC = { link = "Normal" },
 
-                        SatelliteBar = { bg = theme.ui.special },
+                        -- SatelliteBar = { bg = theme.ui.special },
 
                         TelescopeTitle = { fg = theme.ui.special, bold = true },
                         TelescopePromptNormal = { bg = theme.ui.bg_p1 },
