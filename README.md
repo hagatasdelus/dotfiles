@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/1f331.svg" alt="eyecatch" height="100" >
+<img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/1fab4.svg" alt="eyecatch" height="100" >
 
 # dotfiles
 
