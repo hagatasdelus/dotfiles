@@ -26,12 +26,6 @@ map("t", [[<ESC>]], [[<C-\><C-n>]], opts)
 
 -- neo-tree
 map("n", "<leader>nn", "<Cmd>Neotree toggle<CR>", extend_opts("Neotree Toggle"))
-map(
-	"n",
-	"<leader>no",
-	"<Cmd>Neotree reveal<CR><Cmd>Neotree ~/dotfiles/common/config/nvim/<CR>",
-	extend_opts("Neotree reveal")
-)
 
 -- barbar
 -- Move to previous/next
