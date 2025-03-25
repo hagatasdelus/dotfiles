@@ -4,7 +4,7 @@ vim.g.maplocalleader = "\\"
 -- vim.opt.modifiable = true
 
 -- lang
-vim.cmd("language en_US.UTF-8") 
+vim.cmd("language en_US.UTF-8")
 -- vim.cmd("language ja_JP.UTF-8")
 
 -- File

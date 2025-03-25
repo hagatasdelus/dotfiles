@@ -6,10 +6,10 @@ local lsp_servers = {
     "yamlls",
     "jsonls",
     "taplo",
-    "rust_analyzer",
     "ts_ls",
     "html",
     "cssls",
+    "copilot-language-server",
 }
 
 local formatters = {
