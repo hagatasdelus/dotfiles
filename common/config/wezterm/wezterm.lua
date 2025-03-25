@@ -1,14 +1,32 @@
 local wezterm = require("wezterm")
+local mux = wezterm.mux
+
+wezterm.on("gui-startup", function(cmd)
+    local tab, pane, window = mux.spawn_window(cmd or {})
+    window:gui_window():maximize()
+end)
+
 local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
 config.line_height = 1.0
-config.font_size = 15.0
+config.font_size = 16.0
 config.font = wezterm.font_with_fallback({
     "HackGen Console NF",
 })
 config.color_scheme = "Kanagawa Dragon (Gogh)"
+config.window_padding = {
+    left = 1,
+    right = 0,
+    top = 0,
+    bottom = 0,
+}
 config.use_ime = true
+config.send_composed_key_when_left_alt_is_pressed = false
+config.send_composed_key_when_right_alt_is_pressed = false
+config.force_reverse_video_cursor = true
+config.adjust_window_size_when_changing_font_size = false
+-- config.macos_forward_to_ime_modifier_mark = "SHIFT|CTRL"
 config.window_background_opacity = 0.70
 config.macos_window_background_blur = 20
 
@@ -23,6 +41,7 @@ config.show_tabs_in_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
 -- falseにするとタブバーの透過が効かなくなる
 -- config.use_fancy_tab_bar = false
+config.tab_bar_at_bottom = false
 
 -- タブバーの透過
 config.window_frame = {
