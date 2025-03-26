@@ -1,9 +1,19 @@
 local wezterm = require("wezterm")
 local mux = wezterm.mux
 
+wezterm.on("toggle-opacity", function(window, _)
+	local overrides = window:get_config_overrides() or {}
+	if not overrides.window_background_opacity then
+		overrides.window_background_opacity = 0.60
+	else
+		overrides.window_background_opacity = nil
+	end
+	window:set_config_overrides(overrides)
+end)
+
 wezterm.on("gui-startup", function(cmd)
-    local tab, pane, window = mux.spawn_window(cmd or {})
-    window:gui_window():maximize()
+	local _, _, window = mux.spawn_window(cmd or {})
+	window:gui_window():maximize()
 end)
 
 local config = wezterm.config_builder()
@@ -12,14 +22,14 @@ config.automatically_reload_config = true
 config.line_height = 1.0
 config.font_size = 16.0
 config.font = wezterm.font_with_fallback({
-    "HackGen Console NF",
+	"HackGen Console NF",
 })
 config.color_scheme = "Kanagawa Dragon (Gogh)"
 config.window_padding = {
-    left = 1,
-    right = 0,
-    top = 0,
-    bottom = 0,
+	left = 1,
+	right = 0,
+	top = 0,
+	bottom = 0,
 }
 config.use_ime = true
 config.send_composed_key_when_left_alt_is_pressed = false
@@ -73,7 +83,7 @@ local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_lower_right_triangle
 -- タブの右側の装飾
 local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
 	local background = "#5C6D74"
 	local foreground = "#FFFFFF"
 	local edge_background = "none"

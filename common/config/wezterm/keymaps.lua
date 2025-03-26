@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 local act = wezterm.action
 
 -- Show which key table is active in the status area
-wezterm.on("update-right-status", function(window, pane)
+wezterm.on("update-right-status", function(window, _)
 	local name = window:active_key_table()
 	if name then
 		name = "TABLE: " .. name
@@ -115,6 +115,7 @@ return {
 			mods = "LEADER",
 			action = act.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }),
 		},
+		{ key = "'", mods = "SHIFT|CTRL", action = act.EmitEvent("toggle-opacity") },
 	},
 	-- キーテーブル
 	-- https://wezfurlong.org/wezterm/config/key-tables.html
