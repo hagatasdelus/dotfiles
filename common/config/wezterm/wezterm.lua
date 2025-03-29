@@ -49,7 +49,6 @@ config.window_decorations = "RESIZE"
 config.show_tabs_in_tab_bar = true
 -- タブが一つの時は非表示
 config.hide_tab_bar_if_only_one_tab = true
--- falseにするとタブバーの透過が効かなくなる
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 
@@ -73,59 +72,20 @@ config.show_close_tab_button_in_tabs = false
 -- タブ同士の境界線を非表示
 config.colors = {
 	tab_bar = {
-		inactive_tab_edge = "none",
-		background = "#B8B8B8",
-
-		active_tab = {
-			bg_color = "#CDFF04",
-			fg_color = "#B8B8B8",
-			intensity = "Normal",
-			underline = "None",
-			italic = false,
-			strikethrough = false,
-		},
-		inactive_tab = {
-			bg_color = "#C6C6C6",
-			fg_color = "#B8B8B8",
-			intensity = "Normal",
-			underline = "None",
-			italic = false,
-			strikethrough = false,
-		},
-		inactive_tab_hover = {
-			bg_color = "#B8B8B8",
-			fg_color = "#C6C6C6",
-			intensity = "Normal",
-			underline = "None",
-			italic = true,
-			strikethrough = false,
-		},
-		new_tab = {
-			bg_color = "#B8B8B8",
-			fg_color = "#C6C6C6",
-			italic = false,
-		},
-		new_tab_hover = {
-			bg_color = "#CDFF04",
-			fg_color = "#B8B8B8",
-			italic = false,
-		},
+		inactive_tab_edge = "#none",
 	},
 }
 
--- タブの形をカスタマイズ
--- タブの左側の装飾
 local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_lower_right_triangle
--- タブの右側の装飾
 local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
 
 wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
-	local background = "#5C6D74"
-	local foreground = "#FFFFFF"
-	local edge_background = "none"
+	local background = "#D6D6D6"
+	local foreground = "#404040"
+	local edge_background = "B8B8B8"
 	if tab.is_active then
-		background = "#AE8B2D"
-		foreground = "#FFFFFF"
+		background = "#CDFF04"
+		foreground = "#000000"
 	end
 	local edge_foreground = background
 	local title = "   " .. wezterm.truncate_right(tab.active_pane.title, max_width - 1) .. "   "
