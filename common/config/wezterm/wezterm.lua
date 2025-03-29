@@ -50,7 +50,7 @@ config.show_tabs_in_tab_bar = true
 -- タブが一つの時は非表示
 config.hide_tab_bar_if_only_one_tab = true
 -- falseにするとタブバーの透過が効かなくなる
--- config.use_fancy_tab_bar = false
+config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 
 -- タブバーの透過
@@ -74,6 +74,42 @@ config.show_close_tab_button_in_tabs = false
 config.colors = {
 	tab_bar = {
 		inactive_tab_edge = "none",
+		background = "#B8B8B8",
+
+		active_tab = {
+			bg_color = "#CDFF04",
+			fg_color = "#B8B8B8",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
+			strikethrough = false,
+		},
+		inactive_tab = {
+			bg_color = "#C6C6C6",
+			fg_color = "#B8B8B8",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
+			strikethrough = false,
+		},
+		inactive_tab_hover = {
+			bg_color = "#B8B8B8",
+			fg_color = "#C6C6C6",
+			intensity = "Normal",
+			underline = "None",
+			italic = true,
+			strikethrough = false,
+		},
+		new_tab = {
+			bg_color = "#B8B8B8",
+			fg_color = "#C6C6C6",
+			italic = false,
+		},
+		new_tab_hover = {
+			bg_color = "#CDFF04",
+			fg_color = "#B8B8B8",
+			italic = false,
+		},
 	},
 }
 
