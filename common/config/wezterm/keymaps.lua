@@ -13,13 +13,13 @@ end)
 return {
 	keys = {
 		{
-			-- workspaceの切り替え
+			-- swtich workspace
 			key = "w",
 			mods = "LEADER",
 			action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select workspace" }),
 		},
 		{
-			--workspaceの名前変更
+			-- rename workspace
 			key = "$",
 			mods = "LEADER",
 			action = act.PromptInputLine({

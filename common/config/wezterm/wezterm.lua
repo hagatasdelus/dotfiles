@@ -43,36 +43,65 @@ config.macos_window_background_blur = 20
 ----------------------------------------------------
 -- Tab
 ----------------------------------------------------
--- タイトルバーを非表示
+-- Hide title bar
 config.window_decorations = "RESIZE"
--- タブバーの表示
 config.show_tabs_in_tab_bar = true
--- タブが一つの時は非表示
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 
--- タブバーの透過
-config.window_frame = {
-	inactive_titlebar_bg = "none",
-	active_titlebar_bg = "none",
-}
+-- Tab Bar Transparency
+-- config.window_frame = {
+-- 	inactive_titlebar_bg = "none",
+-- 	active_titlebar_bg = "none",
+-- }
 
--- タブバーを背景色に合わせる
+-- Match tab bar to background color
 config.window_background_gradient = {
 	colors = { "#000000" },
 }
 
--- タブの追加ボタンを非表示
 config.show_new_tab_button_in_tab_bar = false
--- nightlyのみ使用可能
--- タブの閉じるボタンを非表示
 config.show_close_tab_button_in_tabs = false
 
--- タブ同士の境界線を非表示
 config.colors = {
 	tab_bar = {
-		inactive_tab_edge = "#none",
+		inactive_tab_edge = "none",
+		background = "#B8B8B8",
+		active_tab = {
+			bg_color = "#CDFF04",
+			fg_color = "#000000",
+			intensity = "Bold",
+			underline = "None",
+			italic = true,
+			strikethrough = false,
+		},
+		inactive_tab = {
+			bg_color = "#D6D6D6",
+			fg_color = "#404040",
+			intensity = "Normal",
+			underline = "None",
+			italic = false,
+			strikethrough = false,
+		},
+		inactive_tab_hover = {
+			bg_color = "#D6D6D6",
+			fg_color = "#404040",
+			intensity = "Bold",
+			underline = "None",
+			italic = true,
+			strikethrough = false,
+		},
+		new_tab = {
+			bg_color = "#D6D6D6",
+			fg_color = "#404040",
+			italic = false,
+		},
+		new_tab_hover = {
+			bg_color = "#CDFF04",
+			fg_color = "#404040",
+			italic = false,
+		},
 	},
 }
 
@@ -82,7 +111,7 @@ local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
 wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
 	local background = "#D6D6D6"
 	local foreground = "#404040"
-	local edge_background = "B8B8B8"
+	local edge_background = "#B8B8B8"
 	if tab.is_active then
 		background = "#CDFF04"
 		foreground = "#000000"
