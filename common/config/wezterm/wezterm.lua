@@ -43,7 +43,6 @@ config.macos_window_background_blur = 20
 ----------------------------------------------------
 -- Tab
 ----------------------------------------------------
--- Hide title bar
 config.window_decorations = "RESIZE"
 config.show_tabs_in_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
@@ -68,6 +67,7 @@ config.colors = {
 	tab_bar = {
 		inactive_tab_edge = "none",
 		background = "#B8B8B8",
+        -- *_colorは便宜的に設定している
 		active_tab = {
 			bg_color = "#CDFF04",
 			fg_color = "#000000",
@@ -87,7 +87,7 @@ config.colors = {
 		inactive_tab_hover = {
 			bg_color = "#D6D6D6",
 			fg_color = "#404040",
-			intensity = "Bold",
+			intensity = "Normal",
 			underline = "None",
 			italic = true,
 			strikethrough = false,
@@ -108,7 +108,7 @@ config.colors = {
 local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_lower_right_triangle
 local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
 
-wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
+wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width) -- tab, tabs, panes, config, hover, max_width
 	local background = "#D6D6D6"
 	local foreground = "#404040"
 	local edge_background = "#B8B8B8"
@@ -132,7 +132,7 @@ wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
 end)
 
 ----------------------------------------------------
--- keybinds
+-- keymaps
 ----------------------------------------------------
 config.disable_default_key_bindings = true
 config.keys = require("keymaps").keys

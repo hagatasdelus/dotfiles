@@ -15,7 +15,7 @@ highlights.yellow = {
 	buffer_selected = {
 		fg = "#FFDC7A",
 		bold = true,
-        italic = true,
+		italic = true,
 	},
 	fill = {
 		bg = "#1E1E1E",
@@ -36,7 +36,7 @@ highlights.yg = {
 	},
 	buffer_selected = {
 		fg = "#CDFF04",
-        bg = "#000000",
+		bg = "#000000",
 		bold = true,
 		italic = true,
 	},
@@ -52,31 +52,30 @@ highlights.yg_wt = {
 	},
 	separator_selected = {
 		fg = "#B8B8B8",
-        bg = "#CDFF04",
+		bg = "#CDFF04",
 	},
 	background = {
 		fg = "#404040",
 		bg = "#D6D6D6",
 	},
 	buffer_selected = {
-        fg = "#000000",
-        bg = "#CDFF04",
+		fg = "#000000",
+		bg = "#CDFF04",
 		bold = true,
 		italic = true,
 	},
 	fill = {
 		bg = "#B8B8B8",
 	},
-    modified = {
-        fg = "#707070",
-        bg = "#D6D6D6",
-    },
-    modified_selected = {
-        fg = "#3D3D3D",
-        bg = "#CDFF04",
-    },
+	modified = {
+		fg = "#707070",
+		bg = "#D6D6D6",
+	},
+	modified_selected = {
+		fg = "#3D3D3D",
+		bg = "#CDFF04",
+	},
 }
-
 
 return {
 	"akinsho/bufferline.nvim",
@@ -93,11 +92,11 @@ return {
 				indicator = {
 					style = "none", -- underline
 				},
-                tab_size = 19,
-                name_formatter = function(buf)
-                    return " " .. buf.name
-                end,
-            },
+				tab_size = 19,
+				name_formatter = function(buf)
+					return " " .. buf.name
+				end,
+			},
 			highlights = highlights.yg_wt,
 		})
 	end,
