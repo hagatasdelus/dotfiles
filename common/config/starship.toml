@@ -15,7 +15,7 @@ renamed = "🏷"
 deleted = "🗑"
 
 [[battery.display]]
-threshold = 100 
+threshold = 100
 style = "bold blue"
 
 [battery]
@@ -25,7 +25,7 @@ discharging_symbol = "😨"
 
 [time]
 disabled = false
-use_12hr = true 
+use_12hr = true
 
 [memory_usage]
 disabled = false
