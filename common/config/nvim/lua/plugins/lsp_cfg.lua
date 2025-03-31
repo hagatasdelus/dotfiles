@@ -9,7 +9,6 @@ local lsp_servers = {
     "ts_ls",
     "html",
     "cssls",
-    "copilot-language-server",
 }
 
 local formatters = {
@@ -33,6 +32,8 @@ return {
             "jay-babu/mason-null-ls.nvim",
             "nvimtools/none-ls.nvim",
         },
+        event = { "BufReadPre", "BufNewFile" },
+        cmd = "Mason",
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
@@ -70,13 +71,13 @@ return {
                 end
             end
         end,
-        cmd = "Mason",
     },
 
     -- mason-null-ls
     {
         "jay-babu/mason-null-ls.nvim",
-        -- event = { "BufReadPre", "BufNewFile" },
+        event = { "BufReadPre", "BufNewFile" },
+        cmd = "Mason",
         dependencies = {
             "williamboman/mason.nvim",
             "nvimtools/none-ls.nvim",
@@ -89,13 +90,13 @@ return {
                 handlers = {},
             })
         end,
-        cmd = "Mason",
     },
 
     -- none-ls
     {
         "nvimtools/none-ls.nvim",
         requires = "nvim-lua/plenary.nvim",
+        event = { "BufReadPre", "BufNewFile" },
         config = function()
             local null_ls = require("null-ls")
 
@@ -117,6 +118,5 @@ return {
                 sources = vim.tbl_flatten({ formatting_sources, diagnostics_sources }),
             })
         end,
-        event = { "BufReadPre", "BufNewFile" },
     },
 }
