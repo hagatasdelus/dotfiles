@@ -93,9 +93,9 @@ return {
                     style = "none", -- underline
                 },
                 tab_size = 19,
-                name_formatter = function(buf)
-                    return " " .. buf.name
-                end,
+                -- name_formatter = function(buf)
+                --     return " " .. buf.name
+                -- end,
             },
             highlights = highlights.yg_wt,
         })
