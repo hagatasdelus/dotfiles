@@ -92,10 +92,7 @@ return {
                 indicator = {
                     style = "none", -- underline
                 },
-                tab_size = 19,
-                -- name_formatter = function(buf)
-                --     return " " .. buf.name
-                -- end,
+                -- tab_size = 13,
             },
             highlights = highlights.yg_wt,
         })
