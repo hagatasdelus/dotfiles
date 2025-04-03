@@ -3,9 +3,9 @@ return {
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },
-    event = { BufAdd, TabEnter },
+    event = { "BufAdd", "TabEnter" },
     init = function()
-        vim.g.barbar_auto_setup = false 
+        vim.g.barbar_auto_setup = false
     end,
     config = function()
         require("barbar").setup({
