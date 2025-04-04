@@ -33,6 +33,7 @@ return {
             "nvimtools/none-ls.nvim",
         },
         event = { "BufReadPre", "BufNewFile" },
+        cond = not use_in_vscode(),
         cmd = "Mason",
         config = function()
             require("mason").setup()
@@ -77,6 +78,7 @@ return {
     {
         "jay-babu/mason-null-ls.nvim",
         event = { "BufReadPre", "BufNewFile" },
+        cond = not use_in_vscode(),
         cmd = "Mason",
         dependencies = {
             "williamboman/mason.nvim",
@@ -97,6 +99,7 @@ return {
         "nvimtools/none-ls.nvim",
         requires = "nvim-lua/plenary.nvim",
         event = { "BufReadPre", "BufNewFile" },
+        cond = not use_in_vscode(),
         config = function()
             local null_ls = require("null-ls")
 
