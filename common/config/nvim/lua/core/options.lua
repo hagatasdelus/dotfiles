@@ -18,7 +18,7 @@ vim.opt.cursorline = true
 vim.opt.whichwrap = "b,s,h,l,[,],<,>,~"
 
 -- Clipboard
-vim.opt.clipboard = "unnamedplus,unnamed"
+vim.opt.clipboard = "unnamedplus"
 
 -- Menu and Command
 vim.opt.wildmenu = true
@@ -42,6 +42,11 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+vim.opt.backspace = {
+    "indent",
+    "eol",
+    "start",
+}
 
 -- Display
 vim.opt.number = true
@@ -50,6 +55,7 @@ vim.opt.showtabline = 2
 vim.opt.visualbell = true
 vim.opt.errorbells = false
 vim.opt.showmatch = true
+vim.opt.list = true
 
 -- UI
 -- vim.opt.winblend = 0
