@@ -56,6 +56,13 @@ vim.opt.visualbell = true
 vim.opt.errorbells = false
 vim.opt.showmatch = true
 vim.opt.list = true
+vim.opt.listchars = {
+    tab = "-",
+    trail = "»",
+    extends = "❯",
+    precedes = "❮",
+    nbsp = "␣",
+}
 
 -- UI
 -- vim.opt.winblend = 0
