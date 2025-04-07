@@ -80,6 +80,7 @@ highlights.yg_wt = {
 return {
     "akinsho/bufferline.nvim",
     event = { "BufAdd", "TabEnter" },
+    cond = not use_in_vscode(),
     config = function()
         require("bufferline").setup({
             options = {
