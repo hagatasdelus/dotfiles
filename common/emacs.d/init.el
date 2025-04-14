@@ -16,7 +16,6 @@
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner))
 
-(add-to-list 'auto-mode-alist '("\\.lisp\\'" . lisp-mode))
 ;;; Slime for common lisp
 ; (load (expand-file-name "~/.roswell/helper.el"))  ; slime 起動スクリプト
 ;; (setq slime-lisp-implementations
