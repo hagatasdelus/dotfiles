@@ -75,6 +75,16 @@ highlights.yg_wt = {
         fg = "#3D3D3D",
         bg = "#CDFF04",
     },
+    duplicate = {
+        fg = "#404040",
+        bg = "#D6D6D6",
+    },
+    duplicate_selected = {
+        fg = "#000000",
+        bg = "#CDFF04",
+        bold = true,
+        italic = true,
+    },
 }
 
 return {
