@@ -1,6 +1,7 @@
 return {
     "vim-denops/denops.vim",
     lazy = true,
+    cond = not use_in_vscode(),
     -- dependencies = {
     --     {
     --         "yuki-yano/denops-lazy.nvim",
