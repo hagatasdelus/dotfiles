@@ -76,4 +76,4 @@ vim.cmd("highlight LineNr guifg=#8a70ac")
 -- vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 
 -- signcolumn priority (Error/Warning/Hints）
-vim.diagnostic.config({ severity_sort = true })
+vim.diagnostic.config({ severity_sort = true, virtual_text = true })
