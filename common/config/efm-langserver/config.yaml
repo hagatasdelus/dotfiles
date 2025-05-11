@@ -1,0 +1,103 @@
+version: 2
+# log-file: /tmp/efm-langserver.log
+log-level: 1
+root-markers:
+  - .git/
+
+tools:
+  stylua: &stylua
+    format-command: "stylua -s --color Never -"
+    format-stdin: true
+    require-marker: true
+    root-markers:
+      - stylua.toml
+      - .stylua.toml
+
+  mypy: &mypy
+    lint-command: "mypy --show-column-numbers"
+    lint-formats:
+      - '%f:%l:%c: %trror: %m'
+      - '%f:%l:%c: %tarning: %m'
+      - '%f:%l:%c: %tote: %m'
+
+  ruff-format: &ruff-format
+    format-command: "ruff --fix -e -n --stdin-filesname -"
+    format-stdin: true
+
+  prettier: &prettier
+    format-command: >
+      ./node_modules/.bin/prettier --stdin --stdin-filepath ${INPUT} 
+        # ${--range-start:charStart} \
+        # ${--range-end:charEnd} \
+        # ${--tab-width:tabSize} \
+        # ${--use-tabs:!insertSpaces}
+    format-stdin: true
+    format-can-range: true
+    require-marker: true
+    root-markers:
+      - .prettierrc
+      - .prettierrc.json
+      - .prettierrc.js
+      - .prettierrc.yml
+      - .prettierrc.yaml
+      - .prettierrc.json5
+      - .prettierrc.mjs
+      - .prettierrc.cjs
+      - .prettierrc.toml
+
+  textlint: &textlint
+    lint-command: "deno run -A --node-modules-dir npm:textlint@latest --format unix --stdin --stdin-filename ${INPUT}"
+    lint-ignore-exit-code: true
+    lint-stdin: true
+    lint-formats:
+      - "%f:%l:%c: %m [%trror/%r]"
+    root-markers:
+      - .textlintrc
+      - .textlintrc.json
+      - .textlintrc.js
+      - .git
+
+languages:
+  lua:
+    - <<: *stylua
+
+  python:
+    - <<: *mypy
+    - <<: *ruff-format
+
+  html:
+    - <<: *prettier
+  javascriptreact:
+    - <<: *prettier
+  javascript.jsx:
+    - <<: *prettier
+  typescriptreact:
+    - <<: *prettier
+  typescript.tsx:
+    - <<: *prettier
+  svelte:
+    - <<: *prettier
+  vue:
+    - <<: *prettier
+
+  markdown:
+    - <<: *textlint
+  markdown.mdx:
+    - <<: *textlint
+
+  css:
+    - <<: *prettier
+  scss:
+    - <<: *prettier
+
+  javascript:
+    - <<: *prettier
+  typescript:
+    - <<: *prettier
+
+  json:
+    - <<: *prettier
+  jsonc:
+    - <<: *prettier
+  yaml:
+    - <<: *prettier
