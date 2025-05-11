@@ -2,7 +2,12 @@
 vim.cmd('cnoreabbrev tn tabnew')
 vim.cmd('cnoreabbrev vs vsplit')
 
-vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.format()]])
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    pattern = { "*" },
+    callback = function()
+        vim.lsp.buf.format() { sync = false, timeout_ms = 20000 }
+    end,
+})
 
 -- FileType specific settings
 local set_file_type_settings = function(ft, settings)
@@ -16,7 +21,7 @@ local set_file_type_settings = function(ft, settings)
     })
 end
 
--- Define settings for each filetype
+-- -- Define settings for each filetype
 set_file_type_settings('cpp', {
     tabstop = 2,
     shiftwidth = 2,
@@ -58,4 +63,3 @@ set_file_type_settings('html', {
     cindent = false,
     smartindent = false
 })
-
