@@ -1,3 +1,4 @@
+vim.loader.enable()
 require("core.global")
 require("core.base")
 require("core.options")
