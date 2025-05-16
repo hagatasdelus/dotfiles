@@ -22,7 +22,8 @@ map("i", "jj", "<ESC>", extend_opts("Shift to Normal Mode"))
 map("", "ss", "^", extend_opts("Move Head of Line"))
 map("", ";;", "$", extend_opts("Move End of Line"))
 -- terminal mode
-map("t", [[<ESC>]], [[<C-\><C-n>]], opts)
+map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
+map("t", [[<C-[><C-[>]], [[<C-\><C-n>]], opts)
 
 -- neo-tree
 map("n", "<leader>nn", "<Cmd>Neotree toggle<CR>", extend_opts("Neotree Toggle"))
