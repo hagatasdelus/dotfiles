@@ -1,0 +1,32 @@
+---@type vim.lsp.Config
+return {
+    cmd = { "efm-langserver" },
+    init_options = {
+        documentFormatting = true,
+        documentRangeFormatting = true,
+        hover = true,
+        documentSymbol = true,
+        codeAction = true,
+        completion = true,
+    },
+    filetypes = {
+        "lua",
+        "python",
+        "html",
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
+        "typescript",
+        "typescriptreact",
+        "typescript.tsx",
+        "svelte",
+        "vue",
+        "markdown",
+        "markdown.mdx",
+        "css",
+        "scss",
+        "json",
+        "jsonc",
+        "yaml",
+    },
+}
