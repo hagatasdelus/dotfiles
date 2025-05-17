@@ -1,12 +1,14 @@
--- local ensure_installed = {
---     "efm",
---     "lua_ls",
---     "yamlls",
---     "jsonls",
---     "taplo",
---     "ts_ls",
---     "html",
--- }
+local ensure_installed = {
+    "efm",
+
+    "yamlls",
+    "jsonls",
+    "taplo",
+    "ts_ls",
+    "html",
+
+    "lua_ls",
+}
 
 return {
     {
@@ -19,14 +21,7 @@ return {
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "efm",
-                    "lua_ls",
-                    "yamlls",
-                    "jsonls",
-                    "ts_ls",
-                    "html",
-                },
+                ensure_installed = ensure_installed,
                 automatic_installation = true,
             })
     end,
@@ -41,9 +36,7 @@ return {
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
             vim.lsp.config('*', { capabilities = capabilities })
-            vim.lsp.enable({
-                "efm",
-            })
+            vim.lsp.enable(ensure_installed)
         end,
     }
 }
