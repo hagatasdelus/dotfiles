@@ -4,7 +4,9 @@ local ensure_installed = {
     "yamlls",
     "jsonls",
     "taplo",
+    -- "denols",
     "ts_ls",
+
     "html",
 
     "lua_ls",
@@ -24,7 +26,7 @@ return {
                 ensure_installed = ensure_installed,
                 automatic_installation = true,
             })
-    end,
+        end,
     },
     {
         "neovim/nvim-lspconfig",
