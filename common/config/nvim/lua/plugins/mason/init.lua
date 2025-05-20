@@ -4,8 +4,8 @@ local ensure_installed = {
     "yamlls",
     "jsonls",
     "taplo",
-    -- "denols",
-    "ts_ls",
+    "denols",
+    "vtsls",
 
     "html",
 
