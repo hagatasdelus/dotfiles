@@ -1,5 +1,5 @@
 version: 2
-log-file: /tmp/efm-langserver.log
+# log-file: /tmp/efm-langserver.log
 log-level: 3
 root-markers:
   - .git/
