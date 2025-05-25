@@ -130,17 +130,17 @@ return {
                         -- insert mode
                         i = {
                             ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist, -- 選択項目をquickfix listに送信して開く
-                            ["<C-l>"] = actions.send_to_loclist + actions.open_loclist, -- 検索結果全体をlocation listに送信して開く
-                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- 検索結果全体をquickfix listに送信して開く
-                            ["<CR>"] = function(prompt_bufnr)             -- Enterキーの挙動
+                            ["<C-l>"] = actions.send_to_loclist + actions.open_loclist,        -- 検索結果全体をlocation listに送信して開く
+                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,          -- 検索結果全体をquickfix listに送信して開く
+                            ["<CR>"] = function(prompt_bufnr)                                  -- Enterキーの挙動
                                 require("telescope.actions").select_default(prompt_bufnr)
-                                vim.cmd.stopinsert()                      -- インサートモードを抜ける
+                                vim.cmd.stopinsert()                                           -- インサートモードを抜ける
                             end,
                         },
                         -- normal mode
                         n = {
                             ["<ESC>"] = actions.close, -- 閉じる
-                            ["q"] = actions.close, -- 閉じる
+                            ["q"] = actions.close,     -- 閉じる
                             ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
                             ["<C-l>"] = actions.send_to_loclist + actions.open_loclist,
                             ["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- quickfixリストへ送信
