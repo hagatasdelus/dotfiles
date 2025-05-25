@@ -10,6 +10,9 @@ local ensure_installed = {
     "html",
 
     "lua_ls",
+
+    "pyright",
+    "ruff",
 }
 
 return {
