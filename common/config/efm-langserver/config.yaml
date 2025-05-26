@@ -38,6 +38,7 @@ tools:
       - .prettierrc
       - .prettierrc.json
       - .prettierrc.js
+      - .prettierrc.json5
       - .prettierrc.yml
       - .prettierrc.yaml
       - .prettierrc.mjs
