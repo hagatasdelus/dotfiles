@@ -12,7 +12,7 @@ return {
     opts = {
         debug = true,
         chat_autocomplete = true,
-        -- model = "gpt-4o",
-        model = "claude-3.7-sonnet",
+        model = "gpt-4.1",
+        -- model = "claude-4.0-sonnet",
     },
 }
