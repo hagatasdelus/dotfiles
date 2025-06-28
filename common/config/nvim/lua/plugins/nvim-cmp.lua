@@ -12,6 +12,7 @@ local M = {
         "L3MON4D3/LuaSnip",
         "rafamadriz/friendly-snippets",
         "zbirenbaum/copilot-cmp",
+        "rinx/cmp-skkeleton",
     },
     config = function()
         local cmp = require("cmp")
@@ -50,6 +51,8 @@ local M = {
                 ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
             }),
             sources = cmp.config.sources({
+                { name = "copilot" },
+                { name = "skkeleton" },
                 { name = "nvim_lsp" },
                 { name = "nvim_lua" },
                 { name = "luasnip" }, -- For luasnip users
