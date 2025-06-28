@@ -65,6 +65,10 @@ map("n", "<C-g>a", "<Cmd>Gitsigns stage_buffer<CR>", extend_opts("Stage Buffer")
 map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
 map({ "n", "x" }, "<C-g><C-v>", "<Cmd>Gitsigns blame_line<CR>", extend_opts("Blame Line"))
 
+-- skkeleton
+map({ "i", "c" }, "<C-j>", "<Plug>(skkeleton-enable)", extend_opts("Enable skkeleton"))
+-- map({ "i", "c" }, "<C-l>", "<Plug>(skkeleton-disable)", extend_opts("Disable skkeleton"))
+
 -- LSP-related key mapping and configuration
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
