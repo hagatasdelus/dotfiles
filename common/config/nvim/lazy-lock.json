@@ -15,6 +15,8 @@
   "cmp-skkeleton": { "branch": "main", "commit": "ae74491bc73b868c60f69e4362d3bea29a6bf74d" },
   "cmp-spell": { "branch": "master", "commit": "694a4e50809d6d645c1ea29015dad0c293f019d6" },
   "cmp_luasnip": { "branch": "master", "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90" },
+  "codecompanion-history.nvim": { "branch": "main", "commit": "22637481eee24ab6b2e4bde0a5f7b28641d1834d" },
+  "codecompanion.nvim": { "branch": "main", "commit": "6195175810c92d4644149de7b6b1c0758ac6d99c" },
   "copilot-cmp": { "branch": "master", "commit": "15fc12af3d0109fa76b60b5cffa1373697e261d1" },
   "copilot.lua": { "branch": "master", "commit": "46f4b7d026cba9497159dcd3e6aa61a185cb1c48" },
   "copilot.vim": { "branch": "release", "commit": "5015939f131627a6a332c9e3ecad9a7cb4c2e549" },
