@@ -8,6 +8,11 @@ return {
         "nvim-treesitter/nvim-treesitter",
         "ravitemer/codecompanion-history.nvim",
     },
+    keys = {
+        { "<Space>cc",  "<Cmd>CodeCompanion<CR>",       mode = { "n", "v" }, desc = "CodeCompanion" },
+        { "<Space>ccc", "<Cmd>CodeCompanionChat<CR>",   mode = { "n", "v" }, desc = "CodeCompanion Chat" },
+        { "<Space>cca", "<Cmd>CodeCompanionAction<CR>", mode = { "n", "v" }, desc = "CodeCompanion Action" },
+    },
     opts = {
         opts = {
             language = "Japanese",
