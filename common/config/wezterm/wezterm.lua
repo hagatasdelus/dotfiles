@@ -37,7 +37,7 @@ config.send_composed_key_when_right_alt_is_pressed = false
 config.force_reverse_video_cursor = true
 config.adjust_window_size_when_changing_font_size = false
 -- config.macos_forward_to_ime_modifier_mark = "SHIFT|CTRL"
-config.window_background_opacity = 0.70
+config.window_background_opacity = 0.50
 config.macos_window_background_blur = 20
 
 ----------------------------------------------------
