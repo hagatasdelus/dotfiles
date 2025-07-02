@@ -12,12 +12,16 @@ alias cl='printf "\33c\e[3J"'
 alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
-source "${HOME}/.deno/env"
-
+### Deno ###
+. "$HOME/.deno/env"
+### Cargo ###
+. "$HOME/.cargo/env"
+### Mise ###
 eval "$(${HOME}/.local/bin/mise activate bash)"
-
+### Starship ###
 eval "$(starship init bash)"
 
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
 fi
+
