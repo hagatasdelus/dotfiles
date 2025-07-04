@@ -13,6 +13,8 @@ local ensure_installed = {
 
     "pyright",
     "ruff",
+
+    "tinymist",
 }
 
 return {
