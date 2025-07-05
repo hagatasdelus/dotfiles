@@ -25,9 +25,6 @@ map("", ";;", "$", extend_opts("Move End of Line"))
 map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
 map("t", [[<C-[><C-[>]], [[<C-\><C-n>]], opts)
 
--- neo-tree
-map("n", "<leader>nn", "<Cmd>Neotree toggle<CR>", extend_opts("Neotree Toggle"))
-
 -- barbar
 -- Move to previous/next
 -- map("n", "<leader>,", "<Cmd>BufferPrevious<CR>", opts)
