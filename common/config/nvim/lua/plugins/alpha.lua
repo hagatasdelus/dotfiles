@@ -21,7 +21,7 @@ return {
             dashboard.button("e", "  New file", "<Cmd>enew<CR>"),
             dashboard.button("s", "  Restore Session", '<Cmd>lua require("persistence").load()<CR>'),
             dashboard.button("f", "  Files", "<Cmd>Telescope smart_open<CR>"),
-            dashboard.button(".", "󰈙  Explorer", "<Cmd>Neotree toggle<CR>"),
+            dashboard.button(".", "󰈙  Explorer", "<Cmd>Oil<CR>"),
             dashboard.button("r", "  MRU", "<Cmd>Telescope oldfiles<CR>"),
             dashboard.button("z", "󰒲  Lazy", "<Cmd>Lazy<CR>"),
             dashboard.button("q", "󰅚  Quit", "<Cmd>q<CR>"),
