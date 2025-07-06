@@ -9,6 +9,13 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     end,
 })
 
+vim.api.nvim_create_autocmd("TermOpen", {
+    pattern = "*",
+    callback = function()
+        vim.cmd.startinsert()
+    end,
+})
+
 -- FileType specific settings
 local set_file_type_settings = function(ft, settings)
     vim.api.nvim_create_autocmd('FileType', {
