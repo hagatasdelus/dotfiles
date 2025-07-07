@@ -1,6 +1,6 @@
 return {
     "kat0h/bufpreview.vim",
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     build = "deno task prepare",
     ft = {
         "markdown",

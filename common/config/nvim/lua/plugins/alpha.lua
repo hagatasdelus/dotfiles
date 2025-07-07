@@ -12,7 +12,7 @@ local Ascii = {
 return {
     "goolord/alpha-nvim",
     event = { "VimEnter" },
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     opts = function()
         local theta = require("alpha.themes.theta")
         local dashboard = require("alpha.themes.dashboard")

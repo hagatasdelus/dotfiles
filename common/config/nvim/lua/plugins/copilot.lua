@@ -2,7 +2,7 @@ return {
     {
         "github/copilot.vim",
         enabled = false,
-        cond = not use_in_vscode(),
+        cond = not is_on_vscode(),
         dependencies = {
             { "hrsh7th/cmp-copilot" },
         },
@@ -12,7 +12,7 @@ return {
     {
         "zbirenbaum/copilot.lua",
         enabled = true,
-        cond = not use_in_vscode(),
+        cond = not is_on_vscode(),
         cmd = { "Copilot" },
         event = { "InsertEnter", "VeryLazy" },
         dependencies = {

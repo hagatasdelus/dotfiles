@@ -2,7 +2,7 @@ return {
     {
         "rebelot/kanagawa.nvim",
         event = { "UiEnter", "ColorScheme" },
-        cond = not use_in_vscode(),
+        cond = not is_on_vscode(),
         priority = 1000,
         build = ":KanagawaCompile",
         opts = function()

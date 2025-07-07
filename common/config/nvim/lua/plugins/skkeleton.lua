@@ -6,7 +6,7 @@ return {
     dependencies = {
         "vim-denops/denops.vim",
     },
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     config = function()
         vim.fn["skkeleton#config"]({
             eggLikeNewline = true,

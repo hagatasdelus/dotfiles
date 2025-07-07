@@ -13,7 +13,7 @@ return {
     "nvimtools/none-ls.nvim",
     requires = "nvim-lua/plenary.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     config = function()
         local null_ls = require("null-ls")
 

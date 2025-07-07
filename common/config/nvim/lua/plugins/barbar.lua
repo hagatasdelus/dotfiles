@@ -3,7 +3,7 @@ return {
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     event = { "BufAdd", "TabEnter" },
     init = function()
         vim.g.barbar_auto_setup = false
