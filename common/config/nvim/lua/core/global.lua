@@ -15,3 +15,13 @@ end
 _G.use_in_vscode = function()
     return to_bool(vim.g.vscode)
 end
+
+_G.lambda = function(str)
+    local chunk = [[
+    return function(%s)
+        return %s
+    end
+    ]]
+    local arg, body = str:match("(.*):(.*)")
+    return assert(load(chunk:format(arg, body)))
+end
