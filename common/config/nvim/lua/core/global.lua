@@ -12,7 +12,7 @@ _G.to_bool = function(value)
     end
 end
 
-_G.use_in_vscode = function()
+_G.is_on_vscode = function()
     return to_bool(vim.g.vscode)
 end
 
