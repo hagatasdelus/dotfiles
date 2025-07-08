@@ -13,7 +13,7 @@ end
 function M.debounce(func, wait)
     local timer_id
     return function(...)
-        if timer_id ~ nil then
+        if timer_id ~= nil then
             vim.uv.timer_stop(timer_id)
         end
         local args = { ... }
@@ -24,6 +24,5 @@ function M.debounce(func, wait)
         end)
     end
 end
-
 
 return M

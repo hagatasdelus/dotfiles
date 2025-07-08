@@ -23,5 +23,5 @@ _G.lambda = function(str)
     end
     ]]
     local arg, body = str:match("(.*):(.*)")
-    return assert(load(chunk:format(arg, body)))
+    return assert(load(chunk:format(arg, body)))()
 end
