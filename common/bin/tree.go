@@ -11,6 +11,10 @@ var ignoredEntries = map[string]struct{}{
     ".svn":      {},
     ".git":      {},
     ".DS_Store": {},
+	"node_modules": {},
+	"_cache": {},
+	"_site": {},
+	".mypy_cache": {},
 }
 
 type counter struct {
