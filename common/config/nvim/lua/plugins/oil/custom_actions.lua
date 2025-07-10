@@ -143,6 +143,7 @@ local function canTdfBeRecognized(url)
         return extension == ext
     end)
 end
+
 local isWeztermPreviewOpen = function(pane_id)
     return pane_id ~= nil
 end
@@ -312,4 +313,77 @@ M.openWithTdfWeztermPreview = {
     end,
     desc = "Open Preview with Wezterm",
 }
+
+M.tdfNext = {
+    callback = function()
+        local oil = require("oil")
+        local oil_util = require("oil.util")
+        local preview_entry_id = nil
+
+        local neovim_wezterm_pane_id = getNeovimPaneIdFromWezterm()
+        local bufnr = vim.api.nvim_get_current_buf()
+
+        local updateNextTdfWeztermPreview = debounce(
+            vim.schedule_wrap(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_name = getPreviewPaneNameFromWezterm()
+                    if preview_pane_name ~= "tdf" then
+                        vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
+                        return
+                    end
+                    local preview_pane_id = ensureWeztermPreviewPane()
+                    activeWeztermPane(neovim_wezterm_pane_id)
+
+                    if preview_entry_id == cursor_entry.id then
+                        return
+                    end
+                    sendTextToTdfWeztermPane(preview_pane_id, "l")
+                end
+            end),
+            50
+        )
+        updateNextTdfWeztermPreview()
+    end
+}
+
+M.tdfPrev = {
+    callback = function()
+        local oil = require("oil")
+        local oil_util = require("oil.util")
+        local preview_entry_id = nil
+
+        local neovim_wezterm_pane_id = getNeovimPaneIdFromWezterm()
+        local bufnr = vim.api.nvim_get_current_buf()
+
+        local updateNextTdfWeztermPreview = debounce(
+            vim.schedule_wrap(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_name = getPreviewPaneNameFromWezterm()
+                    if preview_pane_name ~= "tdf" then
+                        vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
+                        return
+                    end
+                    local preview_pane_id = ensureWeztermPreviewPane()
+                    activeWeztermPane(neovim_wezterm_pane_id)
+
+                    if preview_entry_id == cursor_entry.id then
+                        return
+                    end
+                    sendTextToTdfWeztermPane(preview_pane_id, "h")
+                end
+            end),
+            50
+        )
+        updateNextTdfWeztermPreview()
+    end
+}
+
 return M
