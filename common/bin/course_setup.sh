@@ -10,10 +10,10 @@ if [ ${NUMBER_OF_ARGUMENTS} -lt 1 ]; then
 fi
 
 for COURSE in ${COMMAND_LINE}; do
-    mkdir -p "${COURSE}/授業資料" "${COURSE}/レポート" "${COURSE}/テスト" "${COURSE}/過去問"
+    mkdir -p "${COURSE}/lectures" "${COURSE}/reports" "${COURSE}/tests" "${COURSE}/pastexams"
 
     for i in $(seq -f '%02g' 1 15); do
-        mkdir -p "${COURSE}/授業資料/${i}"
+        mkdir -p "${COURSE}/lectures/${i}"
     done
     echo "Course Setup Done >> ${COURSE}"
 done
