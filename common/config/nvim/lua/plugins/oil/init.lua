@@ -27,6 +27,8 @@ return {
                 ["<C-p>"] = "actions.preview",
                 ["gp"] = custom_actions.openWithWeztermPreview,
                 ["gv"] = custom_actions.openWithTdfWeztermPreview,
+                ["gl"] = custom_actions.tdfNext,
+                ["gh"] = custom_actions.tdfPrev,
                 ["g<leader>"] = custom_actions.openWithQuickLook,
                 ["<ESC>"] = "actions.close",
                 ["q"] = nil,
