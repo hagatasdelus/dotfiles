@@ -36,7 +36,7 @@ local function getNeovimPaneIdFromWezterm()
     return tonumber(wezterm_pane_id)
 end
 
-local function getPreviewPaneIdFromWezterm()
+local function getPreviewPaneFromWezterm()
     local panes_list = listWeztermPanes()
     local neovim_wezterm_pane_id = getNeovimPaneIdFromWezterm()
     local current_tab_id = assert(panes_list:find(function(obj)
@@ -48,22 +48,18 @@ local function getPreviewPaneIdFromWezterm()
             and tonumber(obj.pane_id) >
             tonumber(neovim_wezterm_pane_id) -- new pane id should be greater than the current one
     end)
+    return preview_pane
+end
+
+local function getPreviewPaneId()
+    local preview_pane = getPreviewPaneFromWezterm()
     -- https://qiita.com/gyu-don/items/a0aed0f94b8b35c43290
     -- preview_pane ~= nil ? preview_pane.pane_id : nil
     return preview_pane ~= nil and preview_pane.pane_id or nil
 end
 
-local function getPreviewPaneNameFromWezterm()
-    local panes_list = listWeztermPanes()
-    local neovim_wezterm_pane_id = getNeovimPaneIdFromWezterm()
-    local current_tab_id = assert(panes_list:find(function(obj)
-        return obj.pane_id == neovim_wezterm_pane_id
-    end)).tab_id
-    local preview_pane = panes_list:find(function(obj)
-        return
-            obj.tab_id == current_tab_id
-            and tonumber(obj.pane_id) > tonumber(neovim_wezterm_pane_id)
-    end)
+local function getPreviewPaneName()
+    local preview_pane = getPreviewPaneFromWezterm()
     return preview_pane ~= nil and preview_pane.title or nil
 end
 
@@ -112,14 +108,13 @@ local sendTextToTdfWeztermPane = function(wezterm_pane_id, text)
         "wezterm",
         "cli",
         "send-text",
-        "--no-paste",
         ("--pane-id=%s"):format(wezterm_pane_id)
     }
     vim.fn.system(table.concat(cmd, " "))
 end
 
 local ensureWeztermPreviewPane = function(opt)
-    local preview_pane_id = getPreviewPaneIdFromWezterm()
+    local preview_pane_id = getPreviewPaneId()
     if preview_pane_id == nil then
         preview_pane_id = openNewWeztermPane(opt)
     end
@@ -135,7 +130,7 @@ local function isImage(url)
     end)
 end
 
-local function canTdfBeRecognized(url)
+local function isViewableInTdf(url)
     local extension = url:match("^.+(%..*)$")
     local tdfExt = { ".pdf", ".bmp", ".jpg", ".jpeg", ".png" }
 
@@ -150,7 +145,7 @@ end
 
 M.openWithWeztermPreview = {
     callback = function()
-        local open_preview_pane_id = getPreviewPaneIdFromWezterm()
+        local open_preview_pane_id = getPreviewPaneId()
         if isWeztermPreviewOpen(open_preview_pane_id) then
             closeWeztermPane(open_preview_pane_id)
         end
@@ -224,16 +219,18 @@ M.openWithWeztermPreview = {
             group = "Oil",
             buffer = bufnr,
             callback = function()
-                closeWeztermPane(getPreviewPaneIdFromWezterm())
+                closeWeztermPane(getPreviewPaneId())
             end,
         })
     end,
     desc = "Open Preview with Wezterm",
 }
 
+
+-- if you want to open images in tdf
 M.openWithTdfWeztermPreview = {
     callback = function()
-        local open_preview_pane_id = getPreviewPaneIdFromWezterm()
+        local open_preview_pane_id = getPreviewPaneId()
         if isWeztermPreviewOpen(open_preview_pane_id) then
             closeWeztermPane(open_preview_pane_id)
         end
@@ -272,7 +269,7 @@ M.openWithTdfWeztermPreview = {
                         local cmd = "ls -l"
                         command = command .. ("%s %s"):format(cmd, abspath)
                         prev_cmd = cmd
-                    elseif cursor_entry.type == "file" and canTdfBeRecognized(abspath) then
+                    elseif cursor_entry.type == "file" and isViewableInTdf(abspath) then
                         local cmd = "tdf"
                         command = command .. ("%s %s"):format(cmd, abspath)
                         prev_cmd = cmd
@@ -307,7 +304,7 @@ M.openWithTdfWeztermPreview = {
             group = "Oil",
             buffer = bufnr,
             callback = function()
-                closeWeztermPane(getPreviewPaneIdFromWezterm())
+                closeWeztermPane(getPreviewPaneId())
             end,
         })
     end,
@@ -330,7 +327,7 @@ M.tdfNext = {
                 end
                 local cursor_entry = oil.get_cursor_entry()
                 if cursor_entry ~= nil and not oil_util.is_visual_mode() then
-                    local preview_pane_name = getPreviewPaneNameFromWezterm()
+                    local preview_pane_name = getPreviewPaneName()
                     if preview_pane_name ~= "tdf" then
                         vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
                         return
@@ -366,7 +363,7 @@ M.tdfPrev = {
                 end
                 local cursor_entry = oil.get_cursor_entry()
                 if cursor_entry ~= nil and not oil_util.is_visual_mode() then
-                    local preview_pane_name = getPreviewPaneNameFromWezterm()
+                    local preview_pane_name = getPreviewPaneName()
                     if preview_pane_name ~= "tdf" then
                         vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
                         return
