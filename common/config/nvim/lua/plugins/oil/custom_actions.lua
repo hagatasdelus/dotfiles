@@ -138,27 +138,28 @@ end
 -- Preview manager
 local PreviewManager = {}
 
-PreviewManager.getPreviewCommand = function(abspath, cursor_entry, viewerType)
+PreviewManager.getPreviewCommand = function(abspath, cursor_entry)
+    local cmd = nil
+    local text = nil
     if cursor_entry.type == "directory" then
-        local cmd = "ls -l"
-        return { cmd = cmd, ("%s %s"):format(cmd, abspath) }
+        cmd = "ls -l"
     elseif cursor_entry.type == "file" then
-        if viewerType == "tdf" and FileUtils.isViewableInTdf(abspath) then
-            local cmd = "tdf"
-            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
-        elseif viewerType == "wezterm" and FileUtils.isImage(abspath) then
-            local cmd = "wezterm imgcat"
-            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
+        if FileUtils.isImage(abspath) then
+            cmd = "wezterm imgcat"
+        elseif FileUtils.isViewableInTdf(abspath) then
+            cmd = "tdf"
         else
-            local cmd = "bat"
-            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
+            cmd = "bat"
         end
     end
-    return { cmd = nil, text = "" }
+
+    if cmd then
+        text = ("%s %s"):format(cmd, abspath)
+    end
+    return { cmd = cmd, text = text }
 end
 
 PreviewManager.createPreviewAction = function(config)
-    local viewerType = config.viewerType or "wezterm"
     local paneOpts = { percent = config.percent or 30, direction = config.direction or "right" }
 
     return {
@@ -171,7 +172,6 @@ PreviewManager.createPreviewAction = function(config)
             local oil = require("oil")
             local oil_util = require("oil.util")
             local preview_entry_id = nil
-            local prev_cmd = nil
 
             local neovim_wezterm_pane_id = WeztermUtils.getNeovimPaneId()
             local bufnr = vim.api.nvim_get_current_buf()
@@ -190,16 +190,15 @@ PreviewManager.createPreviewAction = function(config)
                             return
                         end
 
-                        if prev_cmd == "bat" then
-                            WeztermUtils.sendCommand(preview_pane_id, "q")
-                            prev_cmd = nil
+                        local preview_pane_name = WeztermUtils.getPreviewPaneName()
+                        if vim.fn.index({ "bat", "tdf" }, preview_pane_name) ~= -1 then
+                            WeztermUtils.sendTextToPreviewPane(preview_pane_id, "q")
                         end
 
                         local abspath = assert(getEntryAbsPath())
-                        local command = PreviewManager.getPreviewCommand(abspath, cursor_entry, viewerType)
+                        local command = PreviewManager.getPreviewCommand(abspath, cursor_entry)
 
                         if command.cmd then
-                            prev_cmd = command.cmd
                             WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command.text)
                         end
                     end
@@ -230,13 +229,11 @@ PreviewManager.createPreviewAction = function(config)
                 end,
             })
         end,
-        desc = ("Open Preview with %s"):format(viewerType == "tdf" and "Wezterm TDF" or "Wezterm"),
+        desc = ("Open Preview with Wezterm Preview")
     }
 end
 
-PreviewManager.createTdfNavigationAction = function(direction)
-    local keyToSend = direction == "next" and "l" or "h"
-
+PreviewManager.createTdfNavigationAction = function(key)
     return {
         callback = function()
             local oil = require("oil")
@@ -285,17 +282,12 @@ M.openWithQuickLook = {
 -- Refactored actions using the common preview manager
 M.openWithWeztermPreview = PreviewManager.createPreviewAction({
     viewerType = "wezterm",
-    percent = 30,
-    direction = "right"
-})
-
-M.openWithTdfWeztermPreview = PreviewManager.createPreviewAction({
-    viewerType = "tdf",
     percent = 50,
     direction = "right"
 })
 
-M.tdfNext = PreviewManager.createTdfNavigationAction("next")
-M.tdfPrev = PreviewManager.createTdfNavigationAction("prev")
+
+M.tdfNext = PreviewManager.createTdfNavigationAction("h")
+M.tdfPrev = PreviewManager.createTdfNavigationAction("l")
 
 return M
