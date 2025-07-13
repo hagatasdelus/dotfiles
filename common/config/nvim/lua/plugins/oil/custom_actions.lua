@@ -50,6 +50,7 @@ end
 
 WeztermUtils.getPreviewPaneId = function()
     local preview_pane = WeztermUtils.getPreviewPane()
+    --  preview_pane ~= nil ? preview_pane.pane_id : nil
     return preview_pane ~= nil and preview_pane.pane_id or nil
 end
 
@@ -139,11 +140,8 @@ end
 local PreviewManager = {}
 
 PreviewManager.getPreviewCommand = function(abspath, cursor_entry)
-    local cmd = nil
-    local text = nil
-    if cursor_entry.type == "directory" then
-        cmd = "ls -l"
-    elseif cursor_entry.type == "file" then
+    local cmd
+    if cursor_entry.type == "file" then
         if FileUtils.isImage(abspath) then
             cmd = "wezterm imgcat"
         elseif FileUtils.isViewableInTdf(abspath) then
@@ -151,12 +149,12 @@ PreviewManager.getPreviewCommand = function(abspath, cursor_entry)
         else
             cmd = "bat"
         end
+    else -- directory, link, etc
+        cmd = "ls -l"
     end
 
-    if cmd then
-        text = ("%s %s"):format(cmd, abspath)
-    end
-    return { cmd = cmd, text = text }
+    local command = ("%s %s"):format(cmd, abspath)
+    return command
 end
 
 PreviewManager.createPreviewAction = function(config)
@@ -198,9 +196,7 @@ PreviewManager.createPreviewAction = function(config)
                         local abspath = assert(getEntryAbsPath())
                         local command = PreviewManager.getPreviewCommand(abspath, cursor_entry)
 
-                        if command.cmd then
-                            WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command.text)
-                        end
+                        WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command)
                     end
                 end),
                 50
@@ -229,7 +225,7 @@ PreviewManager.createPreviewAction = function(config)
                 end,
             })
         end,
-        desc = ("Open Preview with Wezterm Preview")
+        desc = "Open Preview with Wezterm"
     }
 end
 
@@ -279,7 +275,6 @@ M.openWithQuickLook = {
     desc = "Open Preview with QuickLook"
 }
 
--- Refactored actions using the common preview manager
 M.openWithWeztermPreview = PreviewManager.createPreviewAction({
     viewerType = "wezterm",
     percent = 50,
