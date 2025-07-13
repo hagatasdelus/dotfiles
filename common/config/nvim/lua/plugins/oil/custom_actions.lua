@@ -141,17 +141,17 @@ local PreviewManager = {}
 PreviewManager.getPreviewCommand = function(abspath, cursor_entry, viewerType)
     if cursor_entry.type == "directory" then
         local cmd = "ls -l"
-        return { cmd, ("%s %s"):format(cmd, abspath) }
+        return { cmd = cmd, ("%s %s"):format(cmd, abspath) }
     elseif cursor_entry.type == "file" then
         if viewerType == "tdf" and FileUtils.isViewableInTdf(abspath) then
             local cmd = "tdf"
-            return { cmd, text = ("%s %s"):format(cmd, abspath) }
+            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
         elseif viewerType == "wezterm" and FileUtils.isImage(abspath) then
             local cmd = "wezterm imgcat"
-            return { cmd, text = ("%s %s"):format(cmd, abspath) }
+            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
         else
             local cmd = "bat"
-            return { cmd, text = ("%s %s"):format(cmd, abspath) }
+            return { cmd = cmd, text = ("%s %s"):format(cmd, abspath) }
         end
     end
     return { cmd = nil, text = "" }
