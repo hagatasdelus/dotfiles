@@ -286,8 +286,19 @@ M.openWithWeztermPreview = PreviewManager.createPreviewAction({
     direction = "right"
 })
 
+M.closeWeztermPreview = {
+    callback = function()
+        local preview_pane_id = WeztermUtils.getPreviewPaneId()
+        if preview_pane_id then
+            WeztermUtils.closePreviewPane(preview_pane_id)
+        end
+    end,
+    desc = "Close Preview"
+}
 
 M.tdfNext = PreviewManager.createTdfNavigationAction("h")
 M.tdfPrev = PreviewManager.createTdfNavigationAction("l")
+M.tdfFullScreen = PreviewManager.createTdfNavigationAction("f")
+M.tdfInvert = PreviewManager.createTdfNavigationAction("i")
 
 return M
