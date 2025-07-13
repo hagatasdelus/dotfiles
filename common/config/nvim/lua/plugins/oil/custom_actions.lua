@@ -122,7 +122,7 @@ local FileUtils = {}
 
 FileUtils.isImage = function(url)
     local extension = url:match("^.+(%..+)$")
-    local imageExt = { ".bmp", ".jpg", ".jpeg", ".png", ".gif" }
+    local imageExt = { ".bmp", ".jpg", ".jpeg", ".png", ".gif", ".tif", ".tiff" }
     return vim.iter(imageExt):any(function(ext)
         return extension == ext
     end)
@@ -276,7 +276,6 @@ M.openWithQuickLook = {
 }
 
 M.openWithWeztermPreview = PreviewManager.createPreviewAction({
-    viewerType = "wezterm",
     percent = 50,
     direction = "right"
 })
