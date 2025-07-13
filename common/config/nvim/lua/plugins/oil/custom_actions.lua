@@ -76,11 +76,11 @@ WeztermUtils.openNewPane = function(opt)
     return wezterm_pane_id
 end
 
-WeztermUtils.closePane = function(wezterm_pane_id)
+WeztermUtils.closePreviewPane = function(wezterm_pane_id)
     vim.system({ "wezterm", "cli", "kill-pane", ("--pane-id=%s"):format(wezterm_pane_id) })
 end
 
-WeztermUtils.sendCommand = function(wezterm_pane_id, command)
+WeztermUtils.sendCommandToPreviewPane = function(wezterm_pane_id, command)
     local cmd = {
         "echo",
         ("'%s'"):format(command),
@@ -94,7 +94,7 @@ WeztermUtils.sendCommand = function(wezterm_pane_id, command)
     vim.fn.system(table.concat(cmd, " "))
 end
 
-WeztermUtils.sendText = function(wezterm_pane_id, text)
+WeztermUtils.sendTextToPreviewPane = function(wezterm_pane_id, text)
     local cmd = {
         "echo",
         "-n",
@@ -165,7 +165,7 @@ PreviewManager.createPreviewAction = function(config)
         callback = function()
             local open_preview_pane_id = WeztermUtils.getPreviewPaneId()
             if open_preview_pane_id ~= nil then
-                WeztermUtils.closePane(open_preview_pane_id)
+                WeztermUtils.closePreviewPane(open_preview_pane_id)
             end
 
             local oil = require("oil")
@@ -199,8 +199,8 @@ PreviewManager.createPreviewAction = function(config)
                         local command = PreviewManager.getPreviewCommand(abspath, cursor_entry, viewerType)
 
                         if command.cmd then
-                            WeztermUtils.sendCommand(preview_pane_id, command.text)
                             prev_cmd = command.cmd
+                            WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command.text)
                         end
                     end
                 end),
@@ -226,7 +226,7 @@ PreviewManager.createPreviewAction = function(config)
                 group = "Oil",
                 buffer = bufnr,
                 callback = function()
-                    WeztermUtils.closePane(WeztermUtils.getPreviewPaneId())
+                    WeztermUtils.closePreviewPane(WeztermUtils.getPreviewPaneId())
                 end,
             })
         end,
@@ -264,7 +264,7 @@ PreviewManager.createTdfNavigationAction = function(direction)
                         if preview_entry_id == cursor_entry.id then
                             return
                         end
-                        WeztermUtils.sendText(preview_pane_id, keyToSend)
+                        WeztermUtils.sendTextToPreviewPane(preview_pane_id, key)
                     end
                 end),
                 50
