@@ -296,8 +296,8 @@ M.closeWeztermPreview = {
     desc = "Close Preview"
 }
 
-M.tdfNext = PreviewManager.createTdfNavigationAction("h")
-M.tdfPrev = PreviewManager.createTdfNavigationAction("l")
+M.tdfNext = PreviewManager.createTdfNavigationAction("l")
+M.tdfPrev = PreviewManager.createTdfNavigationAction("h")
 M.tdfFullScreen = PreviewManager.createTdfNavigationAction("f")
 M.tdfInvert = PreviewManager.createTdfNavigationAction("i")
 
