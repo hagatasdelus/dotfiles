@@ -95,11 +95,11 @@ WeztermUtils.sendCommandToPreviewPane = function(wezterm_pane_id, command)
     vim.fn.system(table.concat(cmd, " "))
 end
 
-WeztermUtils.sendTextToPreviewPane = function(wezterm_pane_id, text)
+WeztermUtils.sendKeyToPreviewPane = function(wezterm_pane_id, key)
     local cmd = {
         "echo",
         "-n",
-        ("'%s'"):format(text),
+        ("'%s'"):format(key),
         "|",
         "wezterm",
         "cli",
@@ -257,7 +257,7 @@ PreviewManager.createTdfNavigationAction = function(key)
                         if preview_entry_id == cursor_entry.id then
                             return
                         end
-                        WeztermUtils.sendTextToPreviewPane(preview_pane_id, key)
+                        WeztermUtils.sendKeyToPreviewPane(preview_pane_id, key)
                     end
                 end),
                 50
