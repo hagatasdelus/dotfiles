@@ -3,10 +3,25 @@ local jisyo_dir = vim.fn.expand("~/.local/share/skk")
 return {
     "vim-skk/skkeleton",
     event = "InsertEnter",
+    enabled = true,
     dependencies = {
         "vim-denops/denops.vim",
     },
     cond = not is_on_vscode(),
+    keys = {
+        {
+            "<C-j>",
+            "<Plug>(skkeleton-enable)",
+            mode = { "i", "c" },
+            desc = "Enable skkeleton",
+        },
+        {
+            "<C-l>",
+            "<Plug>(skkeleton-disable)",
+            mode = { "i", "c" },
+            desc = "Disable skkeleton",
+        },
+    },
     config = function()
         vim.fn["skkeleton#config"]({
             eggLikeNewline = true,
