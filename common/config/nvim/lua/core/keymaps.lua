@@ -33,18 +33,6 @@ map({ "n", "v" }, "X", '"_X', extend_opts("Delete to end of line without yanking
 map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
 map("t", [[<C-[><C-[>]], [[<C-\><C-n>]], opts)
 
--- Gitsigns
-map("n", "]g", "<Cmd>Gitsigns next_hunk<CR>", extend_opts("Next Git Hunk"))
-map("n", "[g", "<Cmd>Gitsigns prev_hunk<CR>", extend_opts("Previous Git Hunk"))
-map("n", "<C-g><C-a>", "<Cmd>Gitsigns stage_hunk<CR>", extend_opts("Stage Git Hunk"))
-map("n", "<C-g><C-d>", "<Cmd>Gitsigns diffthis ~<CR>", extend_opts("Diff Current File"))
-map("n", "<C-g><C-p>", "<Cmd>Gitsigns diffthis ~<CR>", extend_opts("Preview Git Hunk"))
-map("n", "<C-g><C-q>", "<Cmd>Gitsigns setqflist<CR>", extend_opts("Set Quickfix List"))
-map("n", "<C-g><C-r>", "<Cmd>Gitsigns undo_stage_hunk<CR>", extend_opts("Undo Stage Hunk"))
-map("n", "<C-g>a", "<Cmd>Gitsigns stage_buffer<CR>", extend_opts("Stage Buffer"))
-map("x", "<C-g><C-a>", ":'<,'>Gitsigns stage_hunk<CR>", extend_opts("Stage Selected Hunk"))
-map({ "n", "x" }, "<C-g><C-v>", "<Cmd>Gitsigns blame_line<CR>", extend_opts("Blame Line"))
-
 -- LSP-related key mapping and configuration
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
