@@ -33,11 +33,6 @@ map({ "n", "v" }, "X", '"_X', extend_opts("Delete to end of line without yanking
 map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
 map("t", [[<C-[><C-[>]], [[<C-\><C-n>]], opts)
 
--- -- close-buffers
-map("n", "<A-c>", "<Cmd>BufferClose<CR>", extend_opts("Close Current Buffer"))
-map("n", "<A-w>", "<Cmd>BufferWipeout<CR>", extend_opts("Wipeout Current Buffer"))
-map("n", "<A-a>", "<Cmd>BufferCloseAllButCurrent<CR>", extend_opts("Close All Buffers Except Current"))
-
 -- Gitsigns
 map("n", "]g", "<Cmd>Gitsigns next_hunk<CR>", extend_opts("Next Git Hunk"))
 map("n", "[g", "<Cmd>Gitsigns prev_hunk<CR>", extend_opts("Previous Git Hunk"))
