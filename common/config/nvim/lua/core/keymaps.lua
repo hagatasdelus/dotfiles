@@ -27,6 +27,7 @@ map("n", "tk", "<Cmd>tabnext<CR>", opts)
 map("n", "tl", "<Cmd>tablast<CR>", opts)
 map("n", "tt", "<Cmd>tabe .<CR>", opts)
 map("n", "tq", "<Cmd>tabclose<CR>", opts)
+map("n", "tm", "<Cmd>tab term<CR>", opts)
 map({ "n", "v" }, "x", '"_x', extend_opts("Delete without yanking"))
 map({ "n", "v" }, "X", '"_X', extend_opts("Delete to end of line without yanking"))
 -- terminal mode
