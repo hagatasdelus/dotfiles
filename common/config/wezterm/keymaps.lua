@@ -98,18 +98,17 @@ return {
         { key = "2",     mods = "SUPER",      action = act.ActivateTab(1) },
         { key = "3",     mods = "SUPER",      action = act.ActivateTab(2) },
         { key = "4",     mods = "SUPER",      action = act.ActivateTab(3) },
-        { key = "5",     mods = "SUPER",      action = act.ActivateTab(4) },
-        { key = "6",     mods = "SUPER",      action = act.ActivateTab(5) },
-        { key = "7",     mods = "SUPER",      action = act.ActivateTab(6) },
-        { key = "8",     mods = "SUPER",      action = act.ActivateTab(7) },
-        { key = "9",     mods = "SUPER",      action = act.ActivateTab(-1) },
+        { key = "5",     mods = "SUPER",      action = act.ActivateTab(4) }, { key = "6", mods = "SUPER", action = act.ActivateTab(5) },
+        { key = "7", mods = "SUPER",      action = act.ActivateTab(6) },
+        { key = "8", mods = "SUPER",      action = act.ActivateTab(7) },
+        { key = "9", mods = "SUPER",      action = act.ActivateTab(-1) },
 
         -- コマンドパレット
-        { key = "p",     mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
+        { key = "p", mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
         -- 設定再読み込み
-        { key = "r",     mods = "SHIFT|CTRL", action = act.ReloadConfiguration },
+        { key = "r", mods = "SHIFT|CTRL", action = act.ReloadConfiguration },
         -- キーテーブル用
-        { key = "s",     mods = "LEADER",     action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
+        { key = "s", mods = "LEADER",     action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }) },
         {
             key = "a",
             mods = "LEADER",
