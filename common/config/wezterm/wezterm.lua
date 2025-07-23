@@ -139,4 +139,6 @@ config.keys = require("keymaps").keys
 config.key_tables = require("keymaps").key_tables
 config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 2000 }
 
+require("zen-mode")
+
 return config
