@@ -9,7 +9,10 @@ local function getEntryAbsPath()
     if not cursor_entry or not current_dir then
         return
     end
-    return current_dir .. cursor_entry.name, cursor_entry, current_dir
+
+    local full_path = current_dir .. cursor_entry.name
+    local escaped_path = vim.fn.fnameescape(full_path)
+    return escaped_path, cursor_entry, current_dir
 end
 
 -- Wezterm utilities
