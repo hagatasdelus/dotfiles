@@ -11,8 +11,9 @@ local diagnostics = {
 
 return {
     "jay-babu/mason-null-ls.nvim",
+    enabled = false,
     event = { "BufReadPre", "BufNewFile" },
-    cond = not use_in_vscode(),
+    cond = not is_on_vscode(),
     cmd = "Mason",
     dependencies = {
         "williamboman/mason.nvim",
