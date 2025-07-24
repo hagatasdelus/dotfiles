@@ -12,14 +12,10 @@ end)
 
 return {
     keys = {
+        -- swtich workspace
+        { key = "w",     mods = "LEADER",     action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select workspace" }) },
+        -- rename workspace
         {
-            -- swtich workspace
-            key = "w",
-            mods = "LEADER",
-            action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "Select workspace" }),
-        },
-        {
-            -- rename workspace
             key = "$",
             mods = "LEADER",
             action = act.PromptInputLine({
