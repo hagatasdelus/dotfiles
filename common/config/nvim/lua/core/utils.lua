@@ -10,6 +10,8 @@ M.open_file_with_quicklook = function(file_path)
     end
 end
 
+---@param func function
+---@param wait number
 function M.debounce(func, wait)
     local timer_id
     return function(...)
@@ -23,6 +25,17 @@ function M.debounce(func, wait)
             timer_id = nil
         end)
     end
+end
+
+---@param on_attach OnAttachCallback
+function M.on_attach(on_attach)
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+            local buffer = args.buf
+            local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+            on_attach(client, buffer)
+        end,
+    })
 end
 
 return M
