@@ -11,6 +11,7 @@ return {
                 "danielfalk/smart-open.nvim",
                 dependencies = {
                     "kkharji/sqlite.lua",
+                    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
                     "nvim-telescope/telescope-fzy-native.nvim",
                 },
             },
@@ -79,17 +80,17 @@ return {
                 end
 
                 -- async.void(function()
-                -- 	local err, stat = async.uv.fs_stat(expand_filepath)
-                -- 	assert(not err, err)
-                -- 	if not stat then
-                -- 		return
-                -- 	end
+                --     local err, stat = async.uv.fs_stat(expand_filepath)
+                --     assert(not err, err)
+                --     if not stat then
+                --         return
+                --     end
                 --
-                -- 	if stat.size > 100000 then
-                -- 		return
-                -- 	else
-                -- 		return previewers.buffer_previewer_maker(filepath, bufnr, opts)
-                -- 	end
+                --     if stat.size > 100000 then
+                --         return
+                --     else
+                --         return previewers.buffer_previewer_maker(filepath, bufnr, opts)
+                --     end
                 -- end)
             end
 
