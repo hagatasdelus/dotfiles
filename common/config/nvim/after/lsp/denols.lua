@@ -1,6 +1,5 @@
 ---@type vim.lsp.Config
 return {
-    cmd = { "deno", "lsp" },
     workspace_required = true,
     settings = {
         deno = {
