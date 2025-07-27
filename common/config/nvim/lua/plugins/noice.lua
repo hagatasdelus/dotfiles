@@ -4,7 +4,6 @@ return {
     cond = not is_on_vscode(),
     dependencies = {
         "MunifTanjim/nui.nvim",
-        -- "rcarriga/nvim-notify",
     },
     opts = function()
         return {
