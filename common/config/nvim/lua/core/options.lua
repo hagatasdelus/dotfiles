@@ -11,6 +11,7 @@ vim.cmd("language en_US.UTF-8")
 vim.opt.swapfile = false
 vim.opt.helplang = "ja,en"
 vim.opt.hidden = true
+vim.opt.fenc = "utf-8"
 
 -- Cursol
 vim.opt.cursorline = true
