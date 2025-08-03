@@ -53,8 +53,6 @@ export PATH="${HOME}/.local/share/mise/shims:$PATH"
 #     export PATH="${NEOVIM_HOME}/bin:$PATH"
 # fi
 
-export TYPST_ROOT="$HOME/Developments/slide/"
-
 ### terminal color settings ###
 export CLICOLOR=1
 # export LSCOLORS=exfxcxdxbxegedabagacad
