@@ -4,3 +4,5 @@ alias x64="exec arch -arch x86_64 /bin/zsh --login"
 alias nl="nl -ba -s ':  '"
 alias tree="${HOME}/bin/tree.sh"
 source "/Users/horinakayoshiki/.deno/env"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
