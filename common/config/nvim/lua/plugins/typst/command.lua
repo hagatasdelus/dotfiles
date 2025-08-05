@@ -34,6 +34,7 @@ local function restart_preview_if_running()
                 vim.defer_fn(function()
                     pcall(vim.cmd, "TypstPreview")
                 end, 100)
+                Snacks.notify.info("Restarting Typst Preview with new root", { title = "Typst" })
             end)
             restart_preview()
         end
@@ -51,19 +52,19 @@ function M.set_root(args)
     root = root:gsub("/$", "")
 
     if vim.fn.isdirectory(root) == 0 then
-        Snacks.notify.error("Directory does not exist: " .. root, { title = "Typst" })
+        Snacks.notify.error("No such directory: " .. root, { title = "Typst" })
         return
     end
 
     vim.env.TYPST_ROOT = root
-    Snacks.notify.info("Set Root: " .. root, { title = "Typst" })
+    Snacks.notify.info("Set Typst Root to " .. root, { title = "Typst" })
     restart_preview_if_running()
 end
 
 function M.show_current_root()
     local current_root = get_current_root()
     if current_root ~= nil then
-        Snacks.notify.info("Current Typst Root: " .. current_root, { title = "Typst" })
+        Snacks.notify.info("Current Typst Root is " .. current_root, { title = "Typst" })
     else
         Snacks.notify.warn("No Typst Root set", { title = "Typst" })
     end
@@ -93,16 +94,6 @@ function M.command()
     vim.api.nvim_create_user_command("TypstResetRoot", M.reset_root, {
         nargs = 0,
         desc = "Reset Typst root to default",
-    })
-    vim.api.nvim_create_autocmd("VimLeavePre", {
-        callback = function()
-            if original_typst_root then
-                vim.env.TYPST_ROOT = original_typst_root
-            else
-                vim.env.TYPST_ROOT = nil
-            end
-        end,
-        desc = "Cleanup Typst root settings on Vim exit",
     })
 end
 
