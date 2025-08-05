@@ -1,21 +1,42 @@
 local M = {}
 
 local original_typst_root = vim.env.TYPST_ROOT
-local preview_running = false
+
+local function is_preview_running()
+    local success, servers = pcall(require, 'typst-preview.servers')
+    if not success then
+        return false
+    end
+    local config = require("typst-preview.config")
+
+    local current_bufpath = vim.api.nvim_buf_get_name(0)
+    if current_bufpath == '' then
+        return false
+    end
+
+    local main_file = config.opts.get_main_file(current_bufpath)
+    local server_instance = servers.get(main_file)
+
+    if server_instance ~= nil then
+        return true
+    end
+    return false
+end
 
 local function restart_preview_if_running()
     local bufnr = vim.api.nvim_get_current_buf()
     local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
 
-    if filetype == "typst" and preview_running then
-        local restart_preview = vim.schedule_wrap(function()
-            pcall(vim.cmd, "TypstPreviewStop")
-            preview_running = false
-            vim.defer_fn(function()
-                pcall(vim.cmd, "TypstPreview")
-            end, 100)
-        end)
-        restart_preview()
+    if filetype == "typst" then
+        if is_preview_running() then
+            local restart_preview = vim.schedule_wrap(function()
+                pcall(vim.cmd, "TypstPreviewStop")
+                vim.defer_fn(function()
+                    pcall(vim.cmd, "TypstPreview")
+                end, 100)
+            end)
+            restart_preview()
+        end
     end
 end
 
@@ -35,9 +56,7 @@ function M.set_root(args)
     end
 
     vim.env.TYPST_ROOT = root
-
     Snacks.notify.info("Set Root: " .. root, { title = "Typst" })
-
     restart_preview_if_running()
 end
 
