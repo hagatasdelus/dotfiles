@@ -55,6 +55,22 @@ map("n", "A", function()
     end
     return 'A'
 end, { expr = true })
+map("n", "S", [[:%s/\V\<<C-r><C-w>\>//g<Left><Left>]])                                    -- Substitute word under cursor in file
+map("x", "S", [["zy:%s/\V<C-r><C-r>=escape(@z, '/\\')<CR>//gce<Left><Left><Left><Left>]]) -- Substitute selected text in file (confirm)
+
+map("n", "p", "]p`]")
+map("n", "P", "]P`]")
+
+map("i", "<C-g><C-u>", "<ESC>gUiwgi")
+map("i", "<C-g><C-k>", "<ESC>bgUlgi")
+
+map("n", "/", "/\\v") -- Search forward with very magic
+map("n", "?", "/\\V")
+
+map("", "gV", "`[v`]")
+
+map("n", "F<CR>", "{")
+map("n", "f<CR>", "}")
 
 -- terminal mode
 map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
