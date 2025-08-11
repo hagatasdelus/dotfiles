@@ -9,15 +9,14 @@ vim.api.nvim_create_autocmd("TermOpen", {
     end,
 })
 
--- vim.api.nvim_create_autocmd("BufReadPost", {
---     pattern = "*",
---     callback = function()
---         vim.api.nvim_exec('silent! normal! g`"zv', false)
---     end,
--- })
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "*",
+    callback = function()
+        vim.api.nvim_exec('silent! normal! g`"zv', false)
+    end,
+})
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight on yank",
     callback = function()
         vim.highlight.on_yank()
     end,
