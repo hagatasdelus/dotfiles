@@ -125,7 +125,7 @@ local FileUtils = {}
 
 FileUtils.isImage = function(url)
     local extension = url:match("^.+(%..+)$")
-    local imageExt = { ".bmp", ".jpg", ".jpeg", ".png", ".gif", ".tif", ".tiff" }
+    local imageExt = { ".bmp", ".jpg", ".jpeg", ".png", ".gif", ".tif", ".tiff", ".ico" }
     return vim.iter(imageExt):any(function(ext)
         return extension == ext
     end)
