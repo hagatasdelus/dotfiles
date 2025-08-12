@@ -1,6 +1,6 @@
 ### alias ###
 alias nl='nl -ba -s ": "'
-alias tree='${HOME}/.scripts/bin/tree'
+alias tree='go run ~/scripts/tree.go'
 alias notify='sh ${HOME}/.scripts/notification.sh'
 alias edit='open -a "Visual Studio Code" '
 alias la='ls -A'
@@ -12,18 +12,6 @@ alias cl='printf "\33c\e[3J"'
 alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
 alias path='echo $PATH | tr ":" "\n"'
 
-### Deno ###
-. "$HOME/.deno/env"
-### Cargo ###
-. "$HOME/.cargo/env"
-### Mise ###
-eval "$(${HOME}/.local/bin/mise activate bash)"
-### Starship ###
-eval "$(starship init bash)"
-
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
 fi
-
-
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path bash)"
