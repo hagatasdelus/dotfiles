@@ -1,54 +1,50 @@
--- FileType specific settings
-local set_file_type_settings = function(ft, settings)
-    vim.api.nvim_create_autocmd('FileType', {
-        pattern = ft,
-        callback = function()
-            for option, value in pairs(settings) do
-                vim.opt_local[option] = value
-            end
-        end
-    })
-end
+vim.filetype.add({
+    extension = {
+        mdx = "markdown",
+        jax = "help",
+    },
+    filename = {
+        [".envrc"] = "sh",
+        ["tsconfig.json"] = "jsonc",
+        ["mdx"] = "markdown",
+    },
+    pattern = {
+        [".*/%.%a+rc%.local"] = "sh",
 
--- -- Define settings for each filetype
-set_file_type_settings('cpp', {
-    tabstop = 2,
-    shiftwidth = 2,
-    expandtab = true
-})
+        [".*/%.git/config"] = "gitconfig",
+        [".*/%.git/.*%.conf"] = "gitconfig",
+        [".*/git/config"] = "gitconfig",
+        [".*/git/.*%.conf"] = "gitconfig",
 
-set_file_type_settings('c', {
-    tabstop = 2,
-    expandtab = true
-})
+        [".*/%.git/ignore"] = "gitignore",
+        [".*/git/ignore"] = "gitignore",
 
-set_file_type_settings('markdown', {
-    expandtab = true
-})
+        [".*"] = {
+            function(_, bufnr)
+                local shebang = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1]
+                if not shebang or shebang:sub(1, 2) ~= "#!" then
+                    return
+                end
 
-set_file_type_settings('javascript', {
-    tabstop = 2,
-    shiftwidth = 2,
-    expandtab = true
-})
+                shebang = shebang:gsub("%s+", " ")
 
-set_file_type_settings('typescript', {
-    tabstop = 2,
-    shiftwidth = 2,
-    expandtab = true
-})
+                local idx_space = shebang:find(" ")
+                local path = string.sub(shebang, 3, idx_space and idx_space - 1 or nil)
+                if path == "/usr/bin/env" then
+                    if
+                        vim.startswith(shebang, "#!/usr/bin/env deno")
+                        or vim.startswith(shebang, "#!/usr/bin/env -S deno")
+                    then
+                        return "typescript"
+                    end
+                end
 
-set_file_type_settings('json', {
-    tabstop = 2,
-    shiftwidth = 2,
-    expandtab = true
-})
-
-set_file_type_settings('html', {
-    tabstop = 2,
-    shiftwidth = 2,
-    expandtab = true,
-    autoindent = false,
-    cindent = false,
-    smartindent = false
+                local cmd = vim.fs.basename(path)
+                if cmd == "deno" then
+                    return "typescript"
+                end
+            end,
+            { priority = -math.huge },
+        },
+    },
 })
