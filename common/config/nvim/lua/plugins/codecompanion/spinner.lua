@@ -1,4 +1,4 @@
--- https://github.com/ryoppippi/dotfiles/blob/main/nvim/lua/plugin/codecompanion/spinner.lua
+-- https://raw.githubusercontent.com/ryoppippi/dotfiles/refs/heads/main/nvim/lua/plugin/codecompanion/spinner.lua
 local M = {
     procesing = false,
     spinner_index = 1,
