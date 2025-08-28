@@ -1,3 +1,6 @@
+### welcome messages ###
+echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y/%m/%d"`\033[0;39m" today, "\033[1;34m`date "+%H:%M:%S"`\033[0;39m" now.
+
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 export XDG_CONFIG_HOME=${HOME}/.config
@@ -37,7 +40,7 @@ export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 
-PATH=${HOMEBREW_X86_64_BIN}:${HOMEBREW_ARM_BIN}:${LOCALBIN}:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:${PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
+PATH=${HOMEBREW_X86_64_BIN}:${HOMEBREW_ARM_BIN}:${LOCALBIN}:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:${PATH}:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
 ### Deno ###
 export DENO_INSTALL="${HOME}/.deno"
@@ -66,7 +69,7 @@ export TERM=screen-256color
 # export PS1='\033[01;34m\W\033[00m\$ '
 # Full prompt with full path of current directory
 # export PS1='\033[01;34m\w\033[00m\$ '
-export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+# export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 ### bashrc Read ###
 . ~/.bashrc
