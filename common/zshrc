@@ -1,8 +1,17 @@
-export PATH=$HOME/.progate/bin:$PATH
-alias arm="exec arch -arch arm64e /bin/zsh --login"
-alias x64="exec arch -arch x86_64 /bin/zsh --login"
-alias nl="nl -ba -s ':  '"
-alias tree="${HOME}/bin/tree.sh"
-source "/Users/horinakayoshiki/.deno/env"
+### alias ###
+alias nl='nl -ba -s ": "'
+alias tree='go run ~/scripts/tree.go'
+alias notify='sh ${HOME}/.scripts/notification.sh'
+alias edit='open -a "Visual Studio Code" '
+alias la='ls -A'
+alias h='history'
+alias h2='history 20'
+alias la='ls -laO'
+alias ll='ls -l'
+alias cl='printf "\33c\e[3J"'
+alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
+alias path='echo $PATH | tr ":" "\n"'
 
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+if [ -f ~/.zshrc.local ]; then
+    . ~/.zshrc.local
+fi
