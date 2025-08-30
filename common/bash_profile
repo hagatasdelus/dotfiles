@@ -1,4 +1,4 @@
-### welcome messages ###
+### Welcome Messages ###
 echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y/%m/%d"`\033[0;39m" today, "\033[1;34m`date "+%H:%M:%S"`\033[0;39m" now.
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -69,7 +69,7 @@ export TERM=screen-256color
 # export PS1='\033[01;34m\W\033[00m\$ '
 # Full prompt with full path of current directory
 # export PS1='\033[01;34m\w\033[00m\$ '
-# export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 ### bashrc Read ###
 . ~/.bashrc
