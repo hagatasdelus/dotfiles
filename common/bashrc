@@ -1,16 +1,4 @@
 ### alias ###
-alias nl='nl -ba -s ": "'
-alias tree='go run ~/scripts/tree.go'
-alias notify='sh ${HOME}/.scripts/notification.sh'
-alias edit='open -a "Visual Studio Code" '
-alias la='ls -A'
-alias h='history'
-alias h2='history 20'
-alias la='ls -laO'
-alias ll='ls -l'
-alias cl='printf "\33c\e[3J"'
-alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
-alias path='echo $PATH | tr ":" "\n"'
 
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local

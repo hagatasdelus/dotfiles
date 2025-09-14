@@ -1,0 +1,119 @@
+abbreviations:
+  - name: nl with line numbers and colon separator
+    abbr: nl
+    snippet: 'nl -ba -s ": "'
+
+  - name: tree command using Go script
+    abbr: tree
+    snippet: 'go run ~/scripts/tree.go'
+
+  - name: send notification
+    abbr: notify
+    snippet: 'sh $HOME/.scripts/notification.sh'
+
+  - name: open Visual Studio Code
+    abbr: edit
+    snippet: 'open -a "Visual Studio Code" '
+
+  - name: history
+    abbr: h
+    snippet: history
+
+  - name: last 20 history entries
+    abbr: h2
+    snippet: history 20
+
+  - name: list all files including hidden ones
+    abbr: la
+    snippet: ls -laO
+
+  - name: list files in -A
+    abbr: lA
+    snippet: ls -A
+
+  - name: list files with details
+    abbr: ll
+    snippet: ls -l
+
+  - name: clear screen completely
+    abbr: cl
+    snippet: 'printf "\33c\e[3J"'
+
+  - name: display JAVA_HOME versions
+    abbr: java_home-v
+    snippet: 'sh $HOME/.scripts/java_home-v.sh'
+
+  - name: display PATH variable in a column
+    abbr: path
+    snippet: 'echo $PATH | tr ":" "\n"'
+
+  - abbr: cam
+    snippet: commit -am '%'
+    options:
+      position: anywhere
+      set_cursor: true
+      command: git
+
+  - name: Pipe to less
+    abbr: L
+    snippet: "| less"
+    options:
+      position: anywhere
+
+  - name: git status
+    abbr: s
+    snippet: status
+    options:
+      position: anywhere
+      command: git
+
+  - name: git commit with message
+    abbr: cm
+    snippet: commit -m '%'
+    options:
+      position: anywhere
+      command: git
+      set_cursor: true
+
+  - name: git add all
+    abbr: a
+    snippet: "add ."
+    options:
+      position: anywhere
+      command: git
+
+  - name: git push current branch to origin (dynamic)
+    abbr: po
+    snippet: "push origin $(git symbolic-ref --short HEAD)"
+    options:
+      position: anywhere
+      command: git
+      evaluate: true
+
+  - name: Use trash-cli if available
+    abbr: del
+    snippet: trash
+    options:
+      condition: "command -v trash &> /dev/null"
+
+  - name: Fallback to interactive rm if trash-cli is not installed
+    abbr: del
+    snippet: "rm -i"
+
+  - name: Execute shell scripts
+    snippet: sh $script
+    options:
+      regex: ^(?<script>\S+\.sh)$
+      evaluate: true
+
+  - name: Unpack tar.gz files
+    snippet: tar -xzvf $archive
+    options:
+      regex: ^(?<archive>\S+\.tar\.gz)$
+      evaluate: true
+
+  - name: print Nth field
+    snippet: awk '{ print \$$num }'
+    options:
+      regex: ^p(?<num>\d+)$
+      evaluate: true
