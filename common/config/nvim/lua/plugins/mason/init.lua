@@ -1,5 +1,5 @@
 local ensure_installed = {
-    -- "efm",
+    "efm",
 
     "yamlls",
     "jsonls",
