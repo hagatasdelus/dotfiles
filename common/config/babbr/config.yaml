@@ -90,15 +90,13 @@ abbreviations:
       command: git
       evaluate: true
 
-  - name: Use trash-cli if available
-    abbr: del
-    snippet: trash
-    options:
-      condition: "command -v trash &> /dev/null"
+  - name: rm
+    abbr: rm
+    snippet: rm -ri
 
-  - name: Fallback to interactive rm if trash-cli is not installed
-    abbr: del
-    snippet: "rm -i"
+  - name: mv -i
+    abbr: mv
+    snippet: mv -i
 
   - name: Execute shell scripts
     snippet: sh $script
