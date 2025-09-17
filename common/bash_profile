@@ -1,6 +1,5 @@
 ### Welcome Messages ###
-echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y/%m/%d"`\033[0;39m" today, "\033[1;34m`date "+%H:%M:%S"`\033[0;39m" now.
-echo -e Logged in as "\033[1;33m`whoami`\033[0;39m", BASH version is "\033[1;35m${BASH_VERSION}\033[0;39m".
+echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y/%m/%d"`\033[0;39m" today, "\033[1;34m`date "+%H:%M:%S"`\033[0;39m" now, Logged in as "\033[1;33m`whoami`\033[0;39m", Bash version is "\033[1;35m${BASH_VERSION}\033[0;39m".
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
