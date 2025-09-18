@@ -50,12 +50,6 @@ export PATH="${DENO_INSTALL}/bin:$PATH"
 ### Mise ###
 export PATH="${HOME}/.local/share/mise/shims:$PATH"
 
-### Neovim
-# export NEOVIM_HOME=$HOME/.local/nvim
-# if [ -d "${NEOVIM_HOME}" ]; then
-#     export PATH="${NEOVIM_HOME}/bin:$PATH"
-# fi
-
 ### terminal color settings ###
 export CLICOLOR=1
 # export LSCOLORS=exfxcxdxbxegedabagacad
