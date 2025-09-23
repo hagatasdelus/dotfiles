@@ -26,5 +26,4 @@ fi
 #   if [ ! $? == 0 ] ; then PATH=$SVN_HOME/bin:$PATH ; fi
 # fi
 
-source ~/.zshrc
 export PATH="$PATH:${HOME}/bin"
