@@ -5,14 +5,6 @@ root-markers:
   - .git/
 
 tools:
-  stylua: &stylua
-    format-command: "stylua -s --color Never -"
-    format-stdin: true
-    require-marker: true
-    root-markers:
-      - stylua.toml
-      - .stylua.toml
-
   mypy: &mypy
     lint-command: "mypy --show-column-numbers"
     lint-formats:
@@ -62,10 +54,15 @@ tools:
       - .textlintrc.js
       - .git
 
-languages:
-  lua:
-    - <<: *stylua
+  # stylua: &stylua
+  #   format-command: "stylua -s --color Never -"
+  #   format-stdin: true
+  #   require-marker: true
+  #   root-markers:
+  #     - stylua.toml
+  #     - .stylua.toml
 
+languages:
   python:
     - <<: *mypy
     - <<: *ruff-format
