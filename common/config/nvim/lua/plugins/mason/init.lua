@@ -10,6 +10,7 @@ local ensure_installed = {
     "html",
 
     "lua_ls",
+    "stylua",
 
     "pyright",
     "ruff",
