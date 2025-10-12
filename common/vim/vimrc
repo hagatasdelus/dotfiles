@@ -1,0 +1,132 @@
+syntax on
+language en_US.UTF-8
+
+let g:mapleader=' '
+let g:maplocalleader='\'
+
+set noswapfile
+set helplang=ja,en
+set hidden
+set fileencoding=utf-8
+
+" set cursorline
+" set cursorcolumn
+set whichwrap=b,s,h,l,[,],<,>,~
+
+set clipboard+=unnamedplus
+
+set wildmenu
+set cmdheight=1
+set laststatus=2
+set showcmd
+set confirm
+
+set hlsearch
+set incsearch
+set matchtime=1
+
+set number
+set wrap
+set showtabline=2
+set visualbell
+set noerrorbells
+set showmatch
+set list
+set listchars=tab:^-,trail:»,extends:❯,precedes:❮,nbsp:␣
+
+" set winblend=0
+" set pumblend=10
+set signcolumn=yes
+set splitright
+
+set shiftwidth=4
+set tabstop=4
+set expandtab
+set autoindent
+set smartindent
+set backspace=indent,eol,start
+
+highlight LineNr guifg=#8a70ac
+
+" Color
+" hi Search cterm=NONE ctermfg=black ctermbg=191
+" hi Visual cterm=NONE ctermfg=black ctermbg=191
+" hi StatusLine term=NONE cterm=NONE ctermfg=230 ctermbg=22
+
+inoremap jj <ESC>
+
+nnoremap <Return><Return> <c-w><c-w>
+
+nnoremap ss ^
+xnoremap ss ^
+onoremap ss ^
+
+nnoremap ;; $
+xnoremap ;; $
+onoremap ;; $
+
+cnoreabbrev tn tabnew
+cnoreabbrev vs vsplit
+
+nnoremap <silent> x "_x
+vnoremap <silent> x "_x
+nnoremap <silent> X "_d$
+vnoremap <silent> X "_d$
+" nnoremap Y y$
+" xnoremap y mzy`z
+" nnoremap U <C-r>
+" xnoremap p P
+" nnoremap p ]p`_
+" nnoremap P ]P`_
+
+" noremap gV `[v`]
+" onoremap <silent> i<Space> iW
+" xnoremap <silent> i<Space> iW
+
+" nmap  <expr> M expand('<cword>') =~# 'end' ? '%' : 'g%'
+" omap  <expr> M expand('<cword>') =~# 'end' ? '%' : 'g%'
+" vmap  <expr> M expand('<cword>') =~# 'end' ? '%' : 'g%'
+
+" nnoremap F<CR> {
+" nnoremap f<CR> }
+" xnoremap a" 2i"
+" onoremap a" 2i"
+" xnoremap a' 2i'
+" onoremap a' 2i'
+" xnoremap a` 2i`
+" onoremap a` 2i`
+
+" nnoremap <expr> <silent> <C-k> '<Cmd>move-1-' . v:count1 . '<CR>=l'
+" nnoremap <expr> <silent> <C-j> '<Cmd>move+' . v:count1 . '<CR>=l'
+" xnoremap <silent> <C-k> :move'<-2<CR>gv=gv
+" xnoremap <silent> <C-j> :move'>+1<CR>gv=gv
+" nnoremap <silent> <Space>g <Cmd>copy.<CR>
+" nnoremap <silent> <Space>G <Cmd>copy-1<CR>
+" xnoremap <silent> <Space>g :copy'<-1<CR>gv
+" xnoremap <silent> <Space>G :copy'>+0<CR>gv
+
+nnoremap <silent> <Tab>     <Cmd>tabnext<CR>
+nnoremap <silent> <S-Tab>   <Cmd>tabprevious<CR>
+nnoremap <silent> th        <Cmd>tabfirst<CR>
+nnoremap <silent> tj        <Cmd>tabprevious<CR>
+nnoremap <silent> tk        <Cmd>tabnext<CR>
+nnoremap <silent> tl        <Cmd>tablast<CR>
+nnoremap <silent> tt        <Cmd>tabe .<CR>
+nnoremap <silent> tq        <Cmd>tabclose<CR>
+nnoremap <silent> tm        <Cmd>tab term<CR>
+
+" nnoremap S :%s/\V\<<C-r><C-w>\>//g<Left><Left>
+" xnoremap S "zy:%s/\V<C-r><C-r>=escape(@z, '/\\')<CR>//gce<Left><Left><Left><Left>
+
+" nnoremap / /\v
+" nnoremap ? ?\V
+
+" tnoremap <silent> <ESC><ESC> <C-\><C-n>
+" tnoremap <silent> <C-[><C-[> <C-\><C-n>
+
+" xnoremap <silent> < <gv
+" xnoremap <silent> > >gv
+" nnoremap <expr> i empty(getline('.')) ? '"_cc' : 'i'
+" nnoremap <expr> A empty(getline('.')) ? '"_cc' : 'A'
+" inoremap <C-g><C-u> <ESC>gUiwgi
+" inoremap <C-g><C-k> <ESC>bgUlgi
