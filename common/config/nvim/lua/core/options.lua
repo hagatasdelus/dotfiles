@@ -35,7 +35,7 @@ vim.opt.matchtime = 1
 
 -- ColorScheme
 vim.opt.termguicolors = true
-vim.opt.background = "dark"
+vim.opt.background = "light"
 
 -- Indent
 vim.opt.shiftwidth = 4
@@ -72,7 +72,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.splitright = true
 
 -- line number color
-vim.cmd("highlight LineNr guifg=#8a70ac")
+-- vim.cmd("highlight LineNr guifg=#8a70ac")
 
 -- vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 

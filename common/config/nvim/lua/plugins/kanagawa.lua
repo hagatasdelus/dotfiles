@@ -7,13 +7,12 @@ return {
         build = ":KanagawaCompile",
         opts = function()
             return {
-                theme = "wave",
                 background = {
                     dark = "dragon",
                     light = "lotus",
                 },
                 compile = true,
-                transparent = true,
+                transparent = false,
                 dimInactive = false,
                 colors = {
                     theme = {
