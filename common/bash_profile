@@ -40,7 +40,7 @@ export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 
-PATH=${LOCALBIN}:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/sbin:${PATH}:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
+PATH=${LOCALBIN}:${PATH}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
 ### Deno ###
 export DENO_INSTALL="${HOME}/.deno"
