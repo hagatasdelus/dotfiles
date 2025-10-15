@@ -13,7 +13,7 @@ set fileencoding=utf-8
 " set cursorcolumn
 set whichwrap=b,s,h,l,[,],<,>,~
 
-set clipboard+=unnamedplus
+" set clipboard+=unnamedplus
 
 set wildmenu
 set cmdheight=1
@@ -46,8 +46,8 @@ set autoindent
 set smartindent
 set backspace=indent,eol,start
 
-highlight LineNr guifg=#8a70ac
-
+" highlight LineNr guifg=#8a70ac
+set termguicolors
 " Color
 " hi Search cterm=NONE ctermfg=black ctermbg=191
 " hi Visual cterm=NONE ctermfg=black ctermbg=191
@@ -130,3 +130,51 @@ nnoremap <silent> tm        <Cmd>tab term<CR>
 " nnoremap <expr> A empty(getline('.')) ? '"_cc' : 'A'
 " inoremap <C-g><C-u> <ESC>gUiwgi
 " inoremap <C-g><C-k> <ESC>bgUlgi
+
+call plug#begin()
+
+Plug 'https://github.com/vim-denops/denops.vim'
+
+Plug 'https://github.com/vim-jp/vimdoc-ja'
+Plug 'https://github.com/vim-skk/skkeleton'
+
+Plug 'https://github.com/catppuccin/vim'
+
+call plug#end()
+
+nnoremap <C-j> a<Plug>(skkeleton-toggle)
+imap <C-j> <Plug>(skkeleton-toggle)
+cmap <C-j> <Plug>(skkeleton-toggle)
+tmap <c-j> <Plug>(skkeleton-toggle)
+
+function! s:Skkeleton_config() abort
+    let s:jisyo_dir = expand('~/.local/share/skk')
+
+    call skkeleton#config(#{
+        \ eggLikeNewline: v:true,
+        \ globalDictionaries: [
+        \   s:jisyo_dir . '/SKK-JISYO.L',
+        \   s:jisyo_dir . '/SKK-JISYO.emoji.utf8',
+        \   s:jisyo_dir . '/SKK-JISYO.law',
+        \   s:jisyo_dir . '/SKK-JISYO.propernoun',
+        \   s:jisyo_dir . '/SKK-JISYO.geo',
+        \   s:jisyo_dir . '/SKK-JISYO.station',
+        \   s:jisyo_dir . '/SKK-JISYO.jinmei',
+        \ ],
+        \ immediatelyCancel: v:false,
+        \ databasePath: '/tmp/skkeleton.sqlite3',
+        \ })
+    call skkeleton#register_kanatable('rom', {
+        \ 'z<Space>': ['\u3000', ''],
+        \ 'z!': ['！', ''],
+        \ 'z?': ['？', ''],
+        \ 'z~': ['〜', ''],
+        \ 'xn': ['ん', ''],
+        \ })
+endfunction
+augroup skkeleton_user_config
+    autocmd!
+    autocmd User skkeleton-initialize-pre call s:Skkeleton_config()
+augroup END
+
+colorscheme catppuccin_latte
