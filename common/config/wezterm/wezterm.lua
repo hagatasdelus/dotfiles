@@ -24,7 +24,7 @@ config.font_size = 16.0
 config.font = wezterm.font_with_fallback({
     "HackGen Console NF",
 })
-config.color_scheme = "Kanagawa Dragon (Gogh)"
+config.color_scheme = "Kanagawa Lotus (Gogh)"
 config.window_padding = {
     left = 1,
     right = 0,
