@@ -13,7 +13,7 @@ set fileencoding=utf-8
 " set cursorcolumn
 set whichwrap=b,s,h,l,[,],<,>,~
 
-" set clipboard+=unnamedplus
+set clipboard+=unnamedplus
 
 set wildmenu
 set cmdheight=1
