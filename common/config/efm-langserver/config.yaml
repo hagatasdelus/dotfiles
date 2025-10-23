@@ -8,9 +8,9 @@ tools:
   mypy: &mypy
     lint-command: "mypy --show-column-numbers"
     lint-formats:
-      - '%f:%l:%c: %trror: %m'
-      - '%f:%l:%c: %tarning: %m'
-      - '%f:%l:%c: %tote: %m'
+      - "%f:%l:%c: %trror: %m"
+      - "%f:%l:%c: %tarning: %m"
+      - "%f:%l:%c: %tote: %m"
 
   ruff-format: &ruff-format
     format-command: "ruff --fix -e -n --stdin-filesname -"
@@ -37,8 +37,8 @@ tools:
       - .prettierrc.cjs
       - .prettierrc.toml
 
-  textlint: &textlint
-    # lint-command: "deno run -A --node-modules-dir npm:textlint@latest --format unix --stdin --stdin-filename ${INPUT}"
+  textlint:
+    &textlint # lint-command: "deno run -A --node-modules-dir npm:textlint@latest --format unix --stdin --stdin-filename ${INPUT}"
     lint-command: >
       deno run -A --node-modules-dir npm:textlint@latest --format json ${INPUT} | jq -r '.[] | .filePath as $filePath | .messages[] | "1;\($filePath):\(.line):\(.column):\n2;\(.message | split("\n")[0])\n3;[\(.ruleId)]"'
     lint-ignore-exit-code: true
@@ -54,19 +54,10 @@ tools:
       - .textlintrc.js
       - .git
 
-  # stylua: &stylua
-  #   format-command: "stylua -s --color Never -"
-  #   format-stdin: true
-  #   require-marker: true
-  #   root-markers:
-  #     - stylua.toml
-  #     - .stylua.toml
-
 languages:
   python:
     - <<: *mypy
     - <<: *ruff-format
-
   html:
     - <<: *prettier
   javascriptreact:
