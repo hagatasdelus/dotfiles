@@ -1,12 +1,12 @@
 ---@type LazySpec
 return {
-    "stevearc/oil.nvim",
+    "https://github.com/stevearc/oil.nvim",
     event = "VeryLazy",
     cmd = { "Oil" },
     dependencies = {
-        "echasnovski/mini.icons",
-        "refractalize/oil-git-status.nvim",
-        "folke/snacks.nvim",
+        "https://github.com/echasnovski/mini.icons",
+        "https://github.com/refractalize/oil-git-status.nvim",
+        "https://github.com/folke/snacks.nvim",
     },
     keys = {
         {
