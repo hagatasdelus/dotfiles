@@ -1,7 +1,6 @@
 ---@type LazySpec
 return {
     "https://github.com/olimorris/codecompanion.nvim",
-    cond = false,
     event = "VeryLazy",
     enabled = true,
     dependencies = {
