@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
     {
-        "kaarmu/typst.vim",
+        "https://github.com/kaarmu/typst.vim",
         enabled = false,
         ft = { "typst" },
         -- lazy = false,
@@ -10,7 +10,7 @@ return {
         -- end,
     },
     {
-        "chomosuke/typst-preview.nvim",
+        "https://github.com/chomosuke/typst-preview.nvim",
         enabled = true,
         ft = { "typst" },
         config = function()
@@ -19,7 +19,6 @@ return {
         init = function()
             local typst_command = require("plugins.typst.command")
             typst_command.command()
-        end
+        end,
     },
-
 }
