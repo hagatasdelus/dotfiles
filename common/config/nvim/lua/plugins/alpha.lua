@@ -10,7 +10,7 @@ local Ascii = {
 }
 
 return {
-    "goolord/alpha-nvim",
+    "https://github.com/goolord/alpha-nvim",
     event = { "VimEnter" },
     cond = not is_on_vscode(),
     opts = function()
