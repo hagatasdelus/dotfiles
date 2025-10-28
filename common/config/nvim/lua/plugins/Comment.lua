@@ -1,9 +1,9 @@
 return {
-    "numToStr/Comment.nvim",
+    "https://github.com/numToStr/Comment.nvim",
     keys = {
         { "gcc", mode = "n" },
-        { "gc",  mode = { "n", "x" } },
-        { "gb",  mode = { "n", "x" } },
+        { "gc", mode = { "n", "x" } },
+        { "gb", mode = { "n", "x" } },
     },
     config = function()
         require("Comment").setup({
