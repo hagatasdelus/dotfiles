@@ -88,7 +88,7 @@ highlights.yg_wt = {
 }
 
 return {
-    "akinsho/bufferline.nvim",
+    "https://github.com/akinsho/bufferline.nvim",
     event = { "BufAdd", "TabEnter" },
     cond = not is_on_vscode(),
     config = function()
