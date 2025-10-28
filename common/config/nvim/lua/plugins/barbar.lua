@@ -1,7 +1,7 @@
 return {
-    "romgrk/barbar.nvim",
+    "https://github.com/romgrk/barbar.nvim",
     dependencies = {
-        "nvim-tree/nvim-web-devicons",
+        "https://github.com/nvim-tree/nvim-web-devicons",
     },
     cond = not is_on_vscode(),
     event = { "BufAdd", "TabEnter" },
