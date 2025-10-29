@@ -1,11 +1,11 @@
 return {
-    "kat0h/bufpreview.vim",
+    "https://github.com/kat0h/bufpreview.vim",
     cond = not is_on_vscode(),
     build = "deno task prepare",
     ft = {
         "markdown",
     },
     dependencies = {
-        "vim-denops/denops.vim",
+        "https://github.com/vim-denops/denops.vim",
     },
 }
