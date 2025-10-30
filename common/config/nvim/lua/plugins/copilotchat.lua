@@ -1,9 +1,9 @@
 return {
-    "CopilotC-Nvim/CopilotChat.nvim",
+    "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
     event = "VeryLazy",
     dependencies = {
-        "nvim-lua/plenary.nvim",
-        -- "zbirenbaum/copilot.lua",
+        "https://github.com/nvim-lua/plenary.nvim",
+        -- "https://github.com/zbirenbaum/copilot.lua",
     },
     build = "make tiktoken",
     keys = {
