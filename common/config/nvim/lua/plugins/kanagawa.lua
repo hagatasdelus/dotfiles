@@ -1,6 +1,6 @@
 return {
     {
-        "rebelot/kanagawa.nvim",
+        "https://github.com/rebelot/kanagawa.nvim",
         event = { "UiEnter", "ColorScheme" },
         cond = not is_on_vscode(),
         priority = 1000,
