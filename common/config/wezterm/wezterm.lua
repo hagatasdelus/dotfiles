@@ -43,6 +43,7 @@ config.enable_csi_u_key_encoding = true
 
 require("color").apply(config)
 require("keymaps").apply(config)
+require("tab").apply(config)
 require("zen-mode")
 
 return config
