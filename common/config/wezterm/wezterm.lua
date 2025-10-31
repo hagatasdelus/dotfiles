@@ -41,6 +41,7 @@ config.macos_window_background_blur = 20
 -- config.enable_kitty_keyboard = true
 config.enable_csi_u_key_encoding = true
 
+require("color").apply(config)
 require("keymaps").apply(config)
 require("zen-mode")
 
