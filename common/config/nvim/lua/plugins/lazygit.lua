@@ -1,5 +1,5 @@
 return {
-    "kdheepak/lazygit.nvim",
+    "https://github.com/kdheepak/lazygit.nvim",
     lazy = true,
     cond = not is_on_vscode(),
     cmd = {
