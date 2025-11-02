@@ -1,4 +1,4 @@
 return {
-    "onsails/lspkind.nvim",
+    "https://github.com/onsails/lspkind.nvim",
     event = "InsertEnter",
 }
