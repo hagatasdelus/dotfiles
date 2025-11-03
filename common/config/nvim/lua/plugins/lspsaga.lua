@@ -1,5 +1,5 @@
 return {
-    "nvimdev/lspsaga.nvim",
+    "https://github.com/nvimdev/lspsaga.nvim",
     config = function()
         require("lspsaga").setup({
             symbol_in_winbar = {
@@ -8,7 +8,7 @@ return {
         })
     end,
     dependencies = {
-        "nvim-tree/nvim-web-devicons",
+        "https://github.com/nvim-tree/nvim-web-devicons",
     },
     event = { "BufRead", "BufNewFile" },
 }
