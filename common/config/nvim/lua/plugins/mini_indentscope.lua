@@ -1,5 +1,5 @@
 return {
-    "echasnovski/mini.indentscope",
+    "https://github.com/echasnovski/mini.indentscope",
     event = "BufRead",
     config = function()
         require("mini.indentscope").setup({
