@@ -1,5 +1,5 @@
 return {
-    "nvim-neo-tree/neo-tree.nvim",
+    "https://github.com/nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     enabled = false,
     cond = not is_on_vscode(),
