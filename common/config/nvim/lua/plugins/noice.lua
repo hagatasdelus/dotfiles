@@ -1,5 +1,5 @@
 return {
-    "folke/noice.nvim",
+    "https://github.com/folke/noice.nvim",
     event = "VeryLazy",
     cond = not is_on_vscode(),
     dependencies = {
