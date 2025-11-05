@@ -10,8 +10,8 @@ local diagnostics = {
 }
 
 return {
-    "nvimtools/none-ls.nvim",
-    requires = "nvim-lua/plenary.nvim",
+    "https://github.com/nvimtools/none-ls.nvim",
+    requires = "https://github.com/nvim-lua/plenary.nvim",
     event = { "BufReadPre", "BufNewFile" },
     cond = not is_on_vscode(),
     config = function()
