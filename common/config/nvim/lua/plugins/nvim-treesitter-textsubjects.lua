@@ -1,5 +1,5 @@
 return {
-    "RRethy/nvim-treesitter-textsubjects",
+    "https://github.com/RRethy/nvim-treesitter-textsubjects",
     config = function()
         require("nvim-treesitter-textsubjects").configue({
             prev_selection = ",", -- (Optional) keymap to select the previous selection
