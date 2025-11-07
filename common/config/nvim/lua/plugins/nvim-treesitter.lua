@@ -1,5 +1,6 @@
 return {
-    "nvim-treesitter/nvim-treesitter",
+    "https://github.com/nvim-treesitter/nvim-treesitter",
+    branch = "main",
     event = {
         "BufRead",
         "BufNewFile",
@@ -7,39 +8,14 @@ return {
     },
     build = ":TSUpdate",
     config = function()
-        local configs = require("nvim-treesitter.configs")
-        configs.setup({
-            ensure_installed = {
-                "awk",
-                "bash",
-                "c",
-                "cpp",
-                "csv",
-                "diff",
-                "go",
-                "html",
-                "htmldjango",
-                "java",
-                "javascript",
-                "json",
-                "lua",
-                "markdown",
-                "python",
-                "rust",
-                "scss",
-                "sql",
-                "ssh_config",
-                "typescript",
-                "toml",
-                "vim",
-                "xml",
-                "regex",
-                "vimdoc",
-            },
-            sync_install = false,
-            auto_install = true,
-            highlight = { enable = true },
-            indent = { enable = true },
+        local install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "/treesitter")
+        require("nvim-treesitter").setup({ install_dir = install_dir })
+        vim.api.nvim_create_autocmd("FileType", {
+            group = vim.api.nvim_create_augroup("vim-treesitter-start", { clear = true }),
+            callback = function()
+                pcall(require, "nvim-treesitter")
+                pcall(vim.treesitter.start)
+            end,
         })
     end,
 }
