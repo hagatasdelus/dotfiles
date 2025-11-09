@@ -1,11 +1,11 @@
 local jisyo_dir = vim.fn.expand("~/.local/share/skk")
 
 return {
-    "vim-skk/skkeleton",
+    "https://github.com/vim-skk/skkeleton",
     event = "InsertEnter",
     enabled = true,
     dependencies = {
-        "vim-denops/denops.vim",
+        "https://github.com/vim-denops/denops.vim",
     },
     cond = not is_on_vscode(),
     keys = {
@@ -37,8 +37,6 @@ return {
             userDictionary = vim.fn.expand(jisyo_dir .. "/skk-jisyo.utf8"),
             -- completionRankFile = vim.fn.expand(jisyo_dir .. "/rank.json"),
             immediatelyCancel = false,
-            immediatelyOkuriConvert = true,
-            registerConvertResult = true,
         })
     end,
 }
