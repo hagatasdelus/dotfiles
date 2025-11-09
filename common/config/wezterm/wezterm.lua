@@ -39,7 +39,15 @@ config.macos_forward_to_ime_modifier_mask = "SHIFT|CTRL"
 config.window_background_opacity = 0.70
 config.macos_window_background_blur = 20
 -- config.enable_kitty_keyboard = true
-config.enable_csi_u_key_encoding = true
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, {
+    regex = [[["]?([\w\d]{1}[-\w\d]+)/([-\w\d\.]+)["]?]],
+    format = "https://github.com/$1/$2",
+})
+table.insert(config.hyperlink_rules, {
+    regex = [[github\.com/([\w\d]{1}[-\w\d]+)/([-\w\d\.]+)]],
+    format = "https://github.com/$1/$2",
+})
 
 require("color").apply(config)
 require("keymaps").apply(config)
