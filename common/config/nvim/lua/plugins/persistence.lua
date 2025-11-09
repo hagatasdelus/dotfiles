@@ -1,5 +1,5 @@
 return {
-    "folke/persistence.nvim",
+    "https://github.com/folke/persistence.nvim",
     event = { "BufReadPre" },
     keys = {
         {
