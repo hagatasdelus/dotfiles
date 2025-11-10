@@ -1,5 +1,5 @@
 return {
-    "jedrzejboczar/possession.nvim",
+    "https://github.com/jedrzejboczar/possession.nvim",
     cond = not is_on_vscode(),
     cmd = {
         "PossessionLoadCurrent",
