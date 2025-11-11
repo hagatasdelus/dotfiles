@@ -1,18 +1,19 @@
 local M = {
-    "hrsh7th/nvim-cmp",
+    "https://github.com/hrsh7th/nvim-cmp",
+    enabled = true,
+    cond = not is_on_vscode(),
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-nvim-lua",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "f3fora/cmp-spell",
-        "saadparwaiz1/cmp_luasnip",
-        "L3MON4D3/LuaSnip",
-        "rafamadriz/friendly-snippets",
-        "zbirenbaum/copilot-cmp",
-        "rinx/cmp-skkeleton",
+        "https://github.com/hrsh7th/cmp-nvim-lsp",
+        "https://github.com/hrsh7th/cmp-nvim-lua",
+        "https://github.com/hrsh7th/cmp-buffer",
+        "https://github.com/hrsh7th/cmp-path",
+        "https://github.com/hrsh7th/cmp-cmdline",
+        "https://github.com/f3fora/cmp-spell",
+        "https://github.com/saadparwaiz1/cmp_luasnip",
+        "https://github.com/L3MON4D3/LuaSnip",
+        "https://github.com/rafamadriz/friendly-snippets",
+        "https://github.com/rinx/cmp-skkeleton",
     },
     config = function()
         local cmp = require("cmp")
@@ -48,10 +49,16 @@ local M = {
                 ["<C-f>"] = cmp.mapping.scroll_docs(4),
                 ["<C-l>"] = cmp.mapping.complete(),
                 ["<C-e>"] = cmp.mapping.abort(),
-                ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                ["<CR>"] = cmp.mapping(function(fallback)
+                    local entry = cmp.get_selected_entry()
+                    if cmp.visible() and entry ~= nil then
+                        cmp.confirm({ select = false })
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
             }),
             sources = cmp.config.sources({
-                { name = "copilot" },
                 { name = "skkeleton" },
                 { name = "nvim_lsp" },
                 { name = "nvim_lua" },
