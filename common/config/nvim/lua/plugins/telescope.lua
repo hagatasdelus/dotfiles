@@ -1,18 +1,18 @@
 return {
     {
-        "nvim-telescope/telescope.nvim",
+        "https://github.com/nvim-telescope/telescope.nvim",
         cond = not is_on_vscode(),
         dependencies = {
-            { "nvim-lua/plenary.nvim" },
-            { "nvim-telescope/telescope-fzf-native.nvim",    build = "make" },
-            { "nvim-telescope/telescope-live-grep-args.nvim" },
-            { "nvim-telescope/telescope-symbols.nvim" },
+            { "https://github.com/nvim-lua/plenary.nvim" },
+            { "https://github.com/nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+            { "https://github.com/nvim-telescope/telescope-live-grep-args.nvim" },
+            { "https://github.com/nvim-telescope/telescope-symbols.nvim" },
             {
-                "danielfalk/smart-open.nvim",
+                "https://github.com/danielfalk/smart-open.nvim",
                 dependencies = {
-                    "kkharji/sqlite.lua",
-                    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-                    "nvim-telescope/telescope-fzy-native.nvim",
+                    "https://github.com/kkharji/sqlite.lua",
+                    { "https://github.com/nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+                    "https://github.com/nvim-telescope/telescope-fzy-native.nvim",
                 },
             },
         },
@@ -130,21 +130,21 @@ return {
                     mapping = {
                         -- insert mode
                         i = {
-                            ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist, -- 選択項目をquickfix listに送信して開く
-                            ["<C-l>"] = actions.send_to_loclist + actions.open_loclist,        -- 検索結果全体をlocation listに送信して開く
-                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,          -- 検索結果全体をquickfix listに送信して開く
-                            ["<CR>"] = function(prompt_bufnr)                                  -- Enterキーの挙動
+                            ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                            ["<C-l>"] = actions.send_to_loclist + actions.open_loclist,
+                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+                            ["<CR>"] = function(prompt_bufnr)
                                 require("telescope.actions").select_default(prompt_bufnr)
-                                vim.cmd.stopinsert()                                           -- インサートモードを抜ける
+                                vim.cmd.stopinsert()
                             end,
                         },
                         -- normal mode
                         n = {
-                            ["<ESC>"] = actions.close, -- 閉じる
-                            ["q"] = actions.close,     -- 閉じる
+                            ["<ESC>"] = actions.close,
+                            ["q"] = actions.close,
                             ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
                             ["<C-l>"] = actions.send_to_loclist + actions.open_loclist,
-                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist, -- quickfixリストへ送信
+                            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         },
                     },
 
@@ -152,9 +152,8 @@ return {
                     selection_caret = "❯ ",
                     initial_mode = "insert",
                     color_devicons = true,
-                    winblend = 20, -- 透明度設定
+                    winblend = 20,
 
-                    -- 大きなファイルのプレビュー制限
                     buffer_previewer_maker = new_maker,
                 }),
                 extensions = {
