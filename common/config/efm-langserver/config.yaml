@@ -1,5 +1,4 @@
 version: 2
-# log-file: /tmp/efm-langserver.log
 log-level: 1
 root-markers:
   - .git/
@@ -37,10 +36,10 @@ tools:
       - .prettierrc.cjs
       - .prettierrc.toml
 
-  textlint:
-    &textlint # lint-command: "deno run -A --node-modules-dir npm:textlint@latest --format unix --stdin --stdin-filename ${INPUT}"
+  textlint: &textlint
     lint-command: >
       deno run -A --node-modules-dir npm:textlint@latest --format json ${INPUT} | jq -r '.[] | .filePath as $filePath | .messages[] | "1;\($filePath):\(.line):\(.column):\n2;\(.message | split("\n")[0])\n3;[\(.ruleId)]"'
+    # lint-command: "deno run -A --node-modules-dir npm:textlint@latest --format unix --stdin --stdin-filename ${INPUT}"
     lint-ignore-exit-code: true
     lint-stdin: true
     lint-formats:
