@@ -20,9 +20,9 @@ local ensure_installed = {
 
 return {
     {
-        "mason-org/mason.nvim",
+        "https://github.com/mason-org/mason.nvim",
         dependencies = {
-            "mason-org/mason-lspconfig.nvim",
+            "https://github.com/mason-org/mason-lspconfig.nvim",
         },
         event = { "BufReadPre", "BufNewFile" },
         cmd = "Mason",
@@ -35,16 +35,17 @@ return {
         end,
     },
     {
-        "neovim/nvim-lspconfig",
+        "https://github.com/neovim/nvim-lspconfig",
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "b0o/schemastore.nvim",
+            "https://github.com/hrsh7th/cmp-nvim-lsp",
+            "https://github.com/b0o/schemastore.nvim",
+            "https://github.com/folke/snacks.nvim",
         },
         event = { "BufReadPre", "BufNewFile" },
 
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
-            vim.lsp.config('*', { capabilities = capabilities })
+            vim.lsp.config("*", { capabilities = capabilities })
             vim.lsp.enable(ensure_installed)
         end,
         init = function()
@@ -64,5 +65,5 @@ return {
                 vim.diagnostic.reset()
             end, {})
         end,
-    }
+    },
 }
