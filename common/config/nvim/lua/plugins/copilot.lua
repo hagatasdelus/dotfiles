@@ -1,15 +1,14 @@
 return {
+    "https://github.com/zbirenbaum/copilot.lua",
+    enabled = true,
+    cond = not is_on_vscode(),
+    cmd = { "Copilot" },
+    event = { "InsertEnter", "VeryLazy" },
+    dependencies = {
+        { "https://github.com/zbirenbaum/copilot-cmp" },
     },
-    {
-        "zbirenbaum/copilot.lua",
-        enabled = true,
-        cond = not is_on_vscode(),
-        cmd = { "Copilot" },
-        event = { "InsertEnter", "VeryLazy" },
-        dependencies = {
-            { "zbirenbaum/copilot-cmp" },
-        },
-        config = function()
+    config = function()
+        vim.defer_fn(function()
             require("copilot").setup({
                 suggestion = {
                     enabled = true,
@@ -20,7 +19,8 @@ return {
                         accept_word = false,
                         accept_line = false,
                         next = "<C-n>",
-                        prev = "<C-m>",
+                        prev = "<C-p>",
+                        -- prev = "<C-m>",
                     },
                 },
                 panel = {
@@ -32,7 +32,7 @@ return {
                     keymap = {
                         jump_prev = "_",
                         jump_next = "-",
-                        accept = "<CR>",
+                        accept = "<C-y>",
                         refresh = false,
                         open = "<C-S-CR>",
                     },
@@ -51,5 +51,18 @@ return {
                     ["*"] = true,
                 },
             })
-        end,
+        end, 100)
+
+        -- local suggestion = require("copilot.suggestion")
+        -- vim.on_key(function(key)
+        --     if vim.fn.mode() ~= "i" then
+        --         return nil
+        --     end
+        --     if key == "\r" and suggestion.is_visible() then
+        --         suggestion.prev()
+        --         return ""
+        --     end
+        --     return nil
+        -- end)
+    end,
 }
