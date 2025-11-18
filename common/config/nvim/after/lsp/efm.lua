@@ -24,6 +24,7 @@ return {
         "markdown.mdx",
         "css",
         "scss",
+        "typst",
         "json",
         "jsonc",
         "yaml",
