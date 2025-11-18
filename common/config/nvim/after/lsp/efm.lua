@@ -10,7 +10,6 @@ return {
         completion = true,
     },
     filetypes = {
-        "lua",
         "python",
         "html",
         "javascript",
