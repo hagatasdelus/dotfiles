@@ -4,7 +4,7 @@ local nerdfonts = require("wezterm").nerdfonts
 
 M.iconRules = {
     {
-        match_string = "python",
+        match_string = { "python", "uv" },
         icon = nerdfonts.dev_python,
         color = "#FFD700",
     },
