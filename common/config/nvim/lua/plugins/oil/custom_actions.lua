@@ -19,11 +19,10 @@ end
 local WeztermUtils = {}
 
 WeztermUtils.listPanes = function()
-    local cli_result = vim.system({ "wezterm", "cli", "list", ("--format=%s"):format("json") }, { text = true })
-        :wait()
+    local cli_result = vim.system({ "wezterm", "cli", "list", ("--format=%s"):format("json") }, { text = true }):wait()
     local json = vim.json.decode(cli_result.stdout)
-    local panes_list = vim.iter(json):map(lambda(
-        "obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
+    local panes_list = vim.iter(json)
+        :map(lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
     return panes_list
 end
 
@@ -43,10 +42,7 @@ WeztermUtils.getPreviewPane = function()
         return obj.pane_id == neovim_wezterm_pane_id
     end)).tab_id
     local preview_pane = panes_list:find(function(obj)
-        return
-            obj.tab_id == current_tab_id
-            and tonumber(obj.pane_id) >
-            tonumber(neovim_wezterm_pane_id) -- new pane id should be greater than the current one
+        return obj.tab_id == current_tab_id and tonumber(obj.pane_id) > tonumber(neovim_wezterm_pane_id) -- new pane id should be greater than the current one
     end)
     return preview_pane
 end
@@ -72,8 +68,15 @@ WeztermUtils.openNewPane = function(opt)
     local percent = _opt.percent or 30
     local direction = _opt.direction or "right"
 
-    local cmd = { "wezterm", "cli", "split-pane", ("--percent=%d"):format(percent), ("--%s"):format(direction), "--",
-        "bash" }
+    local cmd = {
+        "wezterm",
+        "cli",
+        "split-pane",
+        ("--percent=%d"):format(percent),
+        ("--%s"):format(direction),
+        "--",
+        "bash",
+    }
     local obj = vim.system(cmd, { text = true }):wait()
     local wezterm_pane_id = assert(tonumber(obj.stdout))
 
@@ -93,7 +96,7 @@ WeztermUtils.sendCommandToPreviewPane = function(wezterm_pane_id, command)
         "cli",
         "send-text",
         "--no-paste",
-        ("--pane-id=%s"):format(wezterm_pane_id)
+        ("--pane-id=%s"):format(wezterm_pane_id),
     }
     vim.fn.system(table.concat(cmd, " "))
 end
@@ -107,7 +110,7 @@ WeztermUtils.sendKeyToPreviewPane = function(wezterm_pane_id, key)
         "wezterm",
         "cli",
         "send-text",
-        ("--pane-id=%s"):format(wezterm_pane_id)
+        ("--pane-id=%s"):format(wezterm_pane_id),
     }
     vim.fn.system(table.concat(cmd, " "))
 end
@@ -153,7 +156,11 @@ PreviewManager.getPreviewCommand = function(abspath, cursor_entry)
             cmd = "bat"
         end
     else -- directory, link, etc
-        cmd = "ls -l"
+        if vim.fn.executable("eza") == 1 then
+            cmd = "eza -l --header --icons"
+        else
+            cmd = "ls -l"
+        end
     end
 
     local command = ("%s %s"):format(cmd, abspath)
@@ -228,7 +235,7 @@ PreviewManager.createPreviewAction = function(config)
                 end,
             })
         end,
-        desc = "Open Preview with Wezterm"
+        desc = "Open Preview with Wezterm",
     }
 end
 
@@ -266,7 +273,7 @@ PreviewManager.createTdfNavigationAction = function(key)
                 50
             )
             updateTdfNavigation()
-        end
+        end,
     }
 end
 
@@ -275,12 +282,12 @@ M.openWithQuickLook = {
         local abspath = assert(getEntryAbsPath())
         require("core.utils").open_file_with_quicklook(abspath)
     end,
-    desc = "Open Preview with QuickLook"
+    desc = "Open Preview with QuickLook",
 }
 
 M.openWithWeztermPreview = PreviewManager.createPreviewAction({
     percent = 50,
-    direction = "right"
+    direction = "right",
 })
 
 M.closeWeztermPreview = {
@@ -290,7 +297,7 @@ M.closeWeztermPreview = {
             WeztermUtils.closePreviewPane(preview_pane_id)
         end
     end,
-    desc = "Close Preview"
+    desc = "Close Preview",
 }
 
 M.tdfNext = PreviewManager.createTdfNavigationAction("l")
