@@ -10,9 +10,6 @@ $cmd_duration\
 $line_break\
 $character"""
 
-# right_format = """
-# $cmd_duration"""
-
 [os]
 disabled = false
 
@@ -130,7 +127,6 @@ show_notifications = true
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:lavender"
 format = ' $time '
 use_12hr = true
 
@@ -152,8 +148,6 @@ symbol = "󰰡 "
 
 [aws]
 symbol = ""
-# style = "bg:green"
-# format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 disabled = true
 
 [buf]
@@ -174,8 +168,6 @@ style = "bg:green"
 
 [conda]
 symbol = "  "
-# style = "bg:sapphire"
-# format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
 ignore_base = false
 
 [crystal]
