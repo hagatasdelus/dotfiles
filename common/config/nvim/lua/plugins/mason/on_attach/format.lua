@@ -24,8 +24,7 @@ function M.format(opts)
                 settings ~= nil
                 and (
                     (type(settings.format) == "boolean" and settings.format == false)
-                    or (type(settings.format) == "table" and settings.format.enable == false)                -- or (client.name == "tinymist" and not settings.formatterMode == "typstyle")
-
+                    or (type(settings.format) == "table" and settings.format.enable == false) -- or (client.name == "tinymist" and not settings.formatterMode == "typstyle")
                 )
             then
                 return false
