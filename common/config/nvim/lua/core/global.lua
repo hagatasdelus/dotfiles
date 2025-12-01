@@ -16,6 +16,10 @@ _G.is_on_vscode = function()
     return to_bool(vim.g.vscode)
 end
 
+_G.is_on_mac = function()
+    return vim.uv.os_uname().sysname == "Darwin"
+end
+
 _G.lambda = function(str)
     local chunk = [[
     return function(%s)
