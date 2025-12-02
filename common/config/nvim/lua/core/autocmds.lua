@@ -2,7 +2,7 @@
 vim.cmd("cnoreabbrev tn tabnew")
 vim.cmd("cnoreabbrev vs vsplit")
 
-local augroup = vim.api.nvim_create_augroup("core_autocmds", { clear = true })
+local augroup = vim.api.nvim_create_augroup("augroup_global", { clear = true })
 
 local function create_autocmd(event, opts)
     local final_opts = vim.tbl_extend("keep", { group = augroup }, opts)
