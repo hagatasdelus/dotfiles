@@ -4,7 +4,7 @@ return {
     event = "VeryLazy",
     cmd = { "Oil" },
     dependencies = {
-        "https://github.com/echasnovski/mini.icons",
+        "https://github.com/nvim-mini/mini.icons",
         "https://github.com/refractalize/oil-git-status.nvim",
         "https://github.com/folke/snacks.nvim",
     },
