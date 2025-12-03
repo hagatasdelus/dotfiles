@@ -14,7 +14,7 @@ local function open()
     for _, buf in ipairs(bufs) do
         local buf_name = vim.api.nvim_buf_get_name(buf)
         if vim.startswith(buf_name, "fyler://") then
-            vim.api.nvim_set_current_buf(0, buf)
+            vim.api.nvim_win_set_buf(0, buf)
             return
         end
     end
@@ -28,7 +28,7 @@ end
 ---@type LazySpec
 return {
     "https://github.com/A7Lavinraj/fyler.nvim",
-    dependencies = { "nvim-mini/mini.icons" },
+    dependencies = { "https://github.com/nvim-mini/mini.icons" },
     branch = "stable",
     event = "VeryLazy",
     cmd = { "Fyler" },
