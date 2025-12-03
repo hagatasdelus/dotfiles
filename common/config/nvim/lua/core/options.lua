@@ -15,7 +15,7 @@ vim.opt.fenc = "utf-8"
 
 -- Cursol
 vim.opt.cursorline = true
--- vim.opt.cursorcolumn = true
+vim.opt.cursorcolumn = true
 vim.opt.whichwrap = "b,s,h,l,[,],<,>,~"
 
 -- Clipboard
