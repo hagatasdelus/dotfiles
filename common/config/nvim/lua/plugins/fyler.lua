@@ -35,8 +35,8 @@ return {
     init = function()
         vim.keymap.set("n", "<leader>fn", open)
     end,
-    config = function()
-        require("fyler").setup({
+    opts = function()
+        return {
             views = {
                 finder = {
                     close_on_select = false,
@@ -44,6 +44,9 @@ return {
                     follow_current_file = false,
                 },
             },
-        })
+        }
+    end,
+    config = function(_, opts)
+        require("fyler").setup(opts)
     end,
 }
