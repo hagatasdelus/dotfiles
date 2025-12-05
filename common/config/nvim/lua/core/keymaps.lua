@@ -79,3 +79,6 @@ map("n", "A", function() -- Smart append on empty line
 end, { expr = true })
 map("i", "<C-g><C-u>", "<ESC>gUiwgi")
 map("i", "<C-g><C-k>", "<ESC>bgUlgi")
+-- Command abbreviations
+vim.cmd("cnoreabbrev tn tabnew")
+vim.cmd("cnoreabbrev vs vsplit")

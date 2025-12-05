@@ -1,7 +1,3 @@
--- Command abbreviations
-vim.cmd("cnoreabbrev tn tabnew")
-vim.cmd("cnoreabbrev vs vsplit")
-
 local augroup = vim.api.nvim_create_augroup("augroup_global", { clear = true })
 
 local function create_autocmd(event, opts)
