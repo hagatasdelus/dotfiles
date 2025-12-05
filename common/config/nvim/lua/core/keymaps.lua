@@ -82,3 +82,4 @@ map("i", "<C-g><C-k>", "<ESC>bgUlgi")
 -- Command abbreviations
 vim.cmd("cnoreabbrev tn tabnew")
 vim.cmd("cnoreabbrev vs vsplit")
+vim.cmd("cnoreabbrev rst Restart")
