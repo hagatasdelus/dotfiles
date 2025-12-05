@@ -6,22 +6,13 @@ return {
     enabled = true,
     dependencies = {
         "https://github.com/vim-denops/denops.vim",
+        "https://github.com/delphinus/skkeleton_indicator.nvim",
     },
     cond = not is_on_vscode(),
-    keys = {
-        {
-            "<C-j>",
-            "<Plug>(skkeleton-enable)",
-            mode = { "i", "c" },
-            desc = "Enable skkeleton",
-        },
-        {
-            "<C-l>",
-            "<Plug>(skkeleton-disable)",
-            mode = { "i", "c" },
-            desc = "Disable skkeleton",
-        },
-    },
+    init = function()
+        vim.keymap.set("n", "<C-j>", "a<Plug>(skkeleton-toggle)", { noremap = true, silent = true })
+        vim.keymap.set({ "i", "c", "t" }, "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true, silent = true })
+    end,
     config = function()
         vim.fn["skkeleton#config"]({
             eggLikeNewline = true,
