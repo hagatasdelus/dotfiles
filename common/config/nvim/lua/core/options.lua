@@ -1,15 +1,13 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- vim.opt.modifiable = true
-
 -- lang
-vim.cmd("language en_US.UTF-8")
--- vim.cmd("language ja_JP.UTF-8")
+vim.cmd.language("en_US.UTF-8")
+-- vim.cmd.language("ja_JP.UTF-8")
 
 -- File
 vim.opt.swapfile = false
-vim.opt.helplang = "ja,en"
+vim.opt.helplang = { "ja", "en" }
 vim.opt.hidden = true
 vim.opt.fenc = "utf-8"
 
@@ -35,7 +33,7 @@ vim.opt.matchtime = 1
 
 -- ColorScheme
 vim.opt.termguicolors = true
-vim.opt.background = "light"
+vim.opt.background = "dark"
 
 -- Indent
 vim.opt.shiftwidth = 4
