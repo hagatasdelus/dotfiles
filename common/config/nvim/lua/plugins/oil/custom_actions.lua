@@ -184,33 +184,30 @@ PreviewManager.createPreviewAction = function(config)
             local neovim_wezterm_pane_id = WeztermUtils.getNeovimPaneId()
             local bufnr = vim.api.nvim_get_current_buf()
 
-            local updateWeztermPreview = debounce(
-                vim.schedule_wrap(function()
-                    if vim.api.nvim_get_current_buf() ~= bufnr then
+            local updateWeztermPreview = debounce(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_id = WeztermUtils.ensurePreviewPane(paneOpts)
+                    WeztermUtils.activatePane(neovim_wezterm_pane_id)
+
+                    if preview_entry_id == cursor_entry.id then
                         return
                     end
-                    local cursor_entry = oil.get_cursor_entry()
-                    if cursor_entry ~= nil and not oil_util.is_visual_mode() then
-                        local preview_pane_id = WeztermUtils.ensurePreviewPane(paneOpts)
-                        WeztermUtils.activatePane(neovim_wezterm_pane_id)
 
-                        if preview_entry_id == cursor_entry.id then
-                            return
-                        end
-
-                        local preview_pane_name = WeztermUtils.getPreviewPaneName()
-                        if vim.fn.index({ "bat", "tdf" }, preview_pane_name) ~= -1 then
-                            WeztermUtils.sendTextToPreviewPane(preview_pane_id, "q")
-                        end
-
-                        local abspath = assert(getEntryAbsPath())
-                        local command = PreviewManager.getPreviewCommand(abspath, cursor_entry)
-
-                        WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command)
+                    local preview_pane_name = WeztermUtils.getPreviewPaneName()
+                    if vim.fn.index({ "bat", "tdf" }, preview_pane_name) ~= -1 then
+                        WeztermUtils.sendTextToPreviewPane(preview_pane_id, "q")
                     end
-                end),
-                50
-            )
+
+                    local abspath = assert(getEntryAbsPath())
+                    local command = PreviewManager.getPreviewCommand(abspath, cursor_entry)
+
+                    WeztermUtils.sendCommandToPreviewPane(preview_pane_id, command)
+                end
+            end, 50)
 
             updateWeztermPreview()
 
@@ -249,29 +246,26 @@ PreviewManager.createTdfNavigationAction = function(key)
             local neovim_wezterm_pane_id = WeztermUtils.getNeovimPaneId()
             local bufnr = vim.api.nvim_get_current_buf()
 
-            local updateTdfNavigation = debounce(
-                vim.schedule_wrap(function()
-                    if vim.api.nvim_get_current_buf() ~= bufnr then
+            local updateTdfNavigation = debounce(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_name = WeztermUtils.getPreviewPaneName()
+                    if preview_pane_name ~= "tdf" then
+                        vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
                         return
                     end
-                    local cursor_entry = oil.get_cursor_entry()
-                    if cursor_entry ~= nil and not oil_util.is_visual_mode() then
-                        local preview_pane_name = WeztermUtils.getPreviewPaneName()
-                        if preview_pane_name ~= "tdf" then
-                            vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
-                            return
-                        end
-                        local preview_pane_id = WeztermUtils.ensurePreviewPane()
-                        WeztermUtils.activatePane(neovim_wezterm_pane_id)
+                    local preview_pane_id = WeztermUtils.ensurePreviewPane()
+                    WeztermUtils.activatePane(neovim_wezterm_pane_id)
 
-                        if preview_entry_id == cursor_entry.id then
-                            return
-                        end
-                        WeztermUtils.sendKeyToPreviewPane(preview_pane_id, key)
+                    if preview_entry_id == cursor_entry.id then
+                        return
                     end
-                end),
-                50
-            )
+                    WeztermUtils.sendKeyToPreviewPane(preview_pane_id, key)
+                end
+            end, 50)
             updateTdfNavigation()
         end,
     }
