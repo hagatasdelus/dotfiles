@@ -12,7 +12,7 @@ return {
                     light = "lotus",
                 },
                 compile = true,
-                transparent = false,
+                transparent = true,
                 dimInactive = false,
                 colors = {
                     theme = {
@@ -30,6 +30,12 @@ return {
                         StatusLineNC = { link = "Normal" },
 
                         -- SatelliteBar = { bg = theme.ui.special },
+                        -- CursorLine = { bg = theme.ui.bg_m1 },
+                        -- CursorLine = { bg = colors.palette.sumiInk4 },
+                        -- CursorColumn = { bg = colors.palette.sumiInk4 },
+                        NormalFloat = { bg = "none" },
+                        FloatBorder = { bg = "none" },
+                        FloatTitle = { bg = "none" },
 
                         TelescopeTitle = { fg = theme.ui.special, bold = true },
                         TelescopePromptNormal = { bg = theme.ui.bg_p1 },
@@ -40,11 +46,6 @@ return {
                         TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
 
                         NoiceVirtualText = { bg = theme.ui.bg_search },
-
-                        CursorLine = { bg = theme.ui.bg_m1 },
-                        NormalFloat = { bg = "none" },
-                        FloatBorder = { bg = "none" },
-                        FloatTitle = { bg = "none" },
                     }
                 end,
             }
