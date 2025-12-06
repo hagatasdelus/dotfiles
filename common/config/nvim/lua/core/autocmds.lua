@@ -1,3 +1,4 @@
+local debounce = require("core.utils").debounce
 local augroup = vim.api.nvim_create_augroup("augroup_global", { clear = true })
 
 local function create_autocmd(event, opts)
@@ -45,11 +46,13 @@ local function set_input_source(source)
     end
 end
 
+local switch_ime = debounce(set_input_source, 100)
+
 create_autocmd({ "FocusGained", "VimEnter" }, {
     pattern = "*",
     desc = "Set input source to ABC when Neovim gains focus",
     callback = function()
-        set_input_source("com.apple.keylayout.ABC")
+        switch_ime("com.apple.keylayout.ABC")
     end,
 })
 
@@ -57,6 +60,6 @@ create_autocmd({ "FocusLost", "VimLeave" }, {
     pattern = "*",
     desc = "Set input source to AquaSKK when Neovim loses focus",
     callback = function()
-        set_input_source("jp.sourceforge.inputmethod.aquaskk")
+        switch_ime("jp.sourceforge.inputmethod.aquaskk")
     end,
 })
