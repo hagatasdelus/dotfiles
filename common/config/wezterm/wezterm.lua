@@ -4,7 +4,7 @@ local mux = wezterm.mux
 wezterm.on("toggle-opacity", function(window, _)
     local overrides = window:get_config_overrides() or {}
     if not overrides.window_background_opacity then
-        overrides.window_background_opacity = 0.60
+        overrides.window_background_opacity = 0.5
     else
         overrides.window_background_opacity = nil
     end
@@ -31,9 +31,7 @@ local config = wezterm.config_builder()
 config.automatically_reload_config = true
 config.line_height = 1.0
 config.font_size = 15.0
-config.font = wezterm.font_with_fallback({
-    "HackGen Console NF",
-})
+config.font = wezterm.font("HackGen Console NF")
 config.window_padding = {
     left = 1,
     right = 0,
@@ -46,9 +44,11 @@ config.send_composed_key_when_right_alt_is_pressed = false
 config.force_reverse_video_cursor = true
 config.adjust_window_size_when_changing_font_size = false
 config.macos_forward_to_ime_modifier_mask = "SHIFT|CTRL"
-config.window_background_opacity = 0.70
+config.window_background_opacity = 0.7
 config.macos_window_background_blur = 20
--- config.enable_kitty_keyboard = true
+config.window_background_gradient = {
+    colors = { "#000000" },
+}
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 table.insert(config.hyperlink_rules, {
     regex = [[["]?([\w\d]{1}[-\w\d]+)/([-\w\d\.]+)["]?]],

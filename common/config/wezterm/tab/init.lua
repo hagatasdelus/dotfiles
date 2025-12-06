@@ -70,10 +70,6 @@ function M.apply(config)
     -- 	inactive_titlebar_bg = "none",
     -- 	active_titlebar_bg = "none",
     -- }
-    -- Match tab bar to background color
-    -- config.window_background_gradient = {
-    --     colors = { "#000000" },
-    -- }
     config.show_new_tab_button_in_tab_bar = false
     config.show_close_tab_button_in_tabs = false
     config.colors = {
