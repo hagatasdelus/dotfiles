@@ -56,10 +56,20 @@ create_autocmd({ "FocusGained", "VimEnter" }, {
     end,
 })
 
-create_autocmd({ "FocusLost", "VimLeave" }, {
+create_autocmd("FocusLost", {
     pattern = "*",
     desc = "Set input source to AquaSKK when Neovim loses focus",
     callback = function()
         switch_ime("jp.sourceforge.inputmethod.aquaskk")
+    end,
+})
+
+create_autocmd("VimLeave", {
+    pattern = "*",
+    desc = "Set input source to AquaSKK when Neovim exits",
+    callback = function()
+        if is_on_mac() and vim.fn.executable("macism") == 1 then
+            vim.system({ "macism", "jp.sourceforge.inputmethod.aquaskk" }):wait()
+        end
     end,
 })
