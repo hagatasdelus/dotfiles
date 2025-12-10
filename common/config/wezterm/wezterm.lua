@@ -26,7 +26,10 @@ wezterm.on("gui-startup", function(cmd)
     window:gui_window():maximize()
 end)
 
-local config = wezterm.config_builder()
+local config = {}
+if wezterm.config_builder then
+    config = wezterm.config_builder()
+end
 
 config.automatically_reload_config = true
 config.line_height = 1.0
