@@ -116,6 +116,7 @@ function keys()
             mods = "LEADER",
             action = act.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }),
         },
+        { key = "L", mods = "CTRL", action = act.ShowDebugOverlay },
         { key = "o", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-opacity") },
         { key = "l", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-blur") },
     }
