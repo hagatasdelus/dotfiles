@@ -65,6 +65,6 @@ table.insert(config.hyperlink_rules, {
 require("color").apply(config)
 require("keymaps").apply(config)
 require("tab").apply(config)
-require("zen-mode")
+require("events")
 
 return config
