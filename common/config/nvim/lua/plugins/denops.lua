@@ -1,6 +1,6 @@
 return {
     "https://github.com/vim-denops/denops.vim",
-    lazy = true,
+    lazy = false,
     cond = not is_on_vscode(),
     -- dependencies = {
     --     {
@@ -10,6 +10,7 @@ return {
     --         },
     --     },
     -- },
-    -- event = { "VeryLazy" },
-    -- priority = 1000,
+    init = function()
+        vim.g["denops#server#deno_args"] = { "-q", "--no-lock", "-A", "--unstable-kv" }
+    end,
 }
