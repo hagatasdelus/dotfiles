@@ -29,10 +29,6 @@ return {
                         StatusLine = { link = "Normal" },
                         StatusLineNC = { link = "Normal" },
 
-                        -- SatelliteBar = { bg = theme.ui.special },
-                        -- CursorLine = { bg = theme.ui.bg_m1 },
-                        -- CursorLine = { bg = colors.palette.sumiInk4 },
-                        -- CursorColumn = { bg = colors.palette.sumiInk4 },
                         NormalFloat = { bg = "none" },
                         FloatBorder = { bg = "none" },
                         FloatTitle = { bg = "none" },
