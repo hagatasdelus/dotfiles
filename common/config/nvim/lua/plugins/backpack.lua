@@ -6,7 +6,6 @@ return {
     build = ":BackpackCompile",
     opts = function()
         return {
-            theme = "dark",
             compile = true,
             transparent = true,
             colors = {
@@ -18,6 +17,7 @@ return {
                     },
                 },
             },
+            contrast = "high",
             overrides = function(colors)
                 local theme = colors.theme
                 return {
