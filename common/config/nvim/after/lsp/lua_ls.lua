@@ -18,6 +18,15 @@ return {
                 -- library = vim.api.nvim_get_runtime_file("", true),
                 checkThirdParty = "Disable",
             },
+            format = {
+                enable = false,
+            },
+            hint = {
+                enable = true,
+            },
+            semantic = {
+                enable = false,
+            },
         },
     },
 }
