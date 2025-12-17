@@ -31,19 +31,17 @@ local plugins = {
 -- lazy.nvim setup
 local lazy = require("lazy")
 lazy.setup({
-    root = vim.fn.stdpath("data") .. "lazy",
     defaults = { lazy = true },
     spec = plugins,
     concurrency = 10,
     dev = { path = "~/dev/ghq/github.com/hagatasdelus/" },
-    install = { missing = true, colorscheme = { "kanagawa" } },
+    install = { missing = true, colorscheme = { "backpack" } },
     checker = { enabled = false },
     performance = {
-        cache = { enalbed = true },
+        cache = { enalbed = false },
         rtp = {
             disabled_plugins = {
                 "gzip",
-                -- "matchit",
                 "matchparen",
                 "netrwPlugin",
                 "tarPlugin",
