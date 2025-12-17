@@ -7,7 +7,7 @@ return {
     opts = function()
         return {
             options = {
-                theme = "gruvbox",
+                theme = "auto",
                 component_separators = {},
                 section_separators = {},
             },
