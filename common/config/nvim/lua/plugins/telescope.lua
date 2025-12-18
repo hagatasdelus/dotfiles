@@ -11,7 +11,6 @@ return {
                 "https://github.com/danielfalk/smart-open.nvim",
                 dependencies = {
                     "https://github.com/kkharji/sqlite.lua",
-                    { "https://github.com/nvim-telescope/telescope-fzf-native.nvim", build = "make" },
                     "https://github.com/nvim-telescope/telescope-fzy-native.nvim",
                 },
             },
