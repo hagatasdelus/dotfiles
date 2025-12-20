@@ -3,7 +3,15 @@ echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-export XDG_CONFIG_HOME=${HOME}/.config
+### XDG Base Directory Specification ###
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_STATE_HOME="${HOME}/.local/state"
+export HISTFILE="${XDG_STATE_HOME}/bash/history"
+export TERMINFO="/usr/share/terminfo/"
+export SQLITE_HISTORY="${XDG_STATE_HOME}/sqlite_history"
+export PYTHON_HISOTRY="${XDG_STATE_HOME}/python_history"
 
 ### Subversion ###
 if [ -d "/opt/subversion" ]; then
@@ -39,6 +47,7 @@ export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 ### Homebrew ###
 export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
+export HOMEBREW_NO_EMOJI=1
 
 PATH=${LOCALBIN}:${PATH}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
