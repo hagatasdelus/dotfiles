@@ -19,7 +19,7 @@ return {
                 checkThirdParty = "Disable",
             },
             format = {
-                enable = false,
+                enable = true,
             },
             hint = {
                 enable = true,
