@@ -20,7 +20,7 @@ return {
         vim.api.nvim_create_autocmd("BufWinEnter", {
             group = group,
             pattern = "oil://*",
-            callback = function(ctx)
+            callback = function()
                 local winid = vim.api.nvim_get_current_win()
 
                 if vim.w[winid].oil_prev_winbar == nil then
