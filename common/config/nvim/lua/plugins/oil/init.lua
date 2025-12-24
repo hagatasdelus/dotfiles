@@ -1,4 +1,3 @@
----@type LazySpec
 return {
     "https://github.com/stevearc/oil.nvim",
     event = "VeryLazy",
@@ -16,6 +15,38 @@ return {
             end,
         },
     },
+    init = function()
+        local group = vim.api.nvim_create_augroup("OilWinbar", {})
+        vim.api.nvim_create_autocmd("BufWinEnter", {
+            group = group,
+            pattern = "oil://*",
+            callback = function(ctx)
+                local winid = vim.api.nvim_get_current_win()
+
+                if vim.w[winid].oil_prev_winbar == nil then
+                    vim.w[winid].oil_prev_winbar = vim.wo[winid].winbar or ""
+                end
+
+                local buf_name = vim.api.nvim_buf_get_name(0)
+                local _scheme, path = buf_name:match("^(.*://)(.*)$")
+                if path then
+                    local title = vim.fn.fnamemodify(path, ":~")
+                    vim.wo[winid].winbar = title
+                end
+            end,
+        })
+        vim.api.nvim_create_autocmd("BufWinLeave", {
+            group = group,
+            pattern = "oil://*",
+            callback = function()
+                local winid = vim.api.nvim_get_current_win()
+                if vim.w[winid].oil_prev_winbar ~= nil then
+                    vim.wo[winid].winbar = vim.w[winid].oil_prev_winbar
+                    vim.w[winid].oil_prev_winbar = nil
+                end
+            end,
+        })
+    end,
     opts = function()
         local custom_actions = require("plugins.oil.custom_actions")
         return {
