@@ -51,6 +51,50 @@ return {
                 immediatelyCancel = false,
             })
             vim.fn["skkeleton#initialize"]()
+            local debounce = require("core.utils").debounce
+            local function set_input_source(source)
+                if is_on_mac() and vim.fn.executable("macism") == 1 then
+                    vim.system({ "macism", source }, { text = true }, function(out)
+                        if out.code ~= 0 then
+                            vim.schedule(function()
+                                vim.notify("macism error: " .. out.stderr, vim.log.levels.ERROR)
+                            end)
+                        end
+                    end)
+                end
+            end
+
+            local switch_ime = debounce(set_input_source, 100)
+
+            local augroup_ime = vim.api.nvim_create_augroup("augroup_ime", { clear = true })
+            vim.api.nvim_create_autocmd({ "FocusGained", "VimEnter" }, {
+                group = augroup_ime,
+                pattern = "*",
+                desc = "Set input source to ABC when Neovim gains focus",
+                callback = function()
+                    switch_ime("com.apple.keylayout.ABC")
+                end,
+            })
+
+            vim.api.nvim_create_autocmd("FocusLost", {
+                group = augroup_ime,
+                pattern = "*",
+                desc = "Set input source to macSKK when Neovim loses focus",
+                callback = function()
+                    switch_ime("net.mtgto.inputmethod.macSKK.hiragana")
+                end,
+            })
+
+            vim.api.nvim_create_autocmd("VimLeave", {
+                group = augroup_ime,
+                pattern = "*",
+                desc = "Set input source to macSKK when Neovim exits",
+                callback = function()
+                    if is_on_mac() and vim.fn.executable("macism") == 1 then
+                        vim.system({ "macism", "net.mtgto.inputmethod.macSKK.hiragana" }):wait()
+                    end
+                end,
+            })
         end,
     },
     {

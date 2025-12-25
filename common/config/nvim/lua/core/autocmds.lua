@@ -1,4 +1,3 @@
-local debounce = require("core.utils").debounce
 local augroup = vim.api.nvim_create_augroup("augroup_global", { clear = true })
 
 local function create_autocmd(event, opts)
@@ -31,45 +30,5 @@ create_autocmd("TextYankPost", {
     desc = "Highlight on yank",
     callback = function()
         vim.highlight.on_yank()
-    end,
-})
-
-local function set_input_source(source)
-    if is_on_mac() and vim.fn.executable("macism") == 1 then
-        vim.system({ "macism", source }, { text = true }, function(out)
-            if out.code ~= 0 then
-                vim.schedule(function()
-                    vim.notify("macism error: " .. out.stderr, vim.log.levels.ERROR)
-                end)
-            end
-        end)
-    end
-end
-
-local switch_ime = debounce(set_input_source, 100)
-
-create_autocmd({ "FocusGained", "VimEnter" }, {
-    pattern = "*",
-    desc = "Set input source to ABC when Neovim gains focus",
-    callback = function()
-        switch_ime("com.apple.keylayout.ABC")
-    end,
-})
-
-create_autocmd("FocusLost", {
-    pattern = "*",
-    desc = "Set input source to AquaSKK when Neovim loses focus",
-    callback = function()
-        switch_ime("jp.sourceforge.inputmethod.aquaskk")
-    end,
-})
-
-create_autocmd("VimLeave", {
-    pattern = "*",
-    desc = "Set input source to AquaSKK when Neovim exits",
-    callback = function()
-        if is_on_mac() and vim.fn.executable("macism") == 1 then
-            vim.system({ "macism", "jp.sourceforge.inputmethod.aquaskk" }):wait()
-        end
     end,
 })
