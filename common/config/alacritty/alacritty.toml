@@ -1,49 +1,12 @@
-# Configuration for Alacritty, the GPU enhanced terminal emulator.
-
-# Any items in the `env` entry below will be added as
-# environment variables. Some entries may override variables
-# set by alacritty itself.
-
-draw_bold_text_with_bright_colors = true
-
-# Window decorations
-#
-# Available values:
-# - `full`: Window with title bar and title bar buttons
-# - `none`: Window without title bar, rounded corners, or drop shadow
-# - `transparent`: Window with title bar with transparent background and title
-#   bar buttons
-# - `buttonless`: Window with title bar with transparent background and no
-#   title bar buttons
-# Window decorations
-#
-# Values for `decorations`:
-#     - full: Borders and title bar
-#     - none: Neither borders nor title bar
-#     - buttonless: Title bar, transparent background and title bar buttons
-#     - transparent: Title bar, transparent background, but no title bar buttons
 [window]
 opacity = 0.4
 blur = true
 decorations = "None"
 
-# Window dimensions (changes require restart)
-#
-# Specified in number of columns/lines, not pixels.
-# If both are `0`, this setting is ignored.
-[window.demensions]
-column = 80
-lines = 24
-
-# Window padding (changes require restart)
-#
-# Blank space added around the window in pixels. This padding is not scaled
-# by DPI and the specified value is always added at both opposing sides.
 [window.padding]
 x = 4
 y = 4
 
-# Font configuration (changes require restart)
 [font]
 size = 13.0
 
@@ -55,11 +18,7 @@ family = "HackGen Console NF"
 family = "HackGen Console NF"
 
 [scrolling]
-# Maximum number of lines in the scrollback buffer.
-# Specifying '0' will disable scrolling.
 history = 10000
-# Number of lines the viewport will move for every line scrolled when
-# scrollback is enabled (history > 0).
 multiplier = 3
 
 [terminal.shell]
