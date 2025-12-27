@@ -1,6 +1,6 @@
 [window]
 opacity = 0.4
-blur = true
+blur = false
 decorations = "None"
 
 [window.padding]
