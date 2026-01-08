@@ -48,6 +48,7 @@ export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 export HOMEBREW_X86_64_BIN="/usr/local/bin"
 export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 export HOMEBREW_NO_EMOJI=1
+export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip npm pnpm yarn"
 
 PATH=${LOCALBIN}:${PATH}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
