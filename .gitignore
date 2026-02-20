@@ -25,3 +25,5 @@ Temporary Items
 startup.log
 
 .luarc.json
+
+.mypy_cache
