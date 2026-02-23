@@ -3,6 +3,8 @@ echo -e Welcome to "\033[1;31m`hostname`\033[0;39m", it\'s "\033[1;32m`date "+%Y
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+export EDITOR=nvim
+
 ### XDG Base Directory Specification ###
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
@@ -12,6 +14,26 @@ export HISTFILE="${XDG_STATE_HOME}/bash/history"
 export TERMINFO="/usr/share/terminfo/"
 export SQLITE_HISTORY="${XDG_STATE_HOME}/sqlite_history"
 export PYTHON_HISOTRY="${XDG_STATE_HOME}/python_history"
+
+### PATH ###
+export ARCH=$(uname -m)
+export CUSTOM_SCRIPTS_PATH="${HOME}/scripts"
+export LOCALBIN="${HOME}/.local/bin"
+export SCRIPTS_PATH="${HOME}/.scripts"
+export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
+export POETRY_PATH="${HOME}/.poetry/bin"
+export BUNBIN="${HOME}/.bun/bin"
+export XCODEBIN="/Applications/Xcode.app/Contents/Developer/usr/bin"
+
+### Homebrew ###
+export HOMEBREW_X86_64_BIN="/usr/local/bin"
+export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
+export HOMEBREW_NO_EMOJI=1
+export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip npm pnpm yarn go"
+
+PATH=${SCRIPTS_PATH}:${BUNBIN}:${GOBIN}:${GOPATH}:${POETRY_PATH}:${LOCALBIN}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${CUSTOM_SCRIPTS_PATH}:${PATH}:${XCODEBIN}
 
 ### Subversion ###
 if [ -d "/opt/subversion" ]; then
@@ -36,21 +58,6 @@ fi
 ### Clang Static Analyzer ###
 echo $PATH | grep --quiet "/usr/local/checker/bin"
 if [ ! $? == 0 ]; then PATH=$PATH:/usr/local/checker/bin; fi
-
-### Self-Command Read ###
-export ARCH=$(uname -m)
-export CUSTOM_SCRIPTS_PATH="${HOME}/scripts"
-export LOCALBIN="${HOME}/.local/bin"
-export SCRIPTS_PATH="${HOME}/.scripts"
-export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
-
-### Homebrew ###
-export HOMEBREW_X86_64_BIN="/usr/local/bin"
-export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
-export HOMEBREW_NO_EMOJI=1
-export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip npm pnpm yarn"
-
-PATH=${LOCALBIN}:${PATH}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${SCRIPTS_PATH}:${CUSTOM_SCRIPTS_PATH}
 
 ### Deno ###
 export DENO_INSTALL="${HOME}/.deno"
