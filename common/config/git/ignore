@@ -1,5 +1,8 @@
 *.local
 .venv
+.env
+*.dil
+*.exe
 
 ### macOS ###
 .DS_Store
