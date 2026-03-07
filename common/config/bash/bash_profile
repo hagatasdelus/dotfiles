@@ -23,6 +23,7 @@ export SCRIPTS_PATH="${HOME}/.scripts"
 export SCRIPTS_BIN_PATH="${HOME}/.scripts/bin"
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
+export CARGOBIN="${HOME}/.cargo/bin"
 export POETRY_PATH="${HOME}/.poetry/bin"
 export BUNBIN="${HOME}/.bun/bin"
 export XCODEBIN="/Applications/Xcode.app/Contents/Developer/usr/bin"
@@ -33,7 +34,7 @@ export HOMEBREW_ARM_BIN="/opt/homebrew/bin"
 export HOMEBREW_NO_EMOJI=1
 export HOMEBREW_FORBIDDEN_FORMULAE="node python python3 pip npm pnpm yarn go"
 
-PATH=${SCRIPTS_PATH}:${BUNBIN}:${GOBIN}:${GOPATH}:${POETRY_PATH}:${LOCALBIN}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${CUSTOM_SCRIPTS_PATH}:${PATH}:${XCODEBIN}
+PATH=${SCRIPTS_PATH}:${BUNBIN}:${GOBIN}:${GOPATH}:${CARGOBIN}:${POETRY_PATH}:${LOCALBIN}:/opt/local/sbin:${SCRIPTS_BIN_PATH}:${CUSTOM_SCRIPTS_PATH}:${PATH}:${XCODEBIN}
 
 ### Subversion ###
 if [ -d "/opt/subversion" ]; then
