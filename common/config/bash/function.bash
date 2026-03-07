@@ -1,3 +1,9 @@
+function history-edit() {
+    fc -W
+    ${EDITOR:-nvim} "${HISTFILE}"
+    fc -R
+}
+
 function course_setup() {
     COMMAND_LINE="$@"
     NUMBER_OF_ARGUMENTS=$#
@@ -30,4 +36,24 @@ function git_ssh_sign_config() {
     if [ "$current_key" != "$GIT_SSH_KEY" ]; then
         git config user.signingKey "$GIT_SSH_KEY"
     fi
+}
+
+# ytmp3 <URL> [quality_kbps]
+function ytmp3() {
+    local save_dir="$HOME/__gi/sounds"
+
+    local url=$1
+    local quality=${2:-64} # Default: 64kbps
+
+    mkdir -p "$save_dir"
+
+    uvx yt-dlp \
+        -x \
+        --audio-format mp3 \
+        --audio-quality "${quality}K" \
+        --embed-metadata \
+        --no-mtime \
+        -P "$save_dir" \
+        -o "%(title)s.%(ext)s" \
+        "$url"
 }
