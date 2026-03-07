@@ -22,6 +22,14 @@ vim.api.nvim_create_user_command("Restart", function()
 end, { desc = "Restart current Neovim session" })
 
 vim.api.nvim_create_user_command("OpenUrl", function(opts)
+    local function get_repo_from_cwd()
+        local cwd = vim.fs.normalize(vim.fn.getcwd())
+        local owner, repo = cwd:match("github%.com/([^/]+)/([^/]+)")
+        if owner and repo then
+            return owner .. "/" .. repo
+        end
+        return nil
+    end
     local function build_url(target)
         if target:match("^[%w%-]+/[%w%%._]+$") then
             return "https://github.com/" .. target
@@ -38,7 +46,20 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
         return target
     end
 
-    local url = build_url(opts.args)
+    local target = opts.args
+    if target == "" then
+        local repo = get_repo_from_cwd()
+        if repo then
+            target = repo
+        else
+            Snacks.notify.error(
+                "No URL provided and current directory is not a GitHub repository",
+                { title = "OpenUrl" }
+            )
+            return
+        end
+    end
+    local url = build_url(target)
 
     local ok, ret, err = pcall(vim.ui.open, url)
     if not ok then
@@ -53,4 +74,4 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
         return
     end
     Snacks.notify.info("Opened URL: " .. url, { title = "OpenUrl" })
-end, { nargs = 1, desc = "Open URL or GitHub repository in the default browser" })
+end, { nargs = "?", desc = "Open URL or GitHub repository in the default browser" })
