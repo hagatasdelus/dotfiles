@@ -18,3 +18,16 @@ function course_setup() {
 
     exit 0
 }
+
+function git_ssh_sign_config() {
+    if [ -z "$GIT_SSH_KEY" ]; then
+        echo "GIT_SSH_KEY not found"
+        return
+    fi
+
+    local current_key=$(git config --local user.signingKey 2>/dev/null)
+
+    if [ "$current_key" != "$GIT_SSH_KEY" ]; then
+        git config user.signingKey "$GIT_SSH_KEY"
+    fi
+}

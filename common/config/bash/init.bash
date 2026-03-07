@@ -19,15 +19,18 @@ function ls() {
     fi
 }
 
-### cd ###
-function cd() {
-    builtin cd "$@" && {
+function __after_cd() {
+    if is_interactive; then
         if command -v eza >/dev/null 2>&1; then
             command eza -l --header --icons
         else
             command ls -lhAFG
         fi
-    }
+    fi
+
+    if [ -d .git ]; then
+        git_ssh_sign_config
+    fi
 }
 
 # pip
@@ -68,6 +71,7 @@ if type mise &>/dev/null; then
         cache::mise
     fi
     . ${CACHE_PROFILE}/mise.bash
+    chpwd_functions+=(__after_cd)
 fi
 
 # pnpm
