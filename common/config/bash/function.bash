@@ -38,6 +38,20 @@ function git_ssh_sign_config() {
     fi
 }
 
+function __after_cd() {
+    if is_interactive; then
+        if command -v eza >/dev/null 2>&1; then
+            command eza -l --header --icons
+        else
+            command ls -lhAFG
+        fi
+    fi
+
+    if [ -d .git ]; then
+        git_ssh_sign_config
+    fi
+}
+
 # ytmp3 <URL> [quality_kbps]
 function ytmp3() {
     local save_dir="$HOME/__gi/sounds"

@@ -2,6 +2,7 @@ export BASH_CONFIG_HOME="${XDG_CONFIG_HOME}/bash"
 
 . "${BASH_CONFIG_HOME}/utils.bash"
 . "${BASH_CONFIG_HOME}/function.bash"
+. "${BASH_CONFIG_HOME}/alias.bash"
 . "${BASH_CONFIG_HOME}/init.bash"
 . "${BASH_CONFIG_HOME}/notification.bash"
 

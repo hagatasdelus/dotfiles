@@ -10,29 +10,6 @@ function cache::clear() {
     mkdir -p ${CACHE_PROFILE}
 }
 
-### ls/eza ###
-function ls() {
-    if command -v eza >/dev/null 2>&1; then
-        command eza -l --header --icons "$@"
-    else
-        command ls -lhAFG "$@"
-    fi
-}
-
-function __after_cd() {
-    if is_interactive; then
-        if command -v eza >/dev/null 2>&1; then
-            command eza -l --header --icons
-        else
-            command ls -lhAFG
-        fi
-    fi
-
-    if [ -d .git ]; then
-        git_ssh_sign_config
-    fi
-}
-
 # pip
 if type pip &>/dev/null; then
     function cache::pip() {
