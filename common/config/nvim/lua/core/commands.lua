@@ -75,3 +75,25 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
     end
     Snacks.notify.info("Opened URL: " .. url, { title = "OpenUrl" })
 end, { nargs = "?", desc = "Open URL or GitHub repository in the default browser" })
+
+vim.api.nvim_create_user_command("Browse", function(opts)
+    local query = opts.args
+    if query == "" then
+        Snacks.notify.error("No search query provided", { title = "Browse" })
+        return
+    end
+    local search_url = "https://duckduckgo.com/?q=" .. query
+    local ok, ret, err = pcall(vim.ui.open, search_url)
+    if not ok then
+        Snacks.notify.error(
+            "An Internal error occurred when opening the browser" .. tostring(ret),
+            { title = "Browse" }
+        )
+        return
+    end
+    if not ret and err then
+        Snacks.notify.error("Failed to open URL: " .. tostring(err), { title = "Browse" })
+        return
+    end
+    Snacks.notify.info("Opened Browser with search query: " .. query, { title = "Browse" })
+end, { nargs = "*", desc = "Open Browser and search for the query" })
