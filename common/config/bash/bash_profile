@@ -25,7 +25,8 @@ export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 export CARGOBIN="${HOME}/.cargo/bin"
 export POETRY_PATH="${HOME}/.poetry/bin"
-export BUNBIN="${HOME}/.bun/bin"
+export BUN_INSTALL="${HOME}/.bun"
+export BUNBIN="${BUN_INSTALL}/bin"
 export XCODEBIN="/Applications/Xcode.app/Contents/Developer/usr/bin"
 
 ### Homebrew ###
