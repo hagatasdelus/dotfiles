@@ -1,5 +1,5 @@
 return {
-    "echasnovski/mini.surround",
+    "https://github.com/echasnovski/mini.surround",
     version = "*",
     event = "VeryLazy",
     opts = {
