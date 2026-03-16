@@ -36,9 +36,9 @@ vim.api.nvim_create_user_command("MoStatus", function()
     vim.system({ "mo", "--status" }, { text = true }, function(obj)
         vim.schedule(function()
             if obj.code == 0 then
-                Snacks.notify.info(obj.stdout, { title = "Mo Status" })
+                Snacks.notify.info(obj.stderr, { title = "MoStatus" })
             else
-                Snacks.notify.error("Failed to get status: " .. obj.stderr, { title = "Mo Status" })
+                Snacks.notify.error("Failed to get status: " .. obj.stderr, { title = "MoStatus" })
             end
         end)
     end)
@@ -48,11 +48,10 @@ vim.api.nvim_create_user_command("MoRestart", function()
     vim.system({ "mo", "--restart" }, { text = true }, function(obj)
         vim.schedule(function()
             if obj.code == 0 then
-                Snacks.notify.info("Mo server restarted successfully", { title = "Mo" })
+                Snacks.notify.info("Mo server restarted successfully", { title = "MoRestart" })
             else
-                Snacks.notify.error("Failed to restart Mo: " .. obj.stderr, { title = "Mo" })
+                Snacks.notify.error("Failed to restart Mo: " .. obj.stderr, { title = "MoRestart" })
             end
         end)
     end)
 end, { desc = "Restart the running mo server" })
-
