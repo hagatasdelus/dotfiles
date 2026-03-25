@@ -1,84 +1,115 @@
-if [[ -n "$WEZTERM_PANE" ]] || [[ -n "$TMUX_PANE" ]]; then
-    export NOTIFY_ON_COMMAND_DURATION=5
-    _wez_cmd_start_time=""
-    _wez_is_checking_notification=0
+# Fire notification when command ends without the command execution pane having focus
 
-    function _wez_timer_start {
-        if [[ "$_wez_is_checking_notification" -eq 1 ]]; then return; fi
-        if [[ "$BASH_COMMAND" == "_wez_check_notification"* ]]; then return; fi
-
-        _wez_cmd_start_time=$(date +%s)
-    }
-
-    trap '_wez_timer_start' DEBUG
-
-    function _wez_check_notification {
-        local exit_code=$?
-
-        _wez_is_checking_notification=1
-
-        if [[ -n "$_wez_cmd_start_time" ]]; then
-            local now=$(date +%s)
-            local duration=$((now - _wez_cmd_start_time))
-            _wez_cmd_start_time=""
-
-            if [[ $duration -ge $NOTIFY_ON_COMMAND_DURATION ]]; then
-
-                local should_notify=1
-
-                local active_pid=$(osascript -e 'tell application "System Events" to get the unix id of first process whose frontmost is true' 2>/dev/null)
-                if [[ -n "$active_pid" ]]; then
-                    if [[ -n "$WEZTERM_PANE" ]]; then
-                        if type wezterm >/dev/null 2>&1 && type jq >/dev/null 2>&1; then
-
-                                local active_pane=$(wezterm cli list-clients --format json 2>/dev/null | \
-                                    jq -r --arg pid "$active_pid" '.[] | select(.pid == ($pid|tonumber)) | .focused_pane_id')
-                                if [[ "$active_pane" == "$WEZTERM_PANE" ]]; then
-                                    should_notify=0
-                                fi
-                        fi
-                    elif [[ -n "$TMUX_PANE" ]]; then
-                        if type tmux >/dev/null 2>&1; then
-                            local client_info_list=$(tmux list-clients -F '#{client_pid} #{pane_id}')
-                            while read -r client_pid pane_id; do
-                                if [[ -z "$client_pid" ]]; then continue; fi
-
-                                local current_check_pid=$client_pid
-                                local is_focused_client=0
-
-                                for i in {1..5}; do
-                                    local ppid=$(ps -p "$current_check_pid" -o ppid= 2>/dev/null | tr -d ' ')
-
-                                    if [[ -z "$ppid" || "$ppid" -eq 0 ]]; then break; fi
-
-                                    if [[ "$ppid" -eq "$active_pid" ]]; then
-                                        is_focused_client=1
-                                        break
-                                    fi
-                                    current_check_pid="$ppid"
-                                done
-
-                                if [[ "$is_focused_client" -eq 1 ]]; then
-                                    if [[ "$pane_id" == "$TMUX_PANE" ]]; then
-                                        should_notify=0
-                                    fi
-                                    break
-                                fi
-                            done <<< "$client_info_list"
-                        fi
-                    fi
-                fi
-                if [[ $should_notify -eq 1 ]]; then
-                    local last_cmd=$(fc -ln -1 | sed 's/^[[:space:]]*//')
-                    local msg="$last_cmd returned $exit_code after ${duration}s"
-                    msg=${msg//\"/\\\"}
-                    osascript -e "display notification \"$msg\" with title \"command completed\""
-                fi
-            fi
-        fi
-
-        _wez_is_checking_notification=0
-    }
-
-    PROMPT_COMMAND="_wez_check_notification; $PROMPT_COMMAND"
+if [[ -z "$WEZTERM_PANE" ]] && [[ -z "$TMUX_PANE" ]]; then
+    return
 fi
+
+NOTIFY_ON_COMMAND_DURATION=${NOTIFY_ON_COMMAND_DURATION:-5}
+
+_notify_cmd_start=""
+_notify_in_prompt=0
+
+# When PROMPT_COMMAND calls notify::prompt_hook, the DEBUG trap fires at the exact moment the function is called (before the function has even entered).
+# This triggers with BASH_COMMAND="notify::prompt_hook"
+# -> Since _notify_in_prompt remains 0, the flag has no effect
+# -> Without the BASH_COMMAND check, it would override _notify_cmd_start
+function notify::on_debug() {
+    # Prevent DEBUG triggers from firing for the function call itself
+    [[ "$BASH_COMMAND" == "notify::prompt_hook"* ]] && return
+    # Prevent DEBUG triggers from firing for commands within the function
+    (( _notify_in_prompt )) && return
+    _notify_cmd_start=$(date +%s)
+}
+trap 'notify::on_debug' DEBUG
+
+function notify::active_app_pid() {
+    osascript -e \
+        'tell application "System Events" to get the unix id of first process whose frontmost is true' \
+        2>/dev/null
+}
+
+function notify::wezterm_is_focused() {
+    local active_pid=$1
+    command -v wezterm &>/dev/null && command -v jq &>/dev/null || return 1
+
+    local focused_pane
+    focused_pane=$(
+        wezterm cli list-clients --format json 2>/dev/null \
+        | jq -r --arg pid "$active_pid" \
+            '.[] | select(.pid == ($pid|tonumber)) | .focused_pane_id'
+    )
+    [[ "$focused_pane" == "$WEZTERM_PANE" ]]
+}
+
+function notify::tmux_is_focused() {
+    local active_pid=$1
+    command -v tmux &>/dev/null || return 1
+
+    local client_pid pane_id
+    while read -r client_pid pane_id; do
+        [[ -z "$client_pid" ]] && continue
+
+        local pid=$client_pid
+        local depth
+        for (( depth = 0; depth < 5; depth++ )); do
+            local ppid
+            ppid=$(ps -p "$pid" -o ppid= 2>/dev/null | tr -d ' ')
+            [[ -z "$ppid" || ppid -eq 0 ]] && break
+
+            if (( ppid == active_pid )); then
+                [[ "$pane_id" == "$TMUX_PANE" ]] && return 0
+                return 1  # Focused but in another pane
+            fi
+            pid=$ppid
+        done
+    done < <(tmux list-clients -F '#{client_pid} #{pane_id}')
+
+    return 1
+}
+
+# Notify if not focused
+# Return 0: Current pane is focused (Do not notify)
+# Return 1: Current pane is not focused or active app PID cannot be determined (Send notification)
+function notify::current_pane_is_focused() {
+    local active_pid
+    active_pid=$(notify::active_app_pid)
+    [[ -z "$active_pid" ]] && return 1
+
+    if [[ -n "$WEZTERM_PANE" ]]; then
+        notify::wezterm_is_focused "$active_pid"
+    else
+        notify::tmux_is_focused "$active_pid"
+    fi
+}
+
+function notify::send() {
+    local title=$1 msg=$2
+    # Escape sequence for AppleScript string literals (requires \ to be processed first)
+    msg=${msg//\\/\\\\}
+    msg=${msg//\"/\\\"}
+    osascript -e "display notification \"$msg\" with title \"$title\""
+}
+
+function notify::prompt_hook() {
+    local exit_code=$?
+    _notify_in_prompt=1
+
+    if [[ -n "$_notify_cmd_start" ]]; then
+        local now duration
+        now=$(date +%s)
+        duration=$(( now - _notify_cmd_start ))
+        _notify_cmd_start=""
+
+        if (( duration >= NOTIFY_ON_COMMAND_DURATION )) \
+           && ! notify::current_pane_is_focused; then
+            local last_cmd
+            last_cmd=$(fc -ln -1 | sed 's/^[[:space:]]*//')
+            notify::send "Command completed" \
+                "$last_cmd returned $exit_code after ${duration}s"
+        fi
+    fi
+
+    _notify_in_prompt=0
+}
+
+PROMPT_COMMAND="notify::prompt_hook${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
