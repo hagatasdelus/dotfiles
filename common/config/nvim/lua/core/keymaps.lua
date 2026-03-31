@@ -19,7 +19,7 @@ map({ "n", "o", "v" }, "M", "expand('<cword>') =~# 'end' ? '%' : 'g%'", { expr =
 -- map({ 'n', 'o', 'v' }, 'M', '%', { remap = true })
 map("n", "F<CR>", "{")
 map("n", "f<CR>", "}")
-for _, quote in ipairs({ '"', "'", "`" }) do
+for _, quote in ipairs({ '"', "'", "`" }) do -- Add text objects for quotes
     map({ "x", "o" }, "a" .. quote, "2i" .. quote)
 end
 
