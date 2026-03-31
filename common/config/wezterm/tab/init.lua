@@ -17,21 +17,6 @@ local function get_pane_state(pane_id)
     return pane_state[pane_id]
 end
 
--- local function get_ghq_root()
---     local home = os.getenv("HOME")
---     local exit_code, stdout, _stderr = wezterm.run_child_process({ "git", "config", "--get", "ghq.root" })
---     local ghq_root
---     if exit_code ~= 0 or stdout == "" then
---         ghq_root = home .. "/ghq"
---     else
---         ghq_root = stdout:gsub("%s+$", ""):gsub("^~", home)
---     end
---
---     local ghq_root_escaped = ghq_root:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
---
---     return string.format(".*%s/github.com/([^/]+)/([^/]+)", ghq_root_escaped)
--- end
-
 ---@param matcher string|table
 ---@param value string
 ---@return boolean
@@ -58,7 +43,7 @@ local function basename(s)
     return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
-function M.apply(config)
+function M.apply_to_config(config)
     config.window_decorations = "RESIZE"
     config.show_tabs_in_tab_bar = true
     config.hide_tab_bar_if_only_one_tab = true
@@ -146,7 +131,6 @@ function M.apply(config)
                     end
 
                     local ghq_repo_path = ".*/dev/ghq/github.com/([^/]+)/([^/]+)"
-                    -- local ghq_repo_path = get_ghq_root()
                     local owner, repo = cwd:match(ghq_repo_path)
                     if owner and repo then
                         state.title = repo
