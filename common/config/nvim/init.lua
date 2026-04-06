@@ -1,4 +1,5 @@
 vim.loader.enable()
+require("vim._core.ui2").enable({})
 require("core.global")
 require("core.base")
 require("core.options")
