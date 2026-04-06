@@ -17,7 +17,6 @@ M.on_attach = function(client, bufnr)
     map("n", "gD", vim.lsp.buf.declaration, extend_opts("Go to declaration", bufnr))
     map("n", "gd", vim.lsp.buf.definition, extend_opts("Go to definition", bufnr))
     map("n", "K", vim.lsp.buf.hover, extend_opts("Hover", bufnr))
-    map("n", "gi", vim.lsp.buf.implementation, extend_opts("Go to implementation", bufnr))
     map("i", "<C-k>", vim.lsp.buf.signature_help, extend_opts("Signature help", bufnr))
     map("n", "gk", vim.lsp.buf.signature_help, extend_opts("Signature help", bufnr))
     map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, extend_opts("Add workspace folder", bufnr))
@@ -25,17 +24,23 @@ M.on_attach = function(client, bufnr)
     map("n", "<leader>wl", function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, extend_opts("List workspace folders", bufnr))
-    map("n", "<leader>D", vim.lsp.buf.type_definition, extend_opts("Go to type definition", bufnr))
-    map("n", "<leader>rn", vim.lsp.buf.rename, extend_opts("Rename", bufnr))
-    map({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, extend_opts("Code action", bufnr))
-    map("n", "gr", vim.lsp.buf.references, extend_opts("References", bufnr))
     map("n", "<leader><space>", function()
         vim.lsp.buf.format({ async = true })
     end, extend_opts("Format", bufnr))
     -- Diagnostic mappings
     map("n", "<leader>e", vim.diagnostic.open_float, extend_opts("Open diagnostic float", bufnr))
-    map("n", "[d", vim.diagnostic.goto_prev, extend_opts("Go to previous diagnostic", bufnr))
-    map("n", "]d", vim.diagnostic.goto_next, extend_opts("Go to next diagnostic", bufnr))
+    map(
+        "n",
+        "[d",
+        "<Cmd>lua vim.diagnostic.jump({count=-1, float=true})<CR>",
+        extend_opts("Go to previous diagnostic", bufnr)
+    )
+    map(
+        "n",
+        "]d",
+        "<Cmd>lua vim.diagnostic.jump({count=1, float=true})<CR>",
+        extend_opts("Go to next diagnostic", bufnr)
+    )
     map("n", "<leader>q", vim.diagnostic.setloclist, extend_opts("Set diagnostic loclist", bufnr))
     -- Lspsaga key mappings
     map("n", "<leader>lf", "<Cmd>Lspsaga finder<cr>", extend_opts("Lspsaga Finder show references", bufnr))
