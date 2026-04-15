@@ -3,6 +3,8 @@ function rm() {
     "/"
     "$HOME"
     "$HOME/Library"
+    "$HOME/Library/Caches"
+    "$HOME/Library/Application Support"
     "$HOME/Documents"
     "$HOME/Desktop"
     "$HOME/Downloads"
