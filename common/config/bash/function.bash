@@ -9,8 +9,8 @@ function course_setup() {
     NUMBER_OF_ARGUMENTS=$#
 
     if [ ${NUMBER_OF_ARGUMENTS} -lt 1 ]; then
-        echo "Command Failed: Specify one or more course names." >&2
-        exit 1
+        echo "Error: Command failed. Specify one or more course names." >&2
+        return
     fi
 
     for COURSE in ${COMMAND_LINE}; do
@@ -21,8 +21,6 @@ function course_setup() {
         done
         echo "Course Setup Done >> ${COURSE}"
     done
-
-    exit 0
 }
 
 function git_ssh_sign_config() {
