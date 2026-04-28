@@ -31,7 +31,7 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
         return nil
     end
     local function build_url(target)
-        if target:match("^[%w%-]+/[%w%%._]+$") then
+        if target:match("^[%w%-]+/[%w%%._%-]+$") then
             return "https://github.com/" .. target
         end
 
