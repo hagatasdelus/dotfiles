@@ -5,6 +5,7 @@ export BASH_CONFIG_HOME="${XDG_CONFIG_HOME}/bash"
 . "${BASH_CONFIG_HOME}/alias.bash"
 . "${BASH_CONFIG_HOME}/init.bash"
 . "${BASH_CONFIG_HOME}/notification.bash"
+. "${BASH_CONFIG_HOME}/prompt.bash"
 
 if [ -f ~/.bashrc.local ]; then
     . ~/.bashrc.local
