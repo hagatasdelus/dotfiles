@@ -1,9 +1,12 @@
 ---@type vim.lsp.Config
 return {
-    setttings = {
+    settings = {
         yaml = {
             schemaStore = { enable = true },
             keyOrdering = false,
+            format = {
+                enable = true,
+            },
         },
     },
 }
