@@ -97,3 +97,7 @@ vim.api.nvim_create_user_command("Browse", function(opts)
     end
     Snacks.notify.info("Opened Browser with search query: " .. query, { title = "Browse" })
 end, { nargs = "*", desc = "Open Browser and search for the query" })
+
+vim.api.nvim_create_user_command("EditConfig", function()
+    vim.cmd.edit(vim.fn.stdpath("config"))
+end, { nargs = 0 })
