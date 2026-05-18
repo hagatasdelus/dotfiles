@@ -6,7 +6,21 @@ fi
 
 NOTIFY_ON_COMMAND_DURATION=${NOTIFY_ON_COMMAND_DURATION:-5}
 
-PS0='$((_notify_cmd_start=EPOCHSECONDS, 0))'$'\b \b'
+_notify_cmd_start=""
+_notify_in_prompt=0
+
+# When PROMPT_COMMAND calls notify::prompt_hook, the DEBUG trap fires at the exact moment the function is called (before the function has even entered).
+# This triggers with BASH_COMMAND="notify::prompt_hook"
+# -> Since _notify_in_prompt remains 0, the flag has no effect
+# -> Without the BASH_COMMAND check, it would override _notify_cmd_start
+function notify::on_debug() {
+    # Prevent DEBUG triggers from firing for the function call itself
+    [[ "$BASH_COMMAND" == "notify::prompt_hook"* ]] && return
+    # Prevent DEBUG triggers from firing for commands within the notify function
+    (( _notify_in_prompt )) && return
+    _notify_cmd_start=$(date +%s)
+}
+trap 'notify::on_debug' DEBUG
 
 function notify::active_app_pid() {
     osascript -e \
@@ -78,9 +92,12 @@ function notify::send() {
 
 function notify::prompt_hook() {
     local exit_code=$?
+    _notify_in_prompt=1
 
     if [[ -n "$_notify_cmd_start" ]]; then
-        local duration=$(( EPOCHSECONDS - _notify_cmd_start ))
+        local now duration
+        now=$(date +%s)
+        duration=$(( now - _notify_cmd_start ))
         _notify_cmd_start=""
 
         if (( duration >= NOTIFY_ON_COMMAND_DURATION )) \
@@ -91,6 +108,8 @@ function notify::prompt_hook() {
                 "$last_cmd returned $exit_code after ${duration}s"
         fi
     fi
+
+    _notify_in_prompt=0
 }
 
 # PROMPT_COMMAND="notify::prompt_hook${PROMPT_COMMAND:+; $PROMPT_COMMAND}"

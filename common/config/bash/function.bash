@@ -1,4 +1,4 @@
-. "${BASH_CONFIG_HOME}/my_function/rm.bash"
+. "${BASH_CONFIG_HOME}/my_function/init.bash"
 
 function history-edit() {
     fc -W

@@ -13,10 +13,7 @@
 #   export BYAKU_GIT_DIRTY="!"
 #
 
-# =============================================================================
 # Color Definitions (cached at startup for performance)
-# =============================================================================
-
 # Cache tput output to avoid repeated calls
 # Graceful degradation: empty string if tput fails
 _byaku_color_red="$(tput setaf 1 2>/dev/null || echo '')"
@@ -29,10 +26,7 @@ _byaku_color_white="$(tput setaf 7 2>/dev/null || echo '')"
 _byaku_color_gray="$(tput setaf 8 2>/dev/null || echo '')"
 _byaku_color_reset="$(tput sgr0 2>/dev/null || echo '')"
 
-# =============================================================================
 # User Configuration (environment variable overrides)
-# =============================================================================
-
 # Prompt symbol (default: ❯)
 BYAKU_PROMPT_SYMBOL="${BYAKU_PROMPT_SYMBOL:-❯}"
 
@@ -42,18 +36,12 @@ BYAKU_CMD_MAX_EXEC_TIME="${BYAKU_CMD_MAX_EXEC_TIME:-5}"
 # Git dirty indicator symbol (default: *)
 BYAKU_GIT_DIRTY="${BYAKU_GIT_DIRTY:-*}"
 
-# =============================================================================
 # Internal State Variables
-# =============================================================================
-
 _byaku_cmd_start=""
 _byaku_cmd_duration=""
 _byaku_has_git=""  # Cached git availability
 
-# =============================================================================
 # Utility Functions
-# =============================================================================
-
 # Check if git is available (cached at init time)
 _byaku_init_git_check() {
     if command -v git &>/dev/null; then
@@ -83,10 +71,7 @@ _byaku_format_duration() {
     echo "$result"
 }
 
-# =============================================================================
 # Git Functions
-# =============================================================================
-
 # Check if we're in a git repository (fast fs check, no git command)
 _byaku_is_git_repo() {
     local dir="$PWD"
@@ -138,10 +123,7 @@ _byaku_git_info() {
     fi
 }
 
-# =============================================================================
 # Timing Functions
-# =============================================================================
-
 # Flag to control preexec behavior (avoid running during prompt generation)
 _byaku_preexec_ready=1
 
@@ -181,10 +163,7 @@ _byaku_precmd() {
     _byaku_cmd_start=""
 }
 
-# =============================================================================
 # Main Prompt Function
-# =============================================================================
-
 _byaku_prompt_command() {
     # Capture exit status FIRST (before any other command overwrites it)
     local exit_status=$?
@@ -254,10 +233,7 @@ _byaku_prompt_command() {
     _byaku_preexec_ready=1
 }
 
-# =============================================================================
 # Setup
-# =============================================================================
-
 # Initialize cached checks
 _byaku_init_git_check
 

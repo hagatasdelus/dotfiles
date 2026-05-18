@@ -84,7 +84,7 @@ export TERM=screen-256color
 # export PS1='\033[01;34m\W\033[00m\$ '
 # Full prompt with full path of current directory
 # export PS1='\033[01;34m\w\033[00m\$ '
-export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+# export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 if [[ -f "${HOME}/.bashrc" && "${BASH_VERSION}" != *-release ]]; then
     . "${HOME}/.bashrc"
