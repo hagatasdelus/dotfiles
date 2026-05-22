@@ -104,3 +104,5 @@ flycheck_*.el
 ### direnv ###
 .envrc
 .direnv/*
+
+.antigravitycli
