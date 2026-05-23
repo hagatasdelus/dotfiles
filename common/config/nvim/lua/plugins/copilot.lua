@@ -51,6 +51,14 @@ return {
                     ["*"] = true,
                 },
             })
+
+            vim.keymap.set("n", "gs", function()
+                require("copilot.suggestion").toggle_auto_trigger()
+                Snacks.notify.info(
+                    vim.b.copilot_suggestion_auto_trigger and "Enabled" or "Disabled",
+                    { title = "Copilot Suggestion" }
+                )
+            end, { desc = "Toggle Suggestion", silent = true })
         end, 100)
 
         -- local suggestion = require("copilot.suggestion")
