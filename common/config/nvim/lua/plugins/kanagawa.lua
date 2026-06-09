@@ -11,7 +11,7 @@ return {
                     dark = "dragon",
                     light = "lotus",
                 },
-                compile = true,
+                compile = false,
                 transparent = true,
                 dimInactive = false,
                 colors = {
@@ -49,7 +49,21 @@ return {
         config = function(_, opts)
             local kanagawa = require("kanagawa")
             kanagawa.setup(opts)
-            vim.cmd.colorscheme("kanagawa")
+
+            vim.api.nvim_create_autocmd("ColorSchemePre", {
+                group = vim.api.nvim_create_augroup("KanagawaTransparent", { clear = true }),
+                pattern = "kanagawa*",
+                callback = function(args)
+                    local scheme = args.match
+
+                    if scheme == "kanagawa-lotus" then
+                        kanagawa.setup({ transparent = false })
+                    else
+                        kanagawa.setup({ transparent = true })
+                    end
+                end,
+            })
+            -- vim.cmd.colorscheme("kanagawa")
         end,
     },
 }
