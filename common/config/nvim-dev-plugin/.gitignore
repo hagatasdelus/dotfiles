@@ -1,0 +1,17 @@
+/*
+
+!.gitignore
+!init.lua
+!lazy-lock.json
+!lua/
+
+lua/*
+
+!lua/config/
+!lua/core/
+!lua/plugins/
+
+lua/plugins/*
+
+!lua/plugins/kanagawa.lua
+!lua/plugins/oil/

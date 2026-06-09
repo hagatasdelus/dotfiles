@@ -1,0 +1,293 @@
+local M = {}
+
+local debounce = require("core.utils").debounce
+
+local function getEntryAbsPath()
+    local oil = require("oil")
+    local cursor_entry = oil.get_cursor_entry()
+    local current_dir = oil.get_current_dir()
+    if not cursor_entry or not current_dir then
+        return
+    end
+
+    local full_path = current_dir .. cursor_entry.name
+    local escaped_path = vim.fn.fnameescape(full_path)
+    return escaped_path, cursor_entry, current_dir
+end
+
+local function listPanes()
+    local cli_result = vim.system({ "wezterm", "cli", "list", ("--format=%s"):format("json") }, { text = true }):wait()
+    local json = vim.json.decode(cli_result.stdout)
+    local panes_list = vim.iter(json)
+        :map(lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
+    return panes_list
+end
+
+local function getNeovimPaneId()
+    local wezterm_pane_id = vim.env.WEZTERM_PANE
+    if not wezterm_pane_id then
+        vim.notify("Wezterm pane not found", vim.log.levels.ERROR)
+        return
+    end
+    return tonumber(wezterm_pane_id)
+end
+
+local function getPreviewPane()
+    local panes_list = listPanes()
+    local neovim_wezterm_pane_id = getNeovimPaneId()
+    local current_tab_id = assert(panes_list:find(function(obj)
+        return obj.pane_id == neovim_wezterm_pane_id
+    end)).tab_id
+    local preview_pane = panes_list:find(function(obj)
+        return obj.tab_id == current_tab_id and tonumber(obj.pane_id) > tonumber(neovim_wezterm_pane_id) -- new pane id should be greater than the current one
+    end)
+    return preview_pane
+end
+
+local function getPreviewPaneId()
+    local preview_pane = getPreviewPane()
+    --  preview_pane ~= nil ? preview_pane.pane_id : nil
+    return preview_pane ~= nil and preview_pane.pane_id or nil
+end
+
+local function getPreviewPaneName()
+    local preview_pane = getPreviewPane()
+    return preview_pane ~= nil and preview_pane.title or nil
+end
+
+local function activatePane(wezterm_pane_id)
+    local cmd = { "wezterm", "cli", "activate-pane", ("--pane-id=%s"):format(wezterm_pane_id) }
+    vim.system(cmd):wait()
+end
+
+local function openNewPane(opt)
+    local _opt = opt or {}
+    local percent = _opt.percent or 30
+    local direction = _opt.direction or "right"
+
+    local cmd = {
+        "wezterm",
+        "cli",
+        "split-pane",
+        ("--percent=%d"):format(percent),
+        ("--%s"):format(direction),
+        "--",
+        "bash",
+    }
+    local obj = vim.system(cmd, { text = true }):wait()
+    local wezterm_pane_id = assert(tonumber(obj.stdout))
+
+    return wezterm_pane_id
+end
+
+local function closePreviewPane(wezterm_pane_id)
+    vim.system({ "wezterm", "cli", "kill-pane", ("--pane-id=%s"):format(wezterm_pane_id) })
+end
+
+local function sendCommandToPreviewPane(wezterm_pane_id, command)
+    local cmd = {
+        "echo",
+        ("'%s'"):format(command),
+        "|",
+        "wezterm",
+        "cli",
+        "send-text",
+        "--no-paste",
+        ("--pane-id=%s"):format(wezterm_pane_id),
+    }
+    vim.fn.system(table.concat(cmd, " "))
+end
+
+local function sendKeyToPreviewPane(wezterm_pane_id, key)
+    local cmd = {
+        "echo",
+        "-n",
+        ("'%s'"):format(key),
+        "|",
+        "wezterm",
+        "cli",
+        "send-text",
+        ("--pane-id=%s"):format(wezterm_pane_id),
+    }
+    vim.fn.system(table.concat(cmd, " "))
+end
+
+local function ensurePreviewPane(opt)
+    local preview_pane_id = getPreviewPaneId()
+    if preview_pane_id == nil then
+        preview_pane_id = openNewPane(opt)
+    end
+    return preview_pane_id
+end
+
+local function isImage(url)
+    local extension = url:match("^.+(%..+)$")
+    local imageExt = { ".bmp", ".jpg", ".jpeg", ".png", ".gif", ".tif", ".tiff", ".ico" }
+    return vim.iter(imageExt):any(function(ext)
+        return extension == ext
+    end)
+end
+
+local function isViewableInTdf(url)
+    local extension = url:match("^.+(%..*)$")
+    local tdfExt = { ".pdf", ".bmp", ".jpg", ".jpeg", ".png" }
+    return vim.iter(tdfExt):any(function(ext)
+        return extension == ext
+    end)
+end
+
+local function getPreviewCommand(abspath, cursor_entry)
+    local cmd
+    if cursor_entry.type == "file" then
+        if isImage(abspath) then
+            cmd = "wezterm imgcat"
+        elseif isViewableInTdf(abspath) then
+            cmd = "tdf"
+        else
+            cmd = "bat"
+        end
+    else -- directory, link, etc
+        if vim.fn.executable("eza") == 1 then
+            cmd = "eza -l --header --icons"
+        else
+            cmd = "ls -l"
+        end
+    end
+
+    local command = ("%s %s"):format(cmd, abspath)
+    return command
+end
+
+local function createPreviewAction(config)
+    local paneOpts = { percent = config.percent or 30, direction = config.direction or "right" }
+
+    return {
+        callback = function()
+            local open_preview_pane_id = getPreviewPaneId()
+            if open_preview_pane_id ~= nil then
+                closePreviewPane(open_preview_pane_id)
+            end
+
+            local oil = require("oil")
+            local oil_util = require("oil.util")
+            local preview_entry_id = nil
+
+            local neovim_wezterm_pane_id = getNeovimPaneId()
+            local bufnr = vim.api.nvim_get_current_buf()
+
+            local updateWeztermPreview = debounce(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_id = ensurePreviewPane(paneOpts)
+                    activatePane(neovim_wezterm_pane_id)
+
+                    if preview_entry_id == cursor_entry.id then
+                        return
+                    end
+
+                    local preview_pane_name = getPreviewPaneName()
+                    if vim.fn.index({ "bat", "tdf" }, preview_pane_name) ~= -1 then
+                        sendKeyToPreviewPane(preview_pane_id, "q")
+                    end
+
+                    local abspath = assert(getEntryAbsPath())
+                    local command = getPreviewCommand(abspath, cursor_entry)
+
+                    sendCommandToPreviewPane(preview_pane_id, command)
+                end
+            end, 50)
+
+            updateWeztermPreview()
+
+            local config_oil = require("oil.config")
+            if config_oil.preview_win.update_on_cursor_moved then
+                vim.api.nvim_create_autocmd("CursorMoved", {
+                    desc = "Update oil wezterm preview",
+                    group = "Oil",
+                    buffer = bufnr,
+                    callback = function()
+                        updateWeztermPreview()
+                    end,
+                })
+            end
+
+            vim.api.nvim_create_autocmd({ "BufLeave", "BufDelete", "VimLeave" }, {
+                desc = "Close oil wezterm preview",
+                group = "Oil",
+                buffer = bufnr,
+                callback = function()
+                    closePreviewPane(getPreviewPaneId())
+                end,
+            })
+        end,
+        desc = "Open Preview with Wezterm",
+    }
+end
+
+local function createTdfNavigationAction(key)
+    return {
+        callback = function()
+            local oil = require("oil")
+            local oil_util = require("oil.util")
+            local preview_entry_id = nil
+
+            local neovim_wezterm_pane_id = getNeovimPaneId()
+            local bufnr = vim.api.nvim_get_current_buf()
+
+            local updateTdfNavigation = debounce(function()
+                if vim.api.nvim_get_current_buf() ~= bufnr then
+                    return
+                end
+                local cursor_entry = oil.get_cursor_entry()
+                if cursor_entry ~= nil and not oil_util.is_visual_mode() then
+                    local preview_pane_name = getPreviewPaneName()
+                    if preview_pane_name ~= "tdf" then
+                        vim.notify("TDF is not open in wezterm preview", vim.log.levels.ERROR)
+                        return
+                    end
+                    local preview_pane_id = ensurePreviewPane()
+                    activatePane(neovim_wezterm_pane_id)
+
+                    if preview_entry_id == cursor_entry.id then
+                        return
+                    end
+                    sendKeyToPreviewPane(preview_pane_id, key)
+                end
+            end, 50)
+            updateTdfNavigation()
+        end,
+    }
+end
+
+M.openWithQuickLook = {
+    callback = function()
+        local abspath = assert(getEntryAbsPath())
+        require("core.utils").open_file_with_quicklook(abspath)
+    end,
+    desc = "Open Preview with QuickLook",
+}
+
+M.openWithWeztermPreview = createPreviewAction({
+    percent = 50,
+    direction = "right",
+})
+
+M.closeWeztermPreview = {
+    callback = function()
+        local preview_pane_id = getPreviewPaneId()
+        if preview_pane_id then
+            closePreviewPane(preview_pane_id)
+        end
+    end,
+    desc = "Close Preview",
+}
+
+M.tdfNext = createTdfNavigationAction("l")
+M.tdfPrev = createTdfNavigationAction("h")
+M.tdfFullScreen = createTdfNavigationAction("f")
+M.tdfInvert = createTdfNavigationAction("i")
+
+return M
