@@ -1,0 +1,5 @@
+{
+  "denops.vim": { "branch": "main", "commit": "5cfca39988a36e42d81b925264fc846077a727e3" },
+  "smear-cursor.nvim": { "branch": "main", "commit": "c85bdbb25db096fbcf616bc4e1357bd61fe2c199" },
+  "vimdoc-ja": { "branch": "master", "commit": "7306458ea78b38e0d65ac7e57a983b37a7f8b96b" }
+}
