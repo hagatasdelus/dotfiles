@@ -1,30 +1,4 @@
 local wezterm = require("wezterm")
-local mux = wezterm.mux
-
-wezterm.on("toggle-opacity", function(window, _)
-    local overrides = window:get_config_overrides() or {}
-    if not overrides.window_background_opacity then
-        overrides.window_background_opacity = 0.5
-    else
-        overrides.window_background_opacity = nil
-    end
-    window:set_config_overrides(overrides)
-end)
-
-wezterm.on("toggle-blur", function(window, _)
-    local overrides = window:get_config_overrides() or {}
-    if not overrides.macos_window_background_blur then
-        overrides.macos_window_background_blur = 0
-    else
-        overrides.macos_window_background_blur = nil
-    end
-    window:set_config_overrides(overrides)
-end)
-
-wezterm.on("gui-startup", function(cmd)
-    local _, _, window = mux.spawn_window(cmd or {})
-    window:gui_window():maximize()
-end)
 
 local config = {}
 if wezterm.config_builder then
@@ -41,7 +15,7 @@ config.window_padding = {
     top = 0,
     bottom = 0,
 }
-config.use_ime = true
+config.use_ime = false
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 config.force_reverse_video_cursor = true
@@ -52,19 +26,29 @@ config.macos_window_background_blur = 20
 config.window_background_gradient = {
     colors = { "#000000" },
 }
-config.hyperlink_rules = wezterm.default_hyperlink_rules()
-table.insert(config.hyperlink_rules, {
-    regex = [[["]?([\w\d]{1}[-\w\d]+)/([-\w\d\.]+)["]?]],
-    format = "https://github.com/$1/$2",
-})
-table.insert(config.hyperlink_rules, {
-    regex = [[github\.com/([\w\d]{1}[-\w\d]+)/([-\w\d\.]+)]],
-    format = "https://github.com/$1/$2",
-})
+config.disable_default_quick_select_patterns = true
+config.quick_select_patterns = {
+    "\\bhttps?://[\\w\\-._~:/?#@!$&'()*+,;=%]+",
+    "(?<=[\\s:=(\"'`])(?:~|/)[/\\w\\-.@~]+",
+    "(?m)^(?:~|/)[/\\w\\-.@~]+(?=\\s*$)",
+    "\\b[0-9a-f]{7,40}\\b",
+    "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b",
+    "\\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\b",
+}
 
-require("color").apply(config)
-require("keymaps").apply(config)
-require("tab").apply(config)
-require("events")
+require("keymaps").apply_to_config(config)
+require("appearance").apply_to_config(config)
+require("tab").apply_to_config(config)
+require("statusbar").apply_to_config(config)
+
+require("modules.workspace").apply_to_config(config)
+require("modules.pane_resize").apply_to_config(config)
+require("modules.blur").apply_to_config(config)
+require("modules.opacity").apply_to_config(config)
+require("modules.window_size").apply_to_config(config)
+require("modules.zen_mode").apply_to_config(config)
+require("modules.command_palette").apply_to_config(config)
+require("modules.utilities").apply_to_config(config)
+require("modules.karabiner_profile").apply_to_config(config)
 
 return config

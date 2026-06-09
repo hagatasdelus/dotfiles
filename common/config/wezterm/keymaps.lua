@@ -12,7 +12,7 @@ wezterm.on("update-right-status", function(window, _)
     window:set_right_status(name or "")
 end)
 
-function keys()
+local function keys()
     return {
         -- swich workspace
         {
@@ -40,7 +40,7 @@ function keys()
                 description = "(wezterm) Create new workspace:",
                 action = wezterm.action_callback(function(window, pane, line)
                     if line then
-                        window:perform_aciton(
+                        window:perform_action(
                             act.SwitchToWorkspace({
                                 name = line,
                             }),
@@ -52,6 +52,8 @@ function keys()
         },
         -- show command palette
         { key = "p", mods = "SUPER", action = act.ActivateCommandPalette },
+        -- quick select
+        { key = " ", mods = "SUPER", action = act.QuickSelect },
         -- go to next tab
         { key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
         -- go to prev tab
@@ -66,7 +68,7 @@ function keys()
         -- toggle fullscreen
         { key = "Enter", mods = "ALT", action = act.ToggleFullScreen },
         -- enter copy mode
-        -- { key = 'X',    mods = 'LEADER',        action = act.ActivateKeyTable{ name = 'copy_mode', one_shot =false } },
+        { key = "X", mods = "LEADER", action = act.ActivateKeyTable({ name = "copy_mode", one_shot = false }) },
         { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
         -- copy
         { key = "c", mods = "SUPER", action = act.CopyTo("Clipboard") },
@@ -74,7 +76,8 @@ function keys()
         { key = "v", mods = "SUPER", action = act.PasteFrom("Clipboard") },
         -- create new pane (leader + r or d)
         { key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-        { key = "|", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+        { key = "=", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+        { key = "|", mods = "LEADER|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
         -- close pane (leader + x)
         { key = "x", mods = "LEADER", action = act({ CloseCurrentPane = { confirm = true } }) },
         -- maps panes (leader + hlkj)
@@ -109,7 +112,7 @@ function keys()
         {
             key = "s",
             mods = "LEADER",
-            action = act.ActivateKeyTable({ name = "resize_pane", one_shot = false }),
+            action = act.ActivateKeyTable({ name = "setting_mode", one_shot = false }),
         },
         {
             key = "a",
@@ -117,8 +120,6 @@ function keys()
             action = act.ActivateKeyTable({ name = "activate_pane", timeout_milliseconds = 1000 }),
         },
         { key = "L", mods = "CTRL", action = act.ShowDebugOverlay },
-        { key = "o", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-opacity") },
-        { key = "l", mods = "CMD|SHIFT", action = act.EmitEvent("toggle-blur") },
     }
 end
 
@@ -127,18 +128,8 @@ local function key_tables()
     return {
         -- resize pane (leader + s)
         resize_pane = {
-            { key = "h", action = act.AdjustPaneSize({ "Left", 1 }) },
-            { key = "l", action = act.AdjustPaneSize({ "Right", 1 }) },
-            { key = "k", action = act.AdjustPaneSize({ "Up", 1 }) },
-            { key = "j", action = act.AdjustPaneSize({ "Down", 1 }) },
             -- Cancel the mode by pressing escape
             { key = "Enter", action = "PopKeyTable" },
-        },
-        activate_pane = {
-            { key = "h", action = act.ActivatePaneDirection("Left") },
-            { key = "l", action = act.ActivatePaneDirection("Right") },
-            { key = "k", action = act.ActivatePaneDirection("Up") },
-            { key = "j", action = act.ActivatePaneDirection("Down") },
         },
         -- copy mode (leader + [)
         copy_mode = {
@@ -208,7 +199,7 @@ local function mouse_bindings()
     }
 end
 
-function M.apply(config)
+function M.apply_to_config(config)
     config.disable_default_key_bindings = true
     config.keys = keys()
     config.key_tables = key_tables()
