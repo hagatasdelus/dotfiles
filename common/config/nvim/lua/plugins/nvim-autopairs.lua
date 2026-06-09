@@ -7,6 +7,7 @@ return {
         return {
             break_undo = false,
             map_c_h = true,
+            map_bs = false,
         }
     end,
     config = function(_, opts)
