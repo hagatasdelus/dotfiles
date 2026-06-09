@@ -21,7 +21,7 @@ vim.opt.clipboard = "unnamedplus"
 
 -- Menu and Command
 vim.opt.wildmenu = true
-vim.opt.cmdheight = 1
+-- vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 vim.opt.showcmd = true
 vim.opt.confirm = true

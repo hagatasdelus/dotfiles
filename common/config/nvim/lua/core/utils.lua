@@ -44,7 +44,7 @@ function M.debounce(func, ms)
     end
 end
 
----@param on_attach OnAttachCallback
+---@param on_attach fun(client: vim.lsp.Client, bufnr: integer)
 function M.on_attach(on_attach)
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)

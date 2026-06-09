@@ -1,8 +1,8 @@
 local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
+local opts = { silent = true }
 
 map("n", "<CR><CR>", "<C-w><C-w>")
-map("i", "jj", "<ESC>")
+-- map("i", "jj", "<ESC>")
 map("", "ss", "^")
 map("", ";;", "$")
 map({ "n", "v" }, "x", '"_x') -- Delete without yanking
@@ -38,15 +38,14 @@ map("x", "<Space>g", ":copy'<-1<CR>gv") -- Duplicate selected lines up
 map("x", "<Space>G", ":copy'>+0<CR>gv") -- Duplicate selected lines down
 
 -- Tab Management
-map("n", "<Tab>", "<Cmd>tabnext<CR>", opts)
-map("n", "<S-Tab>", "<Cmd>tabprevious<CR>", opts)
+-- map("n", "<Tab>", "<Cmd>tabnext<CR>", opts)
+-- map("n", "<S-Tab>", "<Cmd>tabprevious<CR>", opts)
 map("n", "th", "<Cmd>tabfirst<CR>", opts)
 map("n", "tj", "<Cmd>tabprevious<CR>", opts)
 map("n", "tk", "<Cmd>tabnext<CR>", opts)
 map("n", "tl", "<Cmd>tablast<CR>", opts)
 map("n", "tt", "<Cmd>tabe .<CR>", opts)
 map("n", "tq", "<Cmd>tabclose<CR>", opts)
-map("n", "tm", "<Cmd>tab term<CR>", opts)
 
 -- Replace / Substitute
 map("n", "S", [[:%s/\V\<<C-r><C-w>\>//g<Left><Left>]]) -- Substitute word under cursor in file
@@ -57,7 +56,7 @@ map("n", "/", "/\\v") -- Search forward with very magic
 map("n", "?", "/\\V")
 
 -- Terminal
-map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
+-- map("t", [[<ESC><ESC>]], [[<C-\><C-n>]], opts)
 map("t", [[<C-[><C-[>]], [[<C-\><C-n>]], opts)
 
 -- Indentation
