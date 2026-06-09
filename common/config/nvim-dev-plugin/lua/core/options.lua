@@ -41,11 +41,11 @@ vim.opt.tabstop = 4
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
-vim.opt.backspace = {
-    "indent",
-    "eol",
-    "start",
-}
+-- vim.opt.backspace = {
+--     "indent",
+--     "eol",
+--     "start",
+-- }
 
 -- Display
 vim.opt.number = true
