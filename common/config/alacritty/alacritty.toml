@@ -24,10 +24,6 @@ family = "UDEV Gothic 35NFLG"
 history = 10000
 multiplier = 3
 
-[terminal.shell]
-program = "/usr/local/bin/bash"
-args = ["-l", "-c", "/usr/local/bin/tmux a -t 0 || /usr/local/bin/tmux -u"]
-
 [colors.primary]
 background = "#282828"
 foreground = "#eeeeee"
@@ -51,6 +47,3 @@ blue = "#b3deef"
 magenta = "#d3b987"
 cyan = "#73cef4"
 white = "#feffff"
-
-[env]
-TERM = "screen-256color"
