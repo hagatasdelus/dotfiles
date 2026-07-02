@@ -8,7 +8,7 @@ end
 config.automatically_reload_config = true
 config.line_height = 1.0
 config.font_size = 15.0
-config.font = wezterm.font("HackGen Console NF")
+config.font = wezterm.font("UDEV Gothic 35NFLG")
 config.window_padding = {
     left = 1,
     right = 0,
