@@ -1,3 +1,6 @@
+[general]
+live_config_reload = true
+
 [window]
 opacity = 0.4
 blur = true
@@ -11,11 +14,11 @@ y = 4
 size = 13.0
 
 [font.normal]
-family = "HackGen Console NF"
+family = "UDEV Gothic 35NFLG"
 [font.bold]
-family = "HackGen Console NF"
+family = "UDEV Gothic 35NFLG"
 [font.italic]
-family = "HackGen Console NF"
+family = "UDEV Gothic 35NFLG"
 
 [scrolling]
 history = 10000
