@@ -23,6 +23,16 @@ for _, quote in ipairs({ '"', "'", "`" }) do -- Add text objects for quotes
     map({ "x", "o" }, "a" .. quote, "2i" .. quote)
 end
 
+vim.keymap.set(
+    "n",
+    "zz",
+    "zz<Plug>(zsub1)",
+    { remap = true, desc = "Cycle through center -> top -> bottom by mashing 'z'" }
+)
+vim.keymap.set("n", "<Plug>(zsub1)z", "zt<Plug>(zsub2)", { remap = true })
+vim.keymap.set("n", "<Plug>(zsub2)z", "zb<Plug>(zsub3)", { remap = true })
+vim.keymap.set("n", "<Plug>(zsub3)z", "zz<Plug>(zsub1)", { remap = true })
+
 -- Move & Duplicate Lines/Selections
 map("n", "<C-k>", function() -- Move current line up
     return "<Cmd>move-1-" .. vim.v.count1 .. "<CR>=l"
