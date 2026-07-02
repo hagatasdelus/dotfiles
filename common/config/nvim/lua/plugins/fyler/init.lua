@@ -67,17 +67,50 @@ return {
         vim.keymap.set("n", "<leader>fn", open)
     end,
     opts = function()
+        local actions = require("plugins.fyler.actions")
         return {
             views = {
                 finder = {
                     close_on_select = false,
                     confirm_simple = true,
                     follow_current_file = false,
+                    mappings = {
+                        ["q"] = false,
+                        ["|"] = false,
+                        ["^"] = false,
+                        ["="] = false,
+                        ["."] = false,
+                        ["<BS>"] = false,
+                        ["<C-t>"] = false,
+                        ["#"] = false,
+
+                        ["?"] = actions.show_help,
+                        ["gx"] = actions.open_external,
+                        ["<CR>"] = "Select",
+                        ["-"] = "GotoParent",
+                        ["gp"] = actions.openWithWeztermPreview,
+                        ["gc"] = actions.closeWeztermPreview,
+                        ["gl"] = actions.tdfNext,
+                        ["gh"] = actions.tdfPrev,
+                        ["gs"] = actions.tdfFullScreen,
+                        ["gv"] = actions.tdfInvert,
+                        ["g<leader>"] = actions.openWithQuickLook,
+                        ["<ESC>"] = "CloseView",
+                        ["<C-l>"] = actions.refresh,
+                        ["_"] = actions.open_cwd,
+                        ["`"] = actions.cd,
+                        ["~"] = actions.tcd,
+                        ["g."] = actions.toggle_hidden,
+                        ["<C-s>"] = "SelectVSplit",
+                        ["<C-h>"] = "SelectSplit",
+                        ["<C-b>"] = "SelectTab",
+                    },
                 },
             },
         }
     end,
     config = function(_, opts)
         require("fyler").setup(opts)
+        require("plugins.fyler.actions").setup_patches()
     end,
 }
