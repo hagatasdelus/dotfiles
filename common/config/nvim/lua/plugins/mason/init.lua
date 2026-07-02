@@ -39,7 +39,6 @@ return {
         dependencies = {
             "https://github.com/hrsh7th/cmp-nvim-lsp",
             "https://github.com/b0o/schemastore.nvim",
-            "https://github.com/folke/snacks.nvim",
         },
         event = { "BufReadPre", "BufNewFile" },
         config = function()

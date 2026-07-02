@@ -15,7 +15,7 @@ function M.format(opts)
         bufnr = buf,
         timeout_ms = 2000,
         filter = function(client)
-            if not client.supports_method("textDocument/formatting", buf) then
+            if not client:supports_method("textDocument/formatting", buf) then
                 return false
             end
 

@@ -5,9 +5,9 @@ function M.on_attach(client, _)
         local win = vim.api.nvim_get_current_win()
         vim.api.nvim_set_option_value("foldmethod", "expr", { win = win })
         vim.api.nvim_set_option_value("foldexpr", "v:lua.vim.lsp.foldexpr()", { win = win })
-        vim.opt.foldlevel = 99
-        vim.opt.foldlevelstart = 99
-        vim.opt.foldenable = true
+        vim.opt_local.foldlevel = 99
+        vim.opt_local.foldlevelstart = 99
+        vim.opt_local.foldenable = true
     end
 end
 
