@@ -1,0 +1,27 @@
+font-family = UDEV Gothic 35LG
+font-size = 13
+font-feature = [ "-dlig" ]
+
+theme = Kanagawa Dragon
+
+shell-integration = bash
+shell-integration-features = no-cursor
+
+background-opacity = 0.70
+background-blur-radius = 20
+
+unfocused-split-opacity = 0.85
+unfocused-split-fill = #1e1e2e
+
+split-divider-color = #45475a
+
+scrollback-limit = 10000
+
+cursor-style = block
+cursor-style-blink = false
+
+keybind = [ "cmd+u=text:\\x18\\x15" ]
+
+mouse-hide-while-typing = true
+
+working-directory = inherit
