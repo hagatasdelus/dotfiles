@@ -3,7 +3,7 @@ local M = {}
 local deno = require("plugins.denops.deno")
 
 function M.get_or_install(version)
-    version = version or "2.8.2"
+    version = version or "2.8.1"
     local nvim_cache = vim.fn.stdpath("cache") --[[@as string]]
     local cache_denops = vim.fs.joinpath(nvim_cache, "denops", "deno", version)
     local deno_paths = {
