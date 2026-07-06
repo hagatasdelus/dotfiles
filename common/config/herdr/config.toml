@@ -49,15 +49,15 @@ navigate_pane_right = "l"
 
 [[keys.command]]
 key = "prefix+shift+k"
-type = "shell"
-command = "~/dev/ghq/github.com/hagatasdelus/scripts/karabiner-toggle.sh"
+type = "pane"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/karabiner-profile.sh"
 description = "Toggle Karabiner profile (US/JIS)"
 
 [[keys.command]]
 key = "prefix+shift+c"
 type = "pane"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/caffeinate-menu.sh"
-description = "Caffeinate: prevent sleep (menu)"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/caffeinate.sh"
+description = "Caffeinate: prevent sleep"
 
 [theme]
 name = "kanagawa"

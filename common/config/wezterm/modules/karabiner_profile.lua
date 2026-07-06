@@ -3,8 +3,7 @@ local act = wezterm.action
 local M = {}
 
 local KARABINER_CLI = "/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli"
-local MACSKK_KEYBINDING_SCRIPT = (wezterm.config_dir or (os.getenv("HOME") .. "/.config/wezterm"))
-    .. "/scripts/macskk-keybinding.sh"
+local MACSKK_KEYBINDING_SCRIPT = os.getenv("HOME") .. "/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/macskk-keybinding.sh"
 local PROFILE_TO_KEYBINDING = {
     US = "AZIK_US",
     JIS = "AZIK_JIS",

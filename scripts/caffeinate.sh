@@ -23,7 +23,7 @@ stop_caffeinate() {
 start_caffeinate() {
     local duration="$1"
     local desc="$2"
-    
+
     stop_caffeinate
 
     if [ -z "$duration" ]; then
@@ -37,7 +37,6 @@ start_caffeinate() {
     notify "$desc"
 }
 
-# Define options
 OPTIONS=(
     "Start (無制限)"
     "Start 30 min"
@@ -46,7 +45,6 @@ OPTIONS=(
     "Stop"
 )
 
-# Run fzf to select option
 CHOICE=$(printf "%s\n" "${OPTIONS[@]}" | fzf --prompt="Caffeinate > " --height=10 --layout=reverse --header="Select duration or Stop:")
 
 if [ -z "$CHOICE" ]; then
