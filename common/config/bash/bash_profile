@@ -75,7 +75,6 @@ export GHROOT="$(git config ghq.root)/github.com"
 export CLICOLOR=1
 # export LSCOLORS=exfxcxdxbxegedabagacad
 export LSCOLORS=gxfxcxdxbxegedabagacad
-export TERM=screen-256color
 
 ### prompt string settings ###
 # Full prompt with username, hostname, and current directory
