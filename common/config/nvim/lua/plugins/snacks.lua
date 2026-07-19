@@ -149,6 +149,13 @@ return {
             desc = "Colorschemes",
         },
         {
+            ",k",
+            function()
+                Snacks.picker.keymaps()
+            end,
+            desc = "Keymaps",
+        },
+        {
             "<Leader>z",
             function()
                 Snacks.zen()
@@ -217,10 +224,10 @@ return {
                         desc = "Explorer",
                     },
                     {
-                        icon = "",
-                        key = "r",
-                        action = "<Cmd>Telescope oldfiles<CR>",
-                        desc = "Most Recently Used",
+                        icon = "",
+                        key = "t",
+                        action = "<Cmd>ToggleTerm direction=float<CR>",
+                        desc = "Terminal",
                     },
                     {
                         icon = "",
