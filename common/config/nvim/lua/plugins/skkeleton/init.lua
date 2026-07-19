@@ -63,6 +63,8 @@ return {
                 },
                 completionRankFile = cache_dir("rank.json"),
                 immediatelyCancel = false,
+                markerHenkan = "",
+                markerHenkanSelect = "",
             })
             vim.fn["skkeleton#initialize"]()
         end,

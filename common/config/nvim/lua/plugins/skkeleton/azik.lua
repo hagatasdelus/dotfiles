@@ -88,6 +88,7 @@ function M.load(layout, path)
     rules[" "] = "henkanFirst"
     rules["/"] = "abbrev"
     rules["q"] = "katakana"
+    rules["Q"] = "hankatakana"
     rules[";"] = "henkanPoint"
     rules["@"] = "zenkaku"
 
