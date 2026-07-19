@@ -5,7 +5,8 @@
         "appearance": "dark",
         "warnBeforeQuit": true,
         "minimalMode": false,
-        "reorderOnNotification": false
+        "reorderOnNotification": false,
+        "workspaceInheritWorkingDirectory": true
     },
     "automation": {
         "claudeCodeIntegration": true,
@@ -52,7 +53,9 @@
             "prevSidebarTab": "cmd+shift+b",
             "focusBrowserAddressBar": "cmd+l",
             "openBrowser": "cmd+shift+o",
-            "triggerFlash": "cmd+ctrl+h"
+            "triggerFlash": "cmd+ctrl+h",
+            "splitBrowserDown": "ctrl+shift+x",
+            "splitBrowserRight": "ctrl+shift+d"
         }
     }
 }
