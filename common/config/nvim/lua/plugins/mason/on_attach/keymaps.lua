@@ -28,7 +28,7 @@ M.on_attach = function(client, bufnr)
         vim.lsp.buf.format({ async = true })
     end, extend_opts("Format", bufnr))
     -- Diagnostic mappings
-    map("n", "<leader>e", vim.diagnostic.open_float, extend_opts("Open diagnostic float", bufnr))
+    map("n", "<leader>ef", vim.diagnostic.open_float, extend_opts("Open diagnostic float", bufnr))
     map(
         "n",
         "[d",
