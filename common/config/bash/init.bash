@@ -51,6 +51,18 @@ if type mise &>/dev/null; then
     chpwd_functions+=(__after_cd)
 fi
 
+# git-wt
+if type git-wt &>/dev/null; then
+    function cache::git-wt() {
+        git wt --init bash --nocd > "${CACHE_PROFILE}/git-wt.bash"
+    }
+    if [[ ! -f ${CACHE_PROFILE}/git-wt.bash
+          || "$(command -v git-wt)" -nt "${CACHE_PROFILE}/git-wt.bash" ]]; then
+        cache::git-wt
+    fi
+    . ${CACHE_PROFILE}/git-wt.bash
+fi
+
 # pnpm
 if [[ -d "${HOME}/.local/share/pnpm" ]]; then
     export PNPM_HOME="${HOME}/.local/share/pnpm"
