@@ -65,6 +65,16 @@ type = "shell"
 command = "osascript -e 'tell application \"System Events\" to tell (first process whose frontmost is true) to perform action \"AXZoomWindow\" of (first button of window 1 whose subrole is \"AXFullScreenButton\")'"
 description = "Maximize OS Window"
 
+[[keys.command]]
+key = "prefix+i"
+type = "shell"
+command = """
+TARGET=$HERDR_ACTIVE_PANE_ID;
+NEW_PANE=$(herdr pane split --direction down --ratio 0.75 --focus | jq -r '.result.pane.pane_id');
+herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 editprompt open --editor nvim --target-pane $TARGET --mux wezterm --env EDITPROMPT_TARGET_PANE=$TARGET --quiet";
+"""
+description = "Open editprompt in a new pane"
+
 [theme]
 name = "kanagawa"
 auto_switch = true
