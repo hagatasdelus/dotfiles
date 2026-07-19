@@ -2,8 +2,9 @@
 live_config_reload = true
 
 [window]
-opacity = 0.4
+opacity = 0.80
 blur = true
+dynamic_title = true
 decorations = "None"
 
 [window.padding]
@@ -23,6 +24,19 @@ family = "UDEV Gothic 35NFLG"
 [scrolling]
 history = 10000
 multiplier = 3
+
+[env]
+TERM = "xterm-256color"
+
+[cursor]
+style = "Block"
+unfocused_hollow = true
+
+[mouse]
+hide_when_typing = true
+
+[bell]
+duration = 0
 
 [colors.primary]
 background = "#282828"
@@ -47,3 +61,23 @@ blue = "#b3deef"
 magenta = "#d3b987"
 cyan = "#73cef4"
 white = "#feffff"
+
+[[keyboard.bindings]]
+key = "Q"
+mods = "Command"
+action = "Quit"
+
+[[keyboard.bindings]]
+key = "Key0"
+mods = "Command"
+action = "ResetFontSize"
+
+[[keyboard.bindings]]
+key = "Equals"
+mods = "Command"
+action = "IncreaseFontSize"
+
+[[keyboard.bindings]]
+key = "Minus"
+mods = "Command"
+action = "DecreaseFontSize"
