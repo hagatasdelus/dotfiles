@@ -49,13 +49,13 @@ navigate_pane_right = "l"
 
 [[keys.command]]
 key = "prefix+shift+k"
-type = "pane"
+type = "popup"
 command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/karabiner-profile.sh"
 description = "Toggle Karabiner profile (US/JIS)"
 
 [[keys.command]]
 key = "prefix+shift+c"
-type = "pane"
+type = "popup"
 command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/caffeinate.sh"
 description = "Caffeinate: prevent sleep"
 
@@ -74,6 +74,46 @@ NEW_PANE=$(herdr pane split --direction down --ratio 0.75 --focus | jq -r '.resu
 herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 editprompt open --editor nvim --target-pane $TARGET --mux wezterm --env EDITPROMPT_TARGET_PANE=$TARGET --quiet";
 """
 description = "Open editprompt in a new pane"
+
+[[keys.command]]
+key = "prefix+f"
+description = "Search Files"
+type = "popup"
+width = "95%"
+height = "90%"
+command = '''
+SELECTED=$(rg --files --hidden --glob '!.git' | fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')
+if [ -n "$SELECTED" ]; then
+  herdr pane send-text "$HERDR_ACTIVE_PANE_ID" "nvim $SELECTED"
+  herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" "enter"
+fi
+'''
+
+[[keys.command]]
+key = "prefix+g"
+description = "Live Grep"
+type = "popup"
+width = "95%"
+height = "90%"
+command = '''
+SELECTED=$(fzf --bind 'change:reload:rg --line-number --no-heading --color=always --smart-case {q} || true' \
+    --ansi --delimiter : \
+    --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' \
+    --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+  | awk -F: '{print "+"$2, $1}')
+if [ -n "$SELECTED" ]; then
+  herdr pane send-text "$HERDR_ACTIVE_PANE_ID" "nvim $SELECTED"
+  herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" "enter"
+fi
+'''
+
+[[keys.command]]
+key = "prefix+L"
+description = "Open lazygit in popup"
+type = "popup"
+width = "95%"
+height = "90%"
+command = "lazygit --use-config-dir=$HOME/.config/lazygit"
 
 [theme]
 name = "kanagawa"
