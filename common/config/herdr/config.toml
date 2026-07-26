@@ -62,8 +62,14 @@ description = "Caffeinate: prevent sleep"
 [[keys.command]]
 key = "prefix+m"
 type = "shell"
-command = "osascript -e 'tell application \"System Events\" to tell (first process whose frontmost is true) to perform action \"AXZoomWindow\" of (first button of window 1 whose subrole is \"AXFullScreenButton\")'"
-description = "Maximize OS Window"
+command = "swift ~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/winmax.swift maximize"
+description = "Maximize front window"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "shell"
+command = "swift ~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/winmax.swift restore"
+description = "Restore front window"
 
 [[keys.command]]
 key = "prefix+i"
