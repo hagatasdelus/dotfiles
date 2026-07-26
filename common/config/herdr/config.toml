@@ -50,13 +50,13 @@ navigate_pane_right = "l"
 [[keys.command]]
 key = "prefix+shift+k"
 type = "popup"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/karabiner-profile.sh"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/karabiner-profile.sh"
 description = "Toggle Karabiner profile (US/JIS)"
 
 [[keys.command]]
 key = "prefix+shift+c"
 type = "popup"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/caffeinate.sh"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/caffeinate.sh"
 description = "Caffeinate: prevent sleep"
 
 [[keys.command]]
