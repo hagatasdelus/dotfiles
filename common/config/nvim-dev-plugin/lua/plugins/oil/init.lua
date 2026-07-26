@@ -4,7 +4,6 @@ return {
     cmd = { "Oil" },
     dependencies = {
         "https://github.com/nvim-mini/mini.icons",
-        "https://github.com/refractalize/oil-git-status.nvim",
         "https://github.com/folke/snacks.nvim",
     },
     keys = {
@@ -96,6 +95,5 @@ return {
     end,
     config = function(_, opts)
         require("oil").setup(opts)
-        require("oil-git-status").setup()
     end,
 }

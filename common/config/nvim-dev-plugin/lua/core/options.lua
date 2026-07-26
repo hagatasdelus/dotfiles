@@ -33,7 +33,7 @@ vim.opt.matchtime = 1
 
 -- ColorScheme
 vim.opt.termguicolors = true
-vim.opt.background = "light"
+vim.opt.background = "dark"
 
 -- Indent
 vim.opt.shiftwidth = 4
