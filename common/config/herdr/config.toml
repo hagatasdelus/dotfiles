@@ -62,13 +62,13 @@ description = "Caffeinate: prevent sleep"
 [[keys.command]]
 key = "prefix+m"
 type = "shell"
-command = "swift ~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/winmax.swift maximize"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax maximize"
 description = "Maximize front window"
 
 [[keys.command]]
 key = "prefix+shift+m"
 type = "shell"
-command = "swift ~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/winmax.swift restore"
+command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax restore"
 description = "Restore front window"
 
 [[keys.command]]
