@@ -74,12 +74,49 @@ description = "Restore front window"
 [[keys.command]]
 key = "prefix+i"
 type = "shell"
-command = """
-TARGET=$HERDR_ACTIVE_PANE_ID;
+command = '''
+AGENT_NAME=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.agent // "shell"');
 NEW_PANE=$(herdr pane split --direction down --ratio 0.75 --focus | jq -r '.result.pane.pane_id');
-herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 editprompt open --editor nvim --target-pane $TARGET --mux wezterm --env EDITPROMPT_TARGET_PANE=$TARGET --quiet";
-"""
+herdr pane rename "$NEW_PANE" "📝 Prompting for ${AGENT_NAME}(${HERDR_ACTIVE_PANE_ID})";
+herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 editprompt open --editor nvim --target-pane $HERDR_ACTIVE_PANE_ID --mux herdr --quiet";
+'''
 description = "Open editprompt in a new pane"
+
+[[keys.command]]
+key = "prefix+e"
+type = "shell"
+command = '''
+PANE_LABEL=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.label // ""');
+if [[ "$PANE_LABEL" =~ Prompting\ for ]]; then
+  TARGET=$(echo "$PANE_LABEL" | sed -E 's/.*\(([^)]+)\)/\1/');
+else
+  TARGET="$HERDR_ACTIVE_PANE_ID";
+fi
+SAFE_TARGET=$(echo "$TARGET" | tr ':' '-');
+TMPFILE="${TMPDIR:-/tmp/}herdr-scrollback-${SAFE_TARGET}.txt";
+herdr pane read "$TARGET" --source recent-unwrapped --lines 1000 > "$TMPFILE";
+NEW_PANE=$(herdr pane split --pane "$TARGET" --direction down --ratio 0.90 --focus | jq -r '.result.pane.pane_id');
+herdr pane zoom --pane "$NEW_PANE" --on;
+herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 EDITPROMPT_TARGET_PANE='$TARGET' nvim '$TMPFILE'; herdr pane zoom --off; herdr pane close '$NEW_PANE'; herdr pane focus --pane '$HERDR_ACTIVE_PANE_ID'; rm -f '$TMPFILE'";
+'''
+description = "Edit scrollback in $EDITOR targeted for agent pane with auto-refocus"
+
+[[keys.command]]
+key = "prefix+c"
+type = "shell"
+command = '''
+PANE_LABEL=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.label // ""');
+if [[ "$PANE_LABEL" =~ Prompting\ for ]]; then
+  TARGET=$(echo "$PANE_LABEL" | sed -E 's/.*\(([^)]+)\)/\1/');
+else
+  TARGET="$HERDR_ACTIVE_PANE_ID";
+fi
+TEXT=$(pbpaste);
+if [ -n "$TEXT" ]; then
+  editprompt collect --mux herdr --target-pane "$TARGET" -- "$TEXT";
+fi
+'''
+description = "Collect clipboard text as quote for target editprompt pane"
 
 [[keys.command]]
 key = "prefix+f"
