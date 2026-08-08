@@ -1,6 +1,8 @@
 local M = {
     "https://github.com/hrsh7th/nvim-cmp",
     enabled = true,
+    commit = "7d850f3",
+    pin = true,
     cond = not is_on_vscode(),
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
