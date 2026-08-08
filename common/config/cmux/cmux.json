@@ -9,14 +9,22 @@
         "workspaceInheritWorkingDirectory": true
     },
     "automation": {
-        "claudeCodeIntegration": true,
-        "socketControlMode": "full"
+        "claudeCodeIntegration": false,
+        "cursorIntegration": false,
+        "geminiIntegration": false,
+        "kiroIntegration": false,
+        "ampIntegration": false,
+        "workspaceAutoNaming": false,
+        "socketControlMode": "cmuxOnly"
     },
     "notifications": {
         "dockBadge": true,
         "showInMenuBar": true,
         "unreadPaneRing": true,
-        "paneFlash": true
+        "paneFlash": true,
+        "agentPermissionPrompt": false,
+        "agentTurnComplete": "never",
+        "agentIdleReminder": false
     },
     "sidebar": {
         "showPorts": true,
@@ -25,6 +33,7 @@
         "showLog": true,
         "showBranchDirectory": true,
         "showSSH": true,
+        "showAgentActivity": false,
         "branchLayout": "inline",
         "openPullRequestLinksInCmuxBrowser": true,
         "openPortLinksInCmuxBrowser": true
@@ -43,19 +52,18 @@
     },
     "shortcuts": {
         "bindings": {
-            "focusLeft": "cmd+shift+h",
-            "focusDown": "cmd+shift+j",
-            "focusUp": "cmd+shift+k",
-            "focusRight": "cmd+shift+l",
-            "toggleSplitZoom": "cmd+z",
-            "goToWorkspace": "cmd+s",
+            "focusLeft": null,
+            "focusDown": null,
+            "focusUp": null,
+            "focusRight": null,
+            "toggleSplitZoom": null,
             "nextSidebarTab": "cmd+shift+f",
             "prevSidebarTab": "cmd+shift+b",
-            "focusBrowserAddressBar": "cmd+l",
-            "openBrowser": "cmd+shift+o",
-            "triggerFlash": "cmd+ctrl+h",
+            "triggerFlash": null,
             "splitBrowserDown": "ctrl+shift+x",
-            "splitBrowserRight": "ctrl+shift+d"
+            "splitBrowserRight": "ctrl+shift+d",
+            "focusBrowserAddressBar": "cmd+l",
+            "openBrowser": "cmd+shift+o"
         }
     }
 }
