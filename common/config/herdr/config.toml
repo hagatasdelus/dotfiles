@@ -29,10 +29,10 @@ split_vertical = ["prefix+=", "prefix+|"]
 split_horizontal = "prefix+minus"
 close_pane = "prefix+x"
 zoom = "prefix+z"
-focus_pane_left = "prefix+h"
-focus_pane_down = "prefix+j"
-focus_pane_up = "prefix+k"
-focus_pane_right = "prefix+l"
+focus_pane_left = "ctrl+shift+h"
+focus_pane_down = "ctrl+shift+j"
+focus_pane_up = "ctrl+shift+k"
+focus_pane_right = "ctrl+shift+l"
 
 copy_mode = "prefix+["
 
