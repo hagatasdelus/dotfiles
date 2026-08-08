@@ -1,7 +1,5 @@
 local M = {}
 
-local editprompt_chunk_bytes = 8000
-
 ---Check if current environment is editprompt
 ---@return boolean
 function M.is_editprompt()
@@ -42,51 +40,6 @@ function M.should_save_clipboard(content)
     return trailing_text:find("%S") ~= nil
 end
 
----Get the byte length of a UTF-8 character based on its first byte
----@param first_byte integer first byte of the character
----@return integer length byte length (1 to 4)
-local function utf8_char_byte_length(first_byte)
-    if first_byte < 0x80 then
-        return 1
-    elseif first_byte < 0xE0 then
-        return 2
-    elseif first_byte < 0xF0 then
-        return 3
-    elseif first_byte < 0xF8 then
-        return 4
-    end
-    return 1
-end
-
----Split content by maximum byte size into multiple chunks
----@param content string content to split
----@param max_bytes integer maximum bytes per chunk
----@return string[] chunks list of split content chunks
-local function split_by_utf8_bytes(content, max_bytes)
-    local chunks = {}
-    local len = #content
-    local chunk_start = 1
-    local chunk_bytes = 0
-    local pos = 1
-
-    while pos <= len do
-        local char_bytes = utf8_char_byte_length(content:byte(pos))
-        if chunk_bytes > 0 and chunk_bytes + char_bytes > max_bytes then
-            table.insert(chunks, content:sub(chunk_start, pos - 1))
-            chunk_start = pos
-            chunk_bytes = 0
-        end
-        pos = pos + char_bytes
-        chunk_bytes = chunk_bytes + char_bytes
-    end
-
-    if chunk_start <= len then
-        table.insert(chunks, content:sub(chunk_start))
-    end
-
-    return chunks
-end
-
 ---Apply minimal UI settings for editprompt buffer
 function M.apply_mode_opts()
     if vim.g.quick_ime_opts_applied == 1 then
@@ -104,6 +57,7 @@ function M.apply_mode_opts()
     vim.opt.laststatus = 0
     vim.opt.cmdheight = 0
     vim.opt.signcolumn = "no"
+    vim.opt.winbar = ""
 
     vim.cmd([[
     highlight Normal guibg=NONE ctermbg=NONE
@@ -124,21 +78,6 @@ function M.move_cursor_to_start(bufnr)
     end
 end
 
----Restore editor focus back to the tmux or WezTerm pane
-local function restore_editor_focus()
-    local tmux_pane = vim.env.TMUX_PANE
-    if tmux_pane and tmux_pane ~= "" and vim.fn.executable("tmux") == 1 then
-        vim.system({ "tmux", "select-pane", "-t", tmux_pane }, { text = true })
-        return
-    end
-
-    local wezterm_pane = vim.env.WEZTERM_PANE
-    if wezterm_pane and wezterm_pane ~= "" and vim.fn.executable("wezterm") == 1 then
-        vim.system({ "wezterm", "cli", "activate-pane", "--pane-id", wezterm_pane }, { text = true })
-        return
-    end
-end
-
 ---Check if the buffer content is empty or contains only whitespace
 ---@param bufnr integer buffer number
 ---@return boolean
@@ -147,114 +86,7 @@ function M.is_buffer_blank(bufnr)
     return table.concat(lines, "\n"):find("%S") == nil
 end
 
----Send content via editprompt CLI default handler
-local function send_via_default()
-    local editprompt = require("editprompt")
-    editprompt.input_auto_send()
-end
-
----Send content directly via herdr commands
-local function send_via_herdr(content, original)
-    local editprompt = require("editprompt")
-    local editprompt_history = require("editprompt.history")
-    local editprompt_utils = require("editprompt.utils")
-
-    local target = vim.env.EDITPROMPT_TARGET_PANE
-    if not target or target == "" then
-        Snacks.notify.error("Target pane (EDITPROMPT_TARGET_PANE) is not specified.")
-        return
-    end
-
-    local chunks = split_by_utf8_bytes(content, editprompt_chunk_bytes)
-    local index = 1
-
-    local function send_next_chunk()
-        local is_last = index == #chunks
-        local args = { "herdr", "pane", "send-text", target, chunks[index] }
-
-        vim.system(args, { text = true }, function(result)
-            vim.schedule(function()
-                if result.code ~= 0 then
-                    Snacks.notify.error("herdr send-text failed: " .. (result.stderr or "unknown error"))
-                    return
-                end
-
-                if not is_last then
-                    index = index + 1
-                    send_next_chunk()
-                    return
-                end
-
-                -- Final chunk sent successfully, trigger submission with Enter key
-                vim.system({ "herdr", "pane", "send-keys", target, "enter" }, { text = true }, function(enter_res)
-                    vim.schedule(function()
-                        if enter_res.code ~= 0 then
-                            Snacks.notify.error("herdr send-keys failed")
-                        end
-
-                        editprompt_utils.clear_buffer()
-                        editprompt_history.push(original)
-                        if M.should_save_clipboard(original) then
-                            vim.fn.system("pbcopy", original)
-                        end
-                        editprompt.stash_pop_latest()
-                    end)
-                end)
-            end)
-        end)
-    end
-
-    send_next_chunk()
-end
-
--- Send chunked content via editprompt CLI
-local function send_via_tmux_wezterm_chunks(content, original)
-    local editprompt = require("editprompt")
-    local editprompt_history = require("editprompt.history")
-    local editprompt_utils = require("editprompt.utils")
-
-    local chunks = split_by_utf8_bytes(content, editprompt_chunk_bytes)
-    local index = 1
-
-    local function send_next_chunk()
-        local is_last = index == #chunks
-        local args = { "editprompt", "input" }
-        if is_last then
-            table.insert(args, "--auto-send")
-        end
-        vim.list_extend(args, { "--", chunks[index] })
-
-        vim.system(args, { text = true }, function(result)
-            vim.schedule(function()
-                if result.code ~= 0 then
-                    restore_editor_focus()
-                    Snacks.notify.error("editprompt send failed: " .. (result.stderr or "unknown error"))
-                    return
-                end
-
-                if not is_last then
-                    index = index + 1
-                    send_next_chunk()
-                    return
-                end
-
-                -- All chunks sent successfully
-                editprompt_utils.clear_buffer()
-                editprompt_history.push(original)
-                if M.should_save_clipboard(original) then
-                    vim.fn.system("pbcopy", original)
-                end
-                editprompt.stash_pop_latest()
-                restore_editor_focus()
-            end)
-        end)
-    end
-
-    send_next_chunk()
-end
-
----Send current buffer content to the target pane.
----Dispatches sending strategy based on active multiplexer and content size.
+---Send current buffer content to the target pane via editprompt CLI
 function M.send_buffer_auto_send()
     local editprompt_utils = require("editprompt.utils")
     editprompt_utils.save_buffer()
@@ -265,20 +97,8 @@ function M.send_buffer_auto_send()
         return
     end
 
-    -- For herdr environment, always bypass editprompt CLI and send directly
-    if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
-        send_via_herdr(content, original)
-        return
-    end
-
-    -- For tmux/wezterm, use default auto-send if content is short
-    if #content <= editprompt_chunk_bytes then
-        send_via_default()
-        return
-    end
-
-    -- For tmux/wezterm, use chunked sending if content is long
-    send_via_tmux_wezterm_chunks(content, original)
+    local editprompt = require("editprompt")
+    editprompt.input_auto_send()
 end
 
 ---Save the current buffer content to the history and push to stash.
@@ -297,43 +117,6 @@ function M.stash_buffer_to_history()
     editprompt.stash_push()
 end
 
----Press a key in the target pane.
----For herdr environment, directly sends the key using 'herdr pane' command.
----For other environments, falls back to editprompt's press function.
----@param key string key to press (e.g. "1", "<CR>", etc.)
-function M.press_key(key)
-    local editprompt = require("editprompt")
-
-    -- For herdr environment, bypass editprompt CLI and send key directly
-    if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
-        local target = vim.env.EDITPROMPT_TARGET_PANE
-        if not target or target == "" then
-            Snacks.notify.error("Target pane (EDITPROMPT_TARGET_PANE) is not specified.")
-            return
-        end
-
-        local send_value = key
-        local cmd = "send-text"
-
-        if key == "<CR>" or key == "enter" or key == "Enter" then
-            send_value = "enter"
-            cmd = "send-keys"
-        end
-
-        vim.system({ "herdr", "pane", cmd, target, send_value }, { text = true }, function(result)
-            if result.code ~= 0 then
-                vim.schedule(function()
-                    Snacks.notify.error("herdr press failed: " .. (result.stderr or "unknown error"))
-                end)
-            end
-        end)
-        return
-    end
-
-    -- For tmux/wezterm, fallback to editprompt API
-    editprompt.press(key)
-end
-
 ---Handle <CR> key behavior in the editprompt buffer.
 ---If the buffer is empty, it acts as a normal <CR> or forwards keys.
 ---@param bufnr integer buffer number
@@ -342,12 +125,13 @@ function M.handle_cr(bufnr)
     local mode = vim.api.nvim_get_mode().mode
 
     if M.is_buffer_blank(bufnr) then
+        local editprompt = require("editprompt")
         if mode:sub(1, 1) == "i" then
             vim.schedule(function()
-                M.press_key("<CR>")
+                editprompt.press("<CR>")
             end)
         else
-            M.press_key("<CR>")
+            editprompt.press("<CR>")
         end
         return ""
     end
@@ -358,6 +142,256 @@ function M.handle_cr(bufnr)
 
     vim.schedule(M.send_buffer_auto_send)
     return ""
+end
+
+---Get target pane ID for editprompt CLI operations (Target Pane, NOT Editor Pane)
+---@return string|nil
+local function get_target_pane_id()
+    local env_target = vim.env.EDITPROMPT_TARGET_PANE
+    if env_target and env_target ~= "" then
+        return env_target
+    end
+
+    local current_pane = vim.env.HERDR_PANE_ID
+    if current_pane and current_pane ~= "" then
+        local res = vim.system({ "herdr", "pane", "get", current_pane }, { text = true }):wait()
+        if res.code == 0 and res.stdout then
+            local target_id = res.stdout:match("Prompting for.-%((%w+:%w+)%)")
+                or res.stdout:match("Prompting for%s+(%w+:%w+)")
+            if target_id and target_id ~= "" then
+                return target_id
+            end
+        end
+    end
+
+    local list_res = vim.system({ "herdr", "pane", "list" }, { text = true }):wait()
+    if list_res.code == 0 and list_res.stdout then
+        local target_id = list_res.stdout:match("Prompting for.-%((%w+:%w+)%)")
+            or list_res.stdout:match("Prompting for%s+(%w+:%w+)")
+        if target_id and target_id ~= "" then
+            return target_id
+        end
+    end
+
+    local active = vim.env.HERDR_ACTIVE_PANE_ID
+    if active and active ~= "" and active ~= current_pane then
+        return active
+    end
+
+    return nil
+end
+
+---Parse raw dump output into quote text blocks
+---@param raw_output string
+---@return string[]
+local function parse_quote_blocks(raw_output)
+    raw_output = raw_output:gsub("\n$", "")
+    if raw_output:match("^%s*$") then
+        return {}
+    end
+
+    local blocks = {}
+    local current_block = {}
+
+    for _, line in ipairs(vim.split(raw_output, "\n", { plain = true })) do
+        if line:match("^%s*$") then
+            if #current_block > 0 then
+                table.insert(blocks, table.concat(current_block, "\n"))
+                current_block = {}
+            end
+        else
+            table.insert(current_block, line)
+        end
+    end
+
+    if #current_block > 0 then
+        table.insert(blocks, table.concat(current_block, "\n"))
+    end
+
+    return blocks
+end
+
+---Restore unselected quote blocks back to editprompt collect storage
+---@param blocks string[]
+---@param on_complete? function
+local function restore_quote_blocks(blocks, on_complete)
+    if #blocks == 0 then
+        if on_complete then
+            on_complete()
+        end
+        return
+    end
+
+    local target = get_target_pane_id()
+    if not target or target == "" then
+        Snacks.notify.error("Cannot restore quotes: Target pane ID is missing.", { title = "editprompt" })
+        if on_complete then
+            on_complete()
+        end
+        return
+    end
+
+    local combined = table.concat(blocks, "\n\n")
+    local args = { "editprompt", "collect", "--mux", "herdr", "--target-pane", target, "--no-quote", "--", combined }
+
+    vim.system(args, { text = true }, function(result)
+        vim.schedule(function()
+            if result.code ~= 0 then
+                Snacks.notify.error(
+                    "Failed to restore quotes: " .. (result.stderr or "unknown error"),
+                    { title = "editprompt" }
+                )
+            end
+            if on_complete then
+                on_complete()
+            end
+        end)
+    end)
+end
+
+---Truncate a string to at most `n` characters, appending "..." if it was cut
+---@param s string
+---@param n integer
+---@return string
+local function truncate(s, n)
+    if #s > n then
+        return s:sub(1, n) .. "..."
+    end
+    return s
+end
+
+---Convert a quote block into a Snacks.picker item
+---@param i integer
+---@param block string
+---@return { idx: integer, text: string, label: string }
+local function to_item(i, block)
+    local first_line = vim.split(block, "\n", { plain = true })[1] or ""
+    first_line = truncate((first_line:gsub("^>%s*", "")), 60)
+    return {
+        idx = i,
+        text = block,
+        label = string.format("[%d] %s", i, first_line),
+    }
+end
+
+---Resolve which quote blocks to insert and restore
+---@param blocks string[]
+---@param selected { idx: integer, text: string }[]
+---@param item { idx: integer, text: string }|nil
+---@return { to_insert: string[], to_restore: string[] }
+local function resolve_selection(blocks, selected, item)
+    local chosen = {}
+    if #selected > 0 then
+        chosen = selected
+    elseif item then
+        chosen = { item }
+    end
+
+    local selected_set = {}
+    local to_insert = {}
+    for _, sel in ipairs(chosen) do
+        selected_set[sel.idx] = true
+        table.insert(to_insert, sel.text)
+    end
+
+    local to_restore = {}
+    for i, block in ipairs(blocks) do
+        if not selected_set[i] then
+            table.insert(to_restore, block)
+        end
+    end
+
+    return { to_insert = to_insert, to_restore = to_restore }
+end
+
+---Present Snacks.picker to select quotes to insert
+---@param blocks string[]
+local function show_quote_picker(blocks)
+    local editprompt_utils = require("editprompt.utils")
+
+    local items = vim.iter(ipairs(blocks)):map(to_item):totable()
+
+    local is_confirmed = false
+
+    Snacks.picker.pick({
+        source = "editprompt_quotes",
+        items = items,
+        format = function(item)
+            return { { item.label, "SnacksPickerLabel" } }
+        end,
+        preview = function(ctx)
+            ctx.preview:set_lines(vim.split(ctx.item.text, "\n", { plain = true }))
+        end,
+        on_close = function()
+            if is_confirmed then
+                return
+            end
+            restore_quote_blocks(blocks, function()
+                Snacks.notify.info("Selection cancelled. All quotes retained.", { title = "editprompt" })
+            end)
+        end,
+        actions = {
+            confirm = function(picker, item)
+                is_confirmed = true
+                picker:close()
+
+                local plan = resolve_selection(blocks, picker:selected(), item)
+
+                if #plan.to_insert > 0 then
+                    editprompt_utils.insert_to_buffer(table.concat(plan.to_insert, "\n\n"))
+                end
+
+                restore_quote_blocks(plan.to_restore, function()
+                    if #plan.to_restore > 0 then
+                        Snacks.notify.info(
+                            string.format(
+                                "Inserted %d quote(s). %d quote(s) retained.",
+                                #plan.to_insert,
+                                #plan.to_restore
+                            ),
+                            { title = "editprompt" }
+                        )
+                    else
+                        Snacks.notify.info(
+                            string.format("Inserted %d quote(s).", #plan.to_insert),
+                            { title = "editprompt" }
+                        )
+                    end
+                end)
+            end,
+        },
+    })
+end
+
+---Dump collected quotes and present an interactive picker
+function M.dump_select()
+    local editprompt_utils = require("editprompt.utils")
+    editprompt_utils.save_buffer()
+
+    vim.system({ "editprompt", "dump" }, { text = true }, function(result)
+        vim.schedule(function()
+            if result.code ~= 0 then
+                Snacks.notify.error(
+                    "editprompt dump failed: " .. (result.stderr or "Unknown error"),
+                    { title = "editprompt" }
+                )
+                return
+            end
+
+            local blocks = parse_quote_blocks(result.stdout or "")
+            if #blocks == 0 then
+                Snacks.notify.info("No collected quotes to dump.", { title = "editprompt" })
+                return
+            end
+
+            if #blocks == 1 then
+                editprompt_utils.insert_to_buffer(blocks[1])
+                return
+            end
+
+            show_quote_picker(blocks)
+        end)
+    end)
 end
 
 return M

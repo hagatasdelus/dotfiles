@@ -2,6 +2,14 @@ local helpers = require("plugins.editprompt.helpers")
 
 local editprompt_group = vim.api.nvim_create_augroup("Editprompt", { clear = true })
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("HerdrScrollback", { clear = true }),
+    pattern = "*/herdr-scrollback-*.txt",
+    callback = function(ev)
+        require("plugins.editprompt.scrollback").setup_scrollback_buffer(ev.buf)
+    end,
+})
+
 ---Set up keymaps specific to the editprompt buffer.
 ---@param bufnr integer buffer number
 local function setup_keymaps(bufnr)
@@ -37,7 +45,7 @@ local function setup_keymaps(bufnr)
     for digit = 1, 9 do
         local text = tostring(digit)
         vim.keymap.set("n", text, function()
-            helpers.press_key(text)
+            editprompt.press(text)
         end, map_opts)
     end
 
@@ -98,6 +106,13 @@ local function setup_keymaps(bufnr)
         end)
     end, map_opts)
 
+    vim.keymap.set({ "n", "i" }, "<C-r>", function()
+        editprompt.dump()
+    end, map_opts)
+    vim.keymap.set({ "n", "i" }, "g<C-r>", function()
+        helpers.dump_select()
+    end, map_opts)
+
     vim.keymap.set("n", "<C-d>", function()
         if helpers.is_buffer_blank(bufnr) then
             vim.cmd("quit!")
@@ -139,7 +154,6 @@ return {
             callback = function(ev)
                 local bufnr = ev.buf
 
-                -- Keep it minimal
                 helpers.apply_mode_opts()
                 vim.bo[bufnr].filetype = "markdown.editprompt"
                 vim.opt_local.virtualedit = "block"
