@@ -3,7 +3,7 @@ return {
     enabled = true,
     cond = not is_on_vscode(),
     cmd = { "Copilot" },
-    event = { "InsertEnter", "VeryLazy" },
+    event = { "InsertEnter" },
     dependencies = {
         { "https://github.com/zbirenbaum/copilot-cmp" },
     },
@@ -38,6 +38,9 @@ return {
                     },
                 },
                 copilot_node_command = "node",
+                server = {
+                    type = "binary",
+                },
                 filetypes = {
                     yaml = true,
                     markdown = true,
