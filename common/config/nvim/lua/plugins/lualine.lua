@@ -1,8 +1,6 @@
 return {
     "https://github.com/nvim-lualine/lualine.nvim",
-    dependencies = {
-        "nvim-tree/nvim-web-devicons",
-    },
+    dependencies = { "https://github.com/nvim-tree/nvim-web-devicons" },
     event = { "BufNewFile", "BufRead" },
     opts = function()
         return {
