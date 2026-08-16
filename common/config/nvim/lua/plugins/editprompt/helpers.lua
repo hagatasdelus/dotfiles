@@ -56,8 +56,8 @@ function M.apply_mode_opts()
     vim.opt.showmode = true
     vim.opt.laststatus = 0
     vim.opt.cmdheight = 0
+    vim.opt.showtabline = 0
     vim.opt.signcolumn = "no"
-    vim.opt.winbar = ""
 
     vim.cmd([[
     highlight Normal guibg=NONE ctermbg=NONE
