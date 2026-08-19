@@ -1,3 +1,34 @@
+local GH_OWNER = "hagatasdelus"
+
+local get_ghq_root
+do
+    local cache = nil
+
+    ---Get the ghq root path (cached on first call, throws error on failure).
+    ---@return string
+    get_ghq_root = function()
+        if cache then
+            return cache
+        end
+
+        if vim.fn.executable("ghq") == 1 then
+            local result = vim.system({ "ghq", "root" }, { text = true }):wait()
+            if result.code == 0 and result.stdout and vim.trim(result.stdout) ~= "" then
+                cache = vim.fs.normalize(vim.trim(result.stdout))
+                return cache
+            end
+        end
+
+        local git_result = vim.system({ "git", "config", "get", "ghq.root" }, { text = true }):wait()
+        if git_result.code == 0 and git_result.stdout and vim.trim(git_result.stdout) ~= "" then
+            cache = vim.fs.normalize(vim.trim(git_result.stdout))
+            return cache
+        end
+
+        error("Failed to get ghq root via 'ghq root' or 'git config get ghq.root'")
+    end
+end
+
 vim.api.nvim_create_user_command("QuickLook", function()
     -- get current buffer absolute path
     local current_bf_abspath = vim.fn.expand("%:p")
@@ -36,7 +67,7 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
         end
 
         if target:match("^[%w%-%._]+$") and not target:match("%.") then
-            return "https://github.com/hagatasdelus/" .. target
+            return "https://github.com/" .. GH_OWNER .. "/" .. target
         end
 
         if not target:match("^https?://") then
@@ -101,3 +132,40 @@ end, { nargs = "*", desc = "Open Browser and search for the query" })
 vim.api.nvim_create_user_command("EditConfig", function()
     vim.cmd.edit(vim.fn.stdpath("config"))
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Daily", function(opts)
+    local ok, ghq_root = pcall(get_ghq_root)
+    if not ok then
+        Snacks.notify.error("Daily: " .. tostring(ghq_root), { title = "Daily" })
+        return
+    end
+
+    local date = (opts.args ~= "") and opts.args or os.date("%Y-%m-%d")
+    if date == "yesterday" then
+        date = os.date("%Y-%m-%d", os.time() - 86400)
+    end
+    local diary_dir = vim.fs.joinpath(ghq_root, "github.com", GH_OWNER, "life/daily/diary")
+    local file_path = vim.fs.joinpath(diary_dir, date .. ".md")
+
+    if vim.fn.isdirectory(diary_dir) == 0 then
+        vim.fn.mkdir(diary_dir, "p")
+    end
+
+    local is_new = vim.fn.filereadable(file_path) == 0
+    vim.cmd.edit(vim.fn.fnameescape(file_path))
+
+    if is_new then
+        local template = {
+            "---",
+            string.format('title: "%sの日記"', date),
+            string.format('pubDate: "%s"', date),
+            "---",
+            "",
+            "## 今日やったこと",
+            "",
+            "## 明日以降やりたいこと",
+            "",
+        }
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, template)
+    end
+end, { nargs = "?", desc = "Open daily note" })
