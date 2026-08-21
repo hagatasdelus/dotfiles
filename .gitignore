@@ -28,3 +28,5 @@ startup.log
 .luarc.json
 
 .mypy_cache
+
+skills-lock.json
