@@ -1,0 +1,20 @@
+#
+# Fast compinit loader with daily cache check.
+#
+
+# Initialize zsh completion system with daily cache validation.
+function fastcompinit() {
+  local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  mkdir -p "${cache_dir}"
+  local compdump="${cache_dir}/zcompdump-${ZSH_VERSION}"
+
+  autoload -Uz compinit
+  if [[ -f "${compdump}" && $(find "${compdump}" -mtime -1 2>/dev/null) ]]; then
+    compinit -C -d "${compdump}"
+  else
+    compinit -i -d "${compdump}"
+    touch "${compdump}"
+  fi
+}
+
+fastcompinit "$@"

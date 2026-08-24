@@ -1,0 +1,27 @@
+#
+# ZLE widget to change directory to selected ghq repository.
+#
+
+# ZLE widget to invoke ghq_fzf and insert cd command into command line buffer.
+function _fzf_ghq() {
+  local repo_dir
+  if (( $+functions[ghq_fzf] )); then
+    repo_dir="$(ghq_fzf)"
+  elif command -v ghq_fzf >/dev/null 2>&1; then
+    repo_dir="$(command ghq_fzf)"
+  elif command -v ghq >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
+    repo_dir="$(ghq list --full-path | fzf)"
+  else
+    echo "Error: ghq or fzf is not installed." >&2
+    zle reset-prompt
+    return 1
+  fi
+
+  if [[ -n "${repo_dir}" && -d "${repo_dir}" ]]; then
+    BUFFER="cd ${(q)repo_dir}"
+    zle accept-line
+  fi
+  zle reset-prompt
+}
+
+_fzf_ghq "$@"
