@@ -43,4 +43,14 @@ mkdir -p "${HOME}/.config/nvim/"
 ln -snf $PATH_REAL_LOCAL_NVIM_INIT ~/.config/nvim/init.lua
 ls -la ~/.config/nvim/init.lua
 
+# zsh & sheldon
+ln -snf ${COMMON_DIR}/config/zsh/zshenv ~/.zshenv
+ln -snf ${COMMON_DIR}/config/zsh ~/.config/zsh
+ln -snf ${COMMON_DIR}/config/sheldon ~/.config/sheldon
+ln -snf ~/.config/zsh/zshrc ~/.zshrc
+ln -snf ~/.config/zsh/zprofile ~/.zprofile
+
+# fish
+ln -snf ${COMMON_DIR}/config/fish ~/.config/fish
+
 echo "Dotfiles successfully installed!"

@@ -29,4 +29,10 @@ startup.log
 
 .mypy_cache
 
+*.zwc
+*.zwc.old
+.zcompdump*
+.zcompcache/
+.zsh_sessions/
+
 skills-lock.json
