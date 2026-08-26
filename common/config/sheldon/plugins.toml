@@ -1,0 +1,58 @@
+shell = "zsh"
+
+[templates]
+defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
+
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+apply = ["source"]
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["defer"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+apply = ["defer"]
+hooks.pre = """
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
+"""
+
+[plugins.git-prompt]
+github = "woefe/git-prompt.zsh"
+apply = ["source"]
+hooks.post = """
+ZSH_THEME_GIT_PROMPT_PREFIX=" "
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_UNTRACKED=".."
+ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[red]%}x"
+ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}o"
+ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg[red]%}+"
+ZSH_GIT_PROMPT_SHOW_UPSTREAM=full
+"""
+
+[plugins.zeno]
+github = "yuki-yano/zeno.zsh"
+apply = ["defer"]
+hooks.pre = """
+export ZENO_ENABLE_SOCK=1
+export ZENO_GIT_CAT="bat --color=always --plain --number"
+"""
+hooks.post = """
+if [[ -n "$ZSH_VERSION" ]]; then
+  bindkey ' '  zeno-auto-snippet
+  bindkey '^m' zeno-auto-snippet-and-accept-line
+  bindkey '^i' zeno-completion
+  bindkey '^r' zeno-history-selection
+  bindkey '^x^s' zeno-insert-snippet
+  bindkey '^x^f' zeno-ghq-cd
+  if (( $+widgets[zeno-auto-snippet-and-accept-line] )); then
+    ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(zeno-auto-snippet-and-accept-line)
+  fi
+fi
+"""
