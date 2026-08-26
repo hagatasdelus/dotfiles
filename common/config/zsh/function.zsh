@@ -1,13 +1,12 @@
 #
-# Core shell functions and hooks for bash.
+# Core shell functions and directory hooks for zsh.
 #
 
-. "${BASH_CONFIG_HOME}/functions/init.bash"
+typeset current_dir="${${(%):-%N}:A:h}"
+. "${current_dir}/functions/init.zsh"
 
-# Configure Git SSH signing key locally
 function git_ssh_sign_config() {
   if [[ -z "${GIT_SSH_KEY}" ]]; then
-    echo "GIT_SSH_KEY not found"
     return 0
   fi
 
@@ -19,9 +18,9 @@ function git_ssh_sign_config() {
   fi
 }
 
-# Hook function executed after directory change.
+# Hook function executed after directory change (chpwd)
 function __after_cd() {
-  if is_interactive; then
+  if [[ -o interactive ]]; then
     if command -v eza >/dev/null 2>&1; then
       command eza -l --header --icons
     else

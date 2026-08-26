@@ -1,17 +1,124 @@
-### alias ###
-alias nl='nl -ba -s ": "'
-alias tree='go run ~/scripts/tree.go'
-alias notify='sh ${HOME}/.scripts/notification.sh'
-alias edit='open -a "Visual Studio Code" '
-alias la='ls -A'
-alias h='history'
-alias h2='history 20'
-alias la='ls -laO'
-alias ll='ls -l'
-alias cl='printf "\33c\e[3J"'
-alias java_home-v='sh ${HOME}/.scripts/java_home-v.sh'
-alias path='echo $PATH | tr ":" "\n"'
+#
+# Interactive shell configuration for zsh.
+#
 
-if [ -f ~/.zshrc.local ]; then
-    . ~/.zshrc.local
+typeset current_dir="${${(%):-%N}:A:h}"
+export ZDOTDIR="${ZDOTDIR:-${current_dir}}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
+
+HISTFILE="${XDG_STATE_HOME}/zsh/history"
+HISTSIZE=10000000
+SAVEHIST="${HISTSIZE}"
+if [[ ! -d "${XDG_STATE_HOME}/zsh" ]]; then
+  mkdir -p "${XDG_STATE_HOME}/zsh"
 fi
+
+WORDCHARS="${WORDCHARS:s,/,,}"
+
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt extended_history
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_save_no_dups
+setopt hist_reduce_blanks
+setopt hist_no_store
+setopt hist_verify
+setopt inc_append_history
+setopt share_history
+setopt no_flow_control
+setopt print_eight_bit
+setopt prompt_cr
+setopt prompt_sp
+setopt complete_in_word
+setopt magic_equal_subst
+setopt correct
+setopt list_packed
+setopt nolistbeep
+
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+zstyle ':completion:*:*:cdr:*:*' menu selection
+zstyle ':completion:*' recent-dirs-insert both
+zstyle ':chpwd:*' recent-dirs-max 500
+zstyle ':chpwd:*' recent-dirs-default true
+zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME}/zsh/chpwd-recent-dirs"
+zstyle ':chpwd:*' recent-dirs-pushd true
+
+. "${ZDOTDIR}/path.zsh"
+
+autoload -Uz fastcompinit && fastcompinit
+autoload -Uz bashcompinit && bashcompinit
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z} r:|[._-]=*'
+zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
+
+. "${ZDOTDIR}/init.zsh"
+. "${ZDOTDIR}/alias.zsh"
+. "${ZDOTDIR}/function.zsh"
+. "${ZDOTDIR}/notification.zsh"
+
+bindkey -e
+bindkey '^K' forward-word
+
+autoload -Uz history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+autoload -Uz _fzf_ghq
+zle -N _fzf_ghq
+bindkey '^G' _fzf_ghq
+
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd __after_cd
+
+if command -v sheldon >/dev/null 2>&1; then
+  sheldon_config_file="${XDG_CONFIG_HOME}/sheldon/plugins.toml"
+  sheldon_cache_dir="${XDG_CACHE_HOME}/sheldon"
+  sheldon_cache_file="${sheldon_cache_dir}/cache.zsh"
+
+  if [[ ! -d "${sheldon_cache_dir}" ]]; then
+    mkdir -p "${sheldon_cache_dir}"
+  fi
+
+  if [[ ! -f "${sheldon_cache_file}" || "${sheldon_config_file}" -nt "${sheldon_cache_file}" ]]; then
+    sheldon --config-file "${sheldon_config_file}" source > "${sheldon_cache_file}" 2>/dev/null
+    zcompile "${sheldon_cache_file}" 2>/dev/null || true
+    if [[ -d "${HOME}/.local/share/sheldon/repos" ]]; then
+      autoload -Uz zcompileall
+      zcompileall "${HOME}/.local/share/sheldon/repos" 2>/dev/null || true
+    fi
+  fi
+
+  if [[ -f "${sheldon_cache_file}" ]]; then
+    . "${sheldon_cache_file}"
+  fi
+fi
+
+if [[ -f "${HOME}/.zshrc.local" ]]; then
+  . "${HOME}/.zshrc.local"
+fi
+
+autoload -Uz zrecompile
+zrecompile -p -q "${ZDOTDIR}/zshenv"
+zrecompile -p -q "${ZDOTDIR}/zprofile"
+zrecompile -p -q "${ZDOTDIR}/zshrc"
+zrecompile -p -q "${ZDOTDIR}/path.zsh"
+zrecompile -p -q "${ZDOTDIR}/init.zsh"
+zrecompile -p -q "${ZDOTDIR}/alias.zsh"
+zrecompile -p -q "${ZDOTDIR}/function.zsh"
+zrecompile -p -q "${ZDOTDIR}/notification.zsh"

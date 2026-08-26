@@ -1,0 +1,16 @@
+#
+# Recursive zcompile helper for directories.
+#
+
+# Recursively compile all .zsh files in the specified directory into .zwc files.
+# Arguments:
+#   Directory to compile (defaults to current directory).
+function zcompileall() {
+  local dir="${1:-${PWD}}"
+  local filename
+  for filename in $(find "${dir}" -name "*.zsh" -type f 2>/dev/null); do
+    zcompile -R "${filename}"
+  done
+}
+
+zcompileall "$@"

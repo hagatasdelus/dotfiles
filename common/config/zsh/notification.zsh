@@ -1,13 +1,14 @@
 #
-# Terminal notifications for long-running commands when the pane loses focus in bash.
+# Terminal notifications for long-running commands when the pane loses focus.
 #
 
-if [[ -z "${WEZTERM_PANE:-}" && -z "${TMUX_PANE:-}" ]]; then
+if [[ -z "${WEZTERM_PANE}" && -z "${TMUX_PANE}" ]]; then
   return 0
 fi
 
-NOTIFY_ON_COMMAND_DURATION=${NOTIFY_ON_COMMAND_DURATION:-5}
-PS0='$((_notify_cmd_start=EPOCHSECONDS, 0))'$'\b \b'
+typeset -g NOTIFY_ON_COMMAND_DURATION="${NOTIFY_ON_COMMAND_DURATION:-5}"
+typeset -g _notify_cmd_start=""
+typeset -g _notify_last_command=""
 
 # Retrieve the PID of the frontmost application on macOS.
 # Outputs:
@@ -31,7 +32,7 @@ function notify::wezterm_is_focused() {
   focused_pane="$(
     wezterm cli list-clients --format json 2>/dev/null \
     | jq -r --arg pid "${active_pid}" \
-      '.[] | select(.pid == ($pid|tonumber)) | .focused_pane_id'
+      '.[] | select(.pid == ($pid|tonumber)) | .focused_pane_id' 2>/dev/null
   )"
   [[ "${focused_pane}" == "${WEZTERM_PANE}" ]]
 }
@@ -62,12 +63,14 @@ function notify::tmux_is_focused() {
       fi
       pid="${ppid}"
     done
-  done < <(tmux list-clients -F '#{client_pid} #{pane_id}')
+  done < <(tmux list-clients -F '#{client_pid} #{pane_id}' 2>/dev/null)
 
   return 1
 }
 
 # Check if current terminal pane is focused.
+# Arguments:
+#   None
 # Returns:
 #   0 if focused, 1 otherwise.
 function notify::current_pane_is_focused() {
@@ -95,8 +98,16 @@ function notify::send() {
   osascript -e "display notification \"${msg}\" with title \"${title}\"" 2>/dev/null || true
 }
 
-# Prompt command hook to check elapsed time and notify if unfocused.
-function notify::prompt_hook() {
+# Preexec hook to record start time and command string.
+# Arguments:
+#   Command string being executed.
+function notify::preexec() {
+  _notify_cmd_start="${EPOCHSECONDS}"
+  _notify_last_command="$1"
+}
+
+# Precmd hook to trigger notification if duration exceeds threshold.
+function notify::precmd() {
   local exit_code=$?
 
   if [[ -n "${_notify_cmd_start}" ]]; then
@@ -104,12 +115,13 @@ function notify::prompt_hook() {
     _notify_cmd_start=""
 
     if (( duration >= NOTIFY_ON_COMMAND_DURATION )) && ! notify::current_pane_is_focused; then
-      local last_cmd
-      last_cmd="$(fc -ln -1 2>/dev/null | sed 's/^[[:space:]]*//')"
+      local last_cmd="${_notify_last_command}"
       notify::send "Command completed" \
         "${last_cmd} returned ${exit_code} after ${duration}s"
     fi
   fi
 }
 
-PROMPT_COMMAND+=(notify::prompt_hook)
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec notify::preexec
+add-zsh-hook precmd notify::precmd
