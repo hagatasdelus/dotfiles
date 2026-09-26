@@ -8,9 +8,24 @@ function notify() {
   osascript -e "display notification \"${message}\" with title \"Caffeinate\""
 }
 
+function get_running_pid() {
+  if [[ ! -f "${PID_FILE}" ]]; then
+    return 1
+  fi
+
+  local pid
+  pid="$(cat "${PID_FILE}")"
+  if kill -0 "${pid}" 2>/dev/null; then
+    echo "${pid}"
+    return 0
+  fi
+
+  return 1
+}
+
 function stop_caffeinate() {
   if [[ ! -f "${PID_FILE}" ]]; then
-    return
+    return 0
   fi
 
   local pid
@@ -23,12 +38,26 @@ function stop_caffeinate() {
 }
 
 function start_caffeinate() {
-  local duration="$1"
-  local description="$2"
+  local mode="$1"
+  local duration="$2"
+  local description="$3"
 
   stop_caffeinate
 
-  local flags=(-d)
+  local flags=()
+  case "${mode}" in
+    "System")
+      flags=(-i)
+      ;;
+    "Display")
+      flags=(-d -i)
+      ;;
+    *)
+      echo "Unknown mode: ${mode}" >&2
+      return 1
+      ;;
+  esac
+
   if [[ -n "${duration}" ]]; then
     flags+=(-t "${duration}")
   fi
@@ -37,53 +66,108 @@ function start_caffeinate() {
   local new_pid=$!
   echo "${new_pid}" > "${PID_FILE}"
 
-  echo "Started caffeinate (PID: ${new_pid}, Duration: ${duration:-Infinite})"
+  echo "Started caffeinate (PID: ${new_pid}, Mode: ${mode}, Duration: ${duration:-Infinite})"
   notify "${description}"
 }
 
-function main() {
+function select_mode() {
+  local running_pid
+  local header_text="Mode:"
+  if running_pid="$(get_running_pid)"; then
+    header_text="Mode (Running: ${running_pid}):"
+  fi
+
   local options=(
-    "Start (無制限)"
-    "Start 30 min"
-    "Start 1 hour"
-    "Start 2 hours"
+    "System"
+    "Display"
     "Stop"
   )
 
-  local choice
-  choice="$(printf '%s\n' "${options[@]}" \
-    | fzf --prompt="Caffeinate > " \
+  printf '%s\n' "${options[@]}" \
+    | fzf --prompt="Mode > " \
         --height=10 \
         --layout=reverse \
-        --header="Select duration or Stop:")"
+        --header="${header_text}"
+}
 
-  if [[ -z "${choice}" ]]; then
+function select_duration() {
+  local mode="$1"
+  local options=(
+    "Infinite"
+    "30 min"
+    "1 hour"
+    "2 hours"
+  )
+
+  printf '%s\n' "${options[@]}" \
+    | fzf --prompt="Duration > " \
+        --height=10 \
+        --layout=reverse \
+        --header="Duration (${mode}):"
+}
+
+function handle_duration_selection() {
+  local mode="$1"
+
+  local duration_choice
+  duration_choice="$(select_duration "${mode}")"
+  if [[ -z "${duration_choice}" ]]; then
     echo "Cancelled."
     return 0
   fi
 
-  case "${choice}" in
-    "Start (無制限)")
-      start_caffeinate "" "スリープを無制限に防止します。"
+  local duration=""
+  local time_label=""
+  case "${duration_choice}" in
+    "Infinite")
+      duration=""
+      time_label="Infinite"
       ;;
-    "Start 30 min")
-      start_caffeinate "1800" "30分間スリープを防止します。"
+    "30 min")
+      duration="1800"
+      time_label="30m"
       ;;
-    "Start 1 hour")
-      start_caffeinate "3600" "1時間スリープを防止します。"
+    "1 hour")
+      duration="3600"
+      time_label="1h"
       ;;
-    "Start 2 hours")
-      start_caffeinate "7200" "2時間スリープを防止します。"
+    "2 hours")
+      duration="7200"
+      time_label="2h"
+      ;;
+    *)
+      echo "Unexpected duration '${duration_choice}'" >&2
+      return 1
+      ;;
+  esac
+
+  start_caffeinate "${mode}" "${duration}" "${mode}: ${time_label} started"
+}
+
+function main() {
+  local mode_choice
+  mode_choice="$(select_mode)"
+
+  if [[ -z "${mode_choice}" ]]; then
+    echo "Cancelled."
+    return 0
+  fi
+
+  case "${mode_choice}" in
+    "System"|"Display")
+      handle_duration_selection "${mode_choice}"
       ;;
     "Stop")
       stop_caffeinate
-      notify "停止しました。スリープが有効になります。"
+      notify "Stopped"
       ;;
     *)
-      echo "Unexpected choice '${choice}'" >&2
+      echo "Unexpected choice '${mode_choice}'" >&2
       return 1
       ;;
   esac
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi
