@@ -50,7 +50,7 @@ function start_caffeinate() {
       flags=(-i)
       ;;
     "Display")
-      flags=(-d -i)
+      flags=(-d -i -u)
       ;;
     *)
       echo "Unknown mode: ${mode}" >&2
@@ -62,8 +62,11 @@ function start_caffeinate() {
     flags+=(-t "${duration}")
   fi
 
-  caffeinate "${flags[@]}" &
+  set -m
+  nohup caffeinate "${flags[@]}" </dev/null >/dev/null 2>&1 &
   local new_pid=$!
+  disown "${new_pid}" 2>/dev/null || true
+  set +m
   echo "${new_pid}" > "${PID_FILE}"
 
   echo "Started caffeinate (PID: ${new_pid}, Mode: ${mode}, Duration: ${duration:-Infinite})"
