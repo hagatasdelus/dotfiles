@@ -3,7 +3,6 @@ return {
     event = "VeryLazy",
     cmd = { "Oil" },
     dependencies = {
-        "https://github.com/nvim-mini/mini.icons",
         "https://github.com/folke/snacks.nvim",
     },
     keys = {

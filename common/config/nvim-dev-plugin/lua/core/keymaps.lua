@@ -1,7 +1,9 @@
 local map = vim.keymap.set
 local opts = { silent = true }
 
-map("n", "<CR><CR>", "<C-w><C-w>")
+map("n", "<C-CR>", "<C-w>")
+map("n", "<C-CR><C-CR>", "<C-w><C-w>")
+map("n", "<C-CR><CR>", "<C-w>w")
 -- map("i", "jj", "<ESC>")
 map("", "ss", "^")
 map("", ";;", "$")
