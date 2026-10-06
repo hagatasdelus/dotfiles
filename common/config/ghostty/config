@@ -20,7 +20,7 @@ scrollback-limit = 10000
 cursor-style = block
 cursor-style-blink = false
 
-keybind = [ "cmd+u=text:\\x18\\x15" ]
+keybind = cmd+u=text:\x18\x15
 
 mouse-hide-while-typing = true
 
