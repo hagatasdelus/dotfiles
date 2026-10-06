@@ -5,6 +5,7 @@ return {
         dependencies = {
             "https://github.com/vim-denops/denops.vim",
             "https://github.com/delphinus/skkeleton_indicator.nvim",
+            "https://hagatasdelus/skkeleton-for-pickers.nvim",
         },
         cond = not is_on_vscode(),
         keys = {
@@ -103,13 +104,12 @@ return {
         end,
     },
     {
-        dir = "~/dev/ghq/github.com/hagatasdelus/skkeleton-pickers.nvim",
-        lazy = false,
-        dependencies = {
-            "https://github.com/vim-skk/skkeleton",
-        },
+        "https://github.com/hagatasdelus/skkeleton-for-pickers.nvim",
         config = function()
-            require("skkeleton-pickers").setup()
+            require("skkeleton-for-pickers").setup({
+                telescope = { enabled = true },
+                mini_pick = { enabled = true },
+            })
         end,
     },
     { "https://github.com/skk-dev/dict", lazy = true },
