@@ -2,15 +2,7 @@
 # Safe wrapper for the rm command to protect critical directories from accidental deletion in bash.
 #
 
-#######################################
 # Remove files or directories with critical path protection.
-# Arguments:
-#   File or directory paths to delete.
-# Outputs:
-#   Error message to stderr if deletion of a protected directory is attempted.
-# Returns:
-#   0 on successful deletion, 1 if blocked or if rm fails.
-#######################################
 function rm() {
   local protected_paths=(
     "/"
