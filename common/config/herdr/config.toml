@@ -36,7 +36,7 @@ focus_pane_right = "ctrl+shift+l"
 
 copy_mode = "prefix+["
 
-goto = ["super+p", "ctrl+shift+p"]
+goto = ["ctrl+shift+p"]
 
 resize_mode = "prefix+s"
 
@@ -75,15 +75,15 @@ description = "Restore front window"
 key = "prefix+i"
 type = "shell"
 command = '''
-AGENT_NAME=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.agent // "shell"');
-NEW_PANE=$(herdr pane split --direction down --ratio 0.75 --focus | jq -r '.result.pane.pane_id');
+AGENT_NAME=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.agent // "pane"');
+NEW_PANE=$(herdr pane split --direction down --ratio 0.85 --focus | jq -r '.result.pane.pane_id');
 herdr pane rename "$NEW_PANE" "📝 Prompting for ${AGENT_NAME}(${HERDR_ACTIVE_PANE_ID})";
 herdr pane run "$NEW_PANE" "NVIM_NOTTYFAST=1 editprompt open --editor nvim --target-pane $HERDR_ACTIVE_PANE_ID --mux herdr --quiet";
 '''
 description = "Open editprompt in a new pane"
 
 [[keys.command]]
-key = "prefix+e"
+key = "prefix+shift+e"
 type = "shell"
 command = '''
 PANE_LABEL=$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.pane.label // ""');
@@ -158,9 +158,32 @@ width = "95%"
 height = "90%"
 command = "lazygit --use-config-dir=$HOME/.config/lazygit"
 
+[[keys.command]]
+key = "alt+super+d"
+description = "Split terminal-browser right"
+type = "shell"
+command = '''
+NEW_PANE=$(herdr pane split --direction right --ratio 0.50 --focus | jq -r '.result.pane.pane_id')
+herdr pane run "$NEW_PANE" "terminal-browser; exit"
+'''
+
+[[keys.command]]
+key = "prefix+r"
+description = "ghq Repository Selector"
+type = "popup"
+width = "90%"
+height = "80%"
+command = '''
+SELECTED=$(bash ~/dev/ghq/github.com/hagatasdelus/dotfiles/common/config/bash/functions/ghq_fzf.bash)
+if [ -n "$SELECTED" ]; then
+  herdr pane send-text "$HERDR_ACTIVE_PANE_ID" "cd '$SELECTED'"
+  herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" "enter"
+fi
+'''
+
 [theme]
 name = "kanagawa"
-auto_switch = true
+auto_switch = false
 light_name = "kanagawa-lotus"
 dark_name = "kanagawa"
 
@@ -183,7 +206,7 @@ agent_panel_sort = "priority"
 accent = "#CDFF04"
 
 [ui.toast]
-delivery = "off"
+delivery = "herdr"
 delay_seconds = 1
 
 [ui.toast.herdr]
