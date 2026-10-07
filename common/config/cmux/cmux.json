@@ -1,69 +1,79 @@
 {
-    "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
-    "schemaVersion": 1,
-    "app": {
-        "appearance": "dark",
-        "warnBeforeQuit": true,
-        "minimalMode": false,
-        "reorderOnNotification": false,
-        "workspaceInheritWorkingDirectory": true
-    },
-    "automation": {
-        "claudeCodeIntegration": false,
-        "cursorIntegration": false,
-        "geminiIntegration": false,
-        "kiroIntegration": false,
-        "ampIntegration": false,
-        "workspaceAutoNaming": false,
-        "socketControlMode": "cmuxOnly"
-    },
-    "notifications": {
-        "dockBadge": true,
-        "showInMenuBar": true,
-        "unreadPaneRing": true,
-        "paneFlash": true,
-        "agentPermissionPrompt": false,
-        "agentTurnComplete": "never",
-        "agentIdleReminder": false
-    },
-    "sidebar": {
-        "showPorts": true,
-        "showPullRequests": true,
-        "showProgress": true,
-        "showLog": true,
-        "showBranchDirectory": true,
-        "showSSH": true,
-        "showAgentActivity": false,
-        "branchLayout": "inline",
-        "openPullRequestLinksInCmuxBrowser": true,
-        "openPortLinksInCmuxBrowser": true
-    },
-    "sidebarAppearance": {
-        "matchTerminalBackground": true
-    },
-    "workspaceColors": {
-        "indicatorStyle": "washRail"
-    },
-    "browser": {
-        "openTerminalLinksInCmuxBrowser": true,
-        "interceptTerminalOpenCommandInCmuxBrowser": true,
-        "defaultSearchEngine": "google",
-        "showSearchSuggestions": true
-    },
-    "shortcuts": {
-        "bindings": {
-            "focusLeft": null,
-            "focusDown": null,
-            "focusUp": null,
-            "focusRight": null,
-            "toggleSplitZoom": null,
-            "nextSidebarTab": "cmd+shift+f",
-            "prevSidebarTab": "cmd+shift+b",
-            "triggerFlash": null,
-            "splitBrowserDown": "ctrl+shift+x",
-            "splitBrowserRight": "ctrl+shift+d",
-            "focusBrowserAddressBar": "cmd+l",
-            "openBrowser": "cmd+shift+o"
-        }
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+  "app": {
+    "appearance": "dark",
+    "warnBeforeQuit": true,
+    "minimalMode": false,
+    "reorderOnNotification": false,
+    "workspaceInheritWorkingDirectory": true
+  },
+  "automation": {
+    "claudeCodeIntegration": false,
+    "cursorIntegration": false,
+    "geminiIntegration": false,
+    "kiroIntegration": false,
+    "ampIntegration": false,
+    "workspaceAutoNaming": false,
+    "socketControlMode": "cmuxOnly"
+  },
+  "notifications": {
+    "dockBadge": true,
+    "showInMenuBar": true,
+    "unreadPaneRing": true,
+    "paneFlash": true,
+    "agentPermissionPrompt": false,
+    "agentTurnComplete": "never",
+    "agentIdleReminder": false
+  },
+  "sidebar": {
+    "showPorts": true,
+    "showPullRequests": true,
+    "showProgress": true,
+    "showLog": true,
+    "showBranchDirectory": true,
+    "showSSH": true,
+    "showAgentActivity": false,
+    "branchLayout": "inline",
+    "openPullRequestLinksInCmuxBrowser": true,
+    "openPortLinksInCmuxBrowser": true
+  },
+  "sidebarAppearance": {
+    "matchTerminalBackground": true
+  },
+  "workspaceColors": {
+    "indicatorStyle": "washRail"
+  },
+  "browser": {
+    "openTerminalLinksInCmuxBrowser": true,
+    "interceptTerminalOpenCommandInCmuxBrowser": true,
+    "defaultSearchEngine": "google",
+    "showSearchSuggestions": true
+  },
+  "shortcuts": {
+    "bindings": {
+      "focusLeft": null,
+      "focusDown": null,
+      "focusUp": null,
+      "focusRight": null,
+      "toggleSplitZoom": null,
+      "nextSidebarTab": null,
+      "prevSidebarTab": null,
+      "triggerFlash": null,
+      "splitBrowserDown": null,
+      "splitBrowserRight": null,
+      "focusBrowserAddressBar": null,
+      "openBrowser": null,
+      "goToWorkspace": null,
+      "closeWindow": null,
+      "closeWorkspace": null,
+      "closeTab": null,
+      "newSurface": null,
+      "newTab": null,
+      "resize-pane-left": null,
+      "resize-pane-right": null,
+      "resize-pane-up": null,
+      "resize-pane-down": null
     }
+  }
 }
