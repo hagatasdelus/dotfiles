@@ -40,8 +40,8 @@ goto = ["ctrl+shift+p"]
 
 resize_mode = "prefix+s"
 
-navigate_workspace_up = "up"
-navigate_workspace_down = "down"
+navigate_workspace_up = "shift+k"
+navigate_workspace_down = "shift+j"
 navigate_pane_left = "h"
 navigate_pane_down = "j"
 navigate_pane_up = "k"
@@ -49,26 +49,32 @@ navigate_pane_right = "l"
 
 [[keys.command]]
 key = "prefix+shift+k"
+type = "shell"
+command = "~/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/keyboard-layout toggle"
+description = "Toggle keyboard layout US/JIS (sync Karabiner/macSKK/Nvim)"
+
+[[keys.command]]
+key = "prefix+ctrl+k"
 type = "popup"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/karabiner-profile.sh"
-description = "Toggle Karabiner profile (US/JIS)"
+command = "~/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/keyboard-layout select"
+description = "Pick Karabiner profile (fzf)"
 
 [[keys.command]]
 key = "prefix+shift+c"
 type = "popup"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/caffeinate.sh"
+command = "~/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/caffeinate.sh"
 description = "Caffeinate: prevent sleep"
 
 [[keys.command]]
 key = "prefix+m"
 type = "shell"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax maximize"
+command = "~/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax maximize"
 description = "Maximize front window"
 
 [[keys.command]]
 key = "prefix+shift+m"
 type = "shell"
-command = "~/dev/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax restore"
+command = "~/ghq/github.com/hagatasdelus/dotfiles/scripts/darwin/bin/winmax restore"
 description = "Restore front window"
 
 [[keys.command]]
@@ -174,7 +180,7 @@ type = "popup"
 width = "90%"
 height = "80%"
 command = '''
-SELECTED=$(bash ~/dev/ghq/github.com/hagatasdelus/dotfiles/common/config/bash/functions/ghq_fzf.bash)
+SELECTED=$(bash ~/ghq/github.com/hagatasdelus/dotfiles/common/config/bash/functions/ghq_fzf.bash)
 if [ -n "$SELECTED" ]; then
   herdr pane send-text "$HERDR_ACTIVE_PANE_ID" "cd '$SELECTED'"
   herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" "enter"
