@@ -1,0 +1,51 @@
+{
+  "default_layout": "JIS",
+  "layouts": {
+    "US": {
+      "label": "US Layout (ANSI)",
+      "karabiner_profile": "US",
+      "macskk_key_binding_set": "AZIK_US",
+      "azik_layout": "us"
+    },
+    "JIS": {
+      "label": "JIS Layout",
+      "karabiner_profile": "JIS",
+      "macskk_key_binding_set": "AZIK_JIS",
+      "azik_layout": "jis"
+    }
+  },
+  "devices": [
+    {
+      "label": "SONiX Gaming KeyBoard",
+      "layout": "US",
+      "match": {
+        "vendor_id": 12029,
+        "product_id": 6514
+      }
+    },
+    {
+      "label": "HHKB Professional 2",
+      "layout": "US",
+      "match": {
+        "vendor_id": 2131,
+        "product_id": 256
+      }
+    },
+    {
+      "label": "MacBook Builtin JIS Keyboard",
+      "layout": "JIS",
+      "match": {
+        "vendor_id": 1452,
+        "product_id": 641,
+        "is_built_in": true
+      }
+    },
+    {
+      "label": "JIS Layout Keyboard (CountryCode=15)",
+      "layout": "JIS",
+      "match": {
+        "country_code": 15
+      }
+    }
+  ]
+}

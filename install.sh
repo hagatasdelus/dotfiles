@@ -53,4 +53,6 @@ ln -snf ~/.config/zsh/zprofile ~/.zprofile
 # fish
 ln -snf ${COMMON_DIR}/config/fish ~/.config/fish
 
+bash ${DOTFILES_DIR}/scripts/darwin/install-keyboard-layout.sh
+
 echo "Dotfiles successfully installed!"
