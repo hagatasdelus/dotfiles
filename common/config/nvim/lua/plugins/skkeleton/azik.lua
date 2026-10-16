@@ -28,41 +28,20 @@ local function parse_rule_line(line)
     return from, output, remain
 end
 
-local function layout_cache_path()
-    local state_dir = vim.fn.stdpath("state")
-    if not state_dir or state_dir == "" then
-        state_dir = vim.fn.stdpath("data")
+--- The CLI's state.json is the single source of truth; a local copy would drift
+--- from Karabiner / macSKK.
+local function saved_layout()
+    local ok, keyboard_layout = pcall(require, "plugins.skkeleton.keyboard_layout")
+    if not ok then
+        return nil
     end
-    return vim.fs.joinpath(state_dir, "skkeleton_layout")
-end
-
-local function save_layout(layout)
-    local path = layout_cache_path()
-    local f = io.open(path, "w")
-    if f then
-        f:write(layout)
-        f:close()
-    end
-end
-
-local function load_saved_layout()
-    local path = layout_cache_path()
-    local f = io.open(path, "r")
-    if f then
-        local layout = f:read("*a")
-        f:close()
-        layout = vim.trim(layout)
-        if layout == "us" or layout == "jis" then
-            return layout
-        end
-    end
-    return nil
+    return keyboard_layout.azik_layout()
 end
 
 local current_layout = nil
 
 function M.load(layout, path)
-    layout = layout or current_layout or load_saved_layout() or "us"
+    layout = layout or saved_layout() or "us"
     path = path or default_rule_path()
     local rules = {}
     local shift_aliases = {}
@@ -103,7 +82,7 @@ function M.load(layout, path)
 end
 
 function M.register(layout, path)
-    layout = layout or load_saved_layout() or "us"
+    layout = layout or saved_layout() or "us"
     path = path or default_rule_path()
     if vim.fn.filereadable(path) ~= 1 then
         Snacks.notify.error("Rule file not found: " .. path, { title = "skkeleton azik" })
@@ -112,12 +91,11 @@ function M.register(layout, path)
     local rules = M.load(layout, path)
     vim.fn["skkeleton#register_kanatable"]("azik", rules, true)
     current_layout = layout
-    save_layout(layout)
 end
 
 function M.get_layout()
     if not current_layout then
-        current_layout = load_saved_layout() or "us"
+        current_layout = saved_layout() or "us"
     end
     return current_layout
 end

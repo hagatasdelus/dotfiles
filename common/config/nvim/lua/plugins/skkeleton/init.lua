@@ -35,14 +35,20 @@ return {
             local azik = require("plugins.skkeleton.azik")
             azik.register()
 
-            local function toggle_keyboard_layout()
-                local current = azik.get_layout()
-                local next_layout = current == "us" and "jis" or "us"
-                azik.register(next_layout)
-                Snacks.notify.info("Keyboard Layout: " .. next_layout:upper(), { title = "skkeleton" })
-            end
-
-            vim.keymap.set("n", "<Leader>kl", toggle_keyboard_layout, { desc = "Toggle AZIK US/JIS" })
+            local keyboard_layout = require("plugins.skkeleton.keyboard_layout")
+            vim.keymap.set("n", "<Leader>kl", keyboard_layout.toggle, {
+                desc = "Toggle AZIK US/JIS (Karabiner / macSKK Sync)",
+            })
+            vim.keymap.set("n", "<Leader>kL", keyboard_layout.sync, {
+                desc = "Re-resolve keyboard layout from connected devices",
+            })
+            vim.api.nvim_create_user_command("KeyboardLayoutSync", keyboard_layout.sync, {
+                desc = "Re-resolve keyboard layout from connected devices",
+            })
+            vim.api.nvim_create_user_command("KeyboardLayoutToggle", keyboard_layout.toggle, {
+                desc = "Toggle keyboard layout (US/JIS)",
+            })
+            keyboard_layout.watch()
 
             vim.fn["skkeleton#config"]({
                 kanaTable = "azik",
