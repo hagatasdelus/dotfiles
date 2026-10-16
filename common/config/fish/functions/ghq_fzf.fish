@@ -9,7 +9,7 @@ function __ghq_fzf_get_root --description 'Get root directory of ghq repositorie
     if test (count $root) -gt 0; and test -n "$root[1]"
         echo "$root[1]"
     else
-        echo "$HOME/dev/ghq"
+        echo "$HOME/ghq"
     end
 end
 

@@ -34,7 +34,7 @@ lazy.setup({
     defaults = { lazy = true },
     spec = plugins,
     concurrency = 10,
-    dev = { path = "~/dev/ghq/github.com/hagatasdelus/" },
+    dev = { path = "~/ghq/github.com/hagatasdelus/" },
     install = { missing = true, colorscheme = { "backpack" } },
     checker = { enabled = false },
     performance = {

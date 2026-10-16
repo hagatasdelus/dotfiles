@@ -14,7 +14,7 @@ function _ghq_fzf_get_root() {
   if [[ -n "${root}" ]]; then
     echo "${root}"
   else
-    echo "${HOME}/dev/ghq"
+    echo "${HOME}/ghq"
   fi
 }
 

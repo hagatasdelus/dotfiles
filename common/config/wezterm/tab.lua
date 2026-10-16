@@ -87,7 +87,7 @@ local function extract_project_name(cwd)
         cwd = cwd:gsub("^" .. home, "~")
     end
 
-    local _, repo = cwd:match(".*/dev/ghq/github.com/([^/]+)/([^/]+)")
+    local _, repo = cwd:match(".*/ghq/github.com/([^/]+)/([^/]+)")
     if repo then
         return repo
     end
