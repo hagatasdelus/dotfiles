@@ -114,9 +114,9 @@ if [[ -f "${HOME}/.zshrc.local" ]]; then
 fi
 
 autoload -Uz zrecompile
-zrecompile -p -q "${ZDOTDIR}/zshenv"
-zrecompile -p -q "${ZDOTDIR}/zprofile"
-zrecompile -p -q "${ZDOTDIR}/zshrc"
+zrecompile -p -q "${ZDOTDIR}/.zshenv"
+zrecompile -p -q "${ZDOTDIR}/.zprofile"
+zrecompile -p -q "${ZDOTDIR}/.zshrc"
 zrecompile -p -q "${ZDOTDIR}/path.zsh"
 zrecompile -p -q "${ZDOTDIR}/init.zsh"
 zrecompile -p -q "${ZDOTDIR}/alias.zsh"
