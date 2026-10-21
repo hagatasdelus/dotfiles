@@ -88,18 +88,21 @@ private struct KeyboardDevice {
         ]
     }
 
+    /** The CLI resolves isExternal (pin release / history) from the hint transport */
     func toHintJSON() -> String {
         let payload: [String: Any] = [
             "vendor_id": vendorId,
             "product_id": productId,
             "product": product,
+            "transport": transport,
+            "is_built_in": isBuiltIn,
         ]
 
         guard
             let data = try? JSONSerialization.data(withJSONObject: payload),
             let text = String(data: data, encoding: .utf8)
         else {
-            return "{\"vendor_id\":\(vendorId),\"product_id\":\(productId)}"
+            return "{\"vendor_id\":\(vendorId),\"product_id\":\(productId),\"transport\":\"\(transport)\",\"is_built_in\":\(isBuiltIn)}"
         }
         return text
     }
