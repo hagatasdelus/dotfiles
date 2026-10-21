@@ -36,3 +36,4 @@ startup.log
 .zsh_sessions/
 
 skills-lock.json
+node_modules
