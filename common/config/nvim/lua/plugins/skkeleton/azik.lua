@@ -86,11 +86,16 @@ function M.register(layout, path)
     path = path or default_rule_path()
     if vim.fn.filereadable(path) ~= 1 then
         Snacks.notify.error("Rule file not found: " .. path, { title = "skkeleton azik" })
-        return
+        return false
     end
+    -- pcall: an unavailable autoload (E117) skips now; skkeleton registers on load
     local rules = M.load(layout, path)
-    vim.fn["skkeleton#register_kanatable"]("azik", rules, true)
+    local ok = pcall(vim.fn["skkeleton#register_kanatable"], "azik", rules, true)
+    if not ok then
+        return false
+    end
     current_layout = layout
+    return true
 end
 
 function M.get_layout()

@@ -9,9 +9,14 @@ local FALLBACK_LAYOUT = "us"
 
 M.enabled = is_on_mac()
 
---- ~/.config is a symlink into the dotfiles, so runtime files go under state
+--- The CLI writes state.json to $XDG_STATE_HOME/keyboard-layout, so read that
+--- base directly: stdpath("state") returns ~/.local/state/nvim, which differs
 function M.state_dir()
-    return vim.fs.joinpath(vim.fn.stdpath("state"), "keyboard-layout")
+    local base = vim.env.XDG_STATE_HOME
+    if not base or base == "" then
+        base = vim.fs.joinpath(vim.uv.os_homedir(), ".local/state")
+    end
+    return vim.fs.joinpath(base, "keyboard-layout")
 end
 
 function M.state_file()
@@ -92,8 +97,9 @@ end
 
 function M.apply(layout)
     local azik = require("plugins.skkeleton.azik")
-    azik.register(layout)
-    Snacks.notify.info("Keyboard Layout: " .. layout:upper(), { title = "skkeleton" })
+    if azik.register(layout) then
+        Snacks.notify.info("Keyboard Layout: " .. layout:upper(), { title = "skkeleton" })
+    end
 end
 
 --- Watch the directory, not the file: watching the file itself misses the

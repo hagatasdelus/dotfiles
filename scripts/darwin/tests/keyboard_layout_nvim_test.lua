@@ -1,4 +1,4 @@
--- Tests core.keyboard_layout state watching
+-- Tests plugins.skkeleton.keyboard_layout state watching
 --
 --   DOTFILES_DIR=... XDG_STATE_HOME=$(mktemp -d) \
 --   nvim --headless --clean -c "luafile scripts/darwin/tests/keyboard_layout_nvim_test.lua"
@@ -51,7 +51,8 @@ package.preload["plugins.skkeleton.azik"] = function()
     }
 end
 
-local state_dir = vim.fn.stdpath("state") .. "/keyboard-layout"
+-- Must equal M.state_dir(): the shared dir the CLI writes to, not stdpath("state")
+local state_dir = (os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")) .. "/keyboard-layout"
 vim.fn.mkdir(state_dir, "p")
 local state_file = state_dir .. "/state.json"
 
