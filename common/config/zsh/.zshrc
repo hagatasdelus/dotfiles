@@ -67,7 +67,7 @@ zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 . "${ZDOTDIR}/notification.zsh"
 
 bindkey -e
-bindkey '^K' forward-word
+# bindkey '^K' forward-word
 
 autoload -Uz history-search-end
 zle -N history-beginning-search-backward-end history-search-end
