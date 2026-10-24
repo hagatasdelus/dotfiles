@@ -1,4 +1,17 @@
 {
-  "tab.close": "ctrl+w",
-  "tab.new": "ctrl+t"
+  "tab.close": [
+    "ctrl+w",
+    "ctrl+x"
+  ],
+  "tab.new": "ctrl+t",
+  "page.back": [
+    "cmd+[",
+    "ctrl+[",
+    "ctrl+h"
+  ],
+  "page.forward": [
+    "cmd+]",
+    "ctrl+]",
+    "ctrl+l"
+  ]
 }
