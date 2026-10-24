@@ -1,0 +1,7 @@
+{
+  "cmp-skkeleton": { "branch": "main", "commit": "ae74491bc73b868c60f69e4362d3bea29a6bf74d" },
+  "denops.vim": { "branch": "main", "commit": "e82c5a94ca1154b05c9d74d6f6f58c9991b1424f" },
+  "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
+  "nvim-cmp": { "branch": "main", "commit": "2ffe79f1f021def8dd1fcd81deb16f1bb0d989f3" },
+  "skkeleton": { "branch": "main", "commit": "cb6e529dada798929deefd879e32e418dab1c6ac" }
+}

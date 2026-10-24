@@ -1,5 +1,5 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy-debug-copilot"
-
+-- config of lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local out = vim.fn.system({
@@ -31,7 +31,26 @@ local plugins = {
 -- lazy.nvim setup
 local lazy = require("lazy")
 lazy.setup({
-    root = vim.fn.stdpath("data") .. "lazy",
     defaults = { lazy = true },
     spec = plugins,
+    concurrency = 10,
+    dev = { path = "~/ghq/github.com/hagatasdelus/" },
+    install = { missing = true, colorscheme = { "backpack" } },
+    checker = { enabled = false },
+    performance = {
+        cache = { enalbed = false },
+        rtp = {
+            disabled_plugins = {
+                "gzip",
+                "matchparen",
+                "netrwPlugin",
+                "tarPlugin",
+                "tar",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
+                "zip",
+            },
+        },
+    },
 })
