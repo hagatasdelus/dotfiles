@@ -418,7 +418,6 @@ function M.pdfClose()
 end
 
 M.show_help = function(self)
-    -- oil.nvim のヘルプのように、主要なマッピングを通知で表示する
     local help_msg = [[
 Fyler Mappings (oil.nvim-like):
 - <CR>: Select
