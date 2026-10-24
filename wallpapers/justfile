@@ -1,0 +1,152 @@
+# Apply a Gaussian blur to an original wallpaper.
+#
+# `--radius` controls blur strength: the Gaussian blur radius in pixels at the source resolution.
+# 0 keeps the image sharp, larger values blur more.
+# 5 is subtle on a 4K image; 10-20 is strong.
+#
+# Usage:
+#   just blur <src> [-r N]
+#
+# Arguments:
+#   src       Image under originals/
+#
+# Options:
+#   -r, --radius  Blur strength in pixels (default: 5; 0 = no blur)
+#
+# Output:
+#   wallpapers/<name>, with the same file name as the source.
+#
+# Example:
+#   just blur originals/pixel.png
+#   just blur originals/pixel.png -r 8
+#   just blur originals/pixel.png --radius 8
+[doc('Blur a wallpaper: -r/--radius N = blur strength in px (0 = sharp, larger = blurrier)')]
+[arg('radius', long, short='r', help='Blur strength in pixels (0 = no blur)')]
+blur src radius="5":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    radius="{{radius}}"
+    [[ $radius =~ ^([0-9]+(\.[0-9]+)?|\.[0-9]+)$ ]] ||
+        { echo "error: -r/--radius must be a non-negative number in pixels (0 = no blur): $radius" >&2; exit 1; }
+    src_path="{{src}}"
+    [[ $src_path = /* ]] || src_path="{{invocation_directory()}}/$src_path"
+    [[ -f $src_path ]] || { echo "error: source image not found: $src_path" >&2; exit 1; }
+    src_dir=$(cd -- "$(dirname -- "$src_path")" && pwd -P)
+    originals=$(cd -- "$PWD/originals" && pwd -P)
+    [[ $src_dir == "$originals" ]] || { echo "error: source must be in $originals" >&2; exit 1; }
+    out="$PWD/$(basename -- "$src_path")"
+    magick "$src_path" -blur "0x${radius}" -quality 92 "$out"
+    echo "$out"
+
+# Darken an original wallpaper with a vertical black gradient.
+#
+# `--top` and `--bottom` control how much black is laid over the top and bottom
+# edges: 0 = no darkening, 1 = fully black. The overlay fades linearly from
+# the top value to the bottom value. The background image is affected; text
+# colors are not.
+#
+# Usage:
+#   just gradient <src> [-t N] [-b N]
+#
+# Arguments:
+#   src        Image under originals/ (required)
+#
+# Options:
+#   -t, --top      Black overlay opacity at the top edge, 0-1 (default: 0.45)
+#   -b, --bottom   Black overlay opacity at the bottom edge, 0-1 (default: 0.20)
+#
+# Output:
+#   wallpapers/<name>, with the same file name as the source.
+#
+# Example:
+#   just gradient originals/pixel.png
+#   just gradient originals/pixel.png -t 0.55 -b 0.25
+#   just gradient originals/pixel.png --top 0.55 --bottom 0.25
+[doc('Add a black gradient: -t/--top, -b/--bottom = black opacity at each edge (0 = none, 1 = black)')]
+[arg('top', long, short='t', help='Black overlay opacity at the top edge (0-1)')]
+[arg('bottom', long, short='b', help='Black overlay opacity at the bottom edge (0-1)')]
+gradient src top="0.45" bottom="0.20":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    top="{{top}}"
+    bottom="{{bottom}}"
+    [[ $top =~ ^(0+(\.[0-9]+)?|\.[0-9]+|1(\.0+)?)$ ]] ||
+        { echo "error: -t/--top is the black overlay opacity at the top edge (0 = none, 1 = black) and must be between 0 and 1: $top" >&2; exit 1; }
+    [[ $bottom =~ ^(0+(\.[0-9]+)?|\.[0-9]+|1(\.0+)?)$ ]] ||
+        { echo "error: -b/--bottom is the black overlay opacity at the bottom edge (0 = none, 1 = black) and must be between 0 and 1: $bottom" >&2; exit 1; }
+    src_path="{{src}}"
+    [[ $src_path = /* ]] || src_path="{{invocation_directory()}}/$src_path"
+    [[ -f $src_path ]] || { echo "error: source image not found: $src_path" >&2; exit 1; }
+    src_dir=$(cd -- "$(dirname -- "$src_path")" && pwd -P)
+    originals=$(cd -- "$PWD/originals" && pwd -P)
+    [[ $src_dir == "$originals" ]] || { echo "error: source must be in $originals" >&2; exit 1; }
+    out="$PWD/$(basename -- "$src_path")"
+    size=$(magick identify -format '%wx%h' "$src_path")
+    magick "$src_path" \
+        \( -size "$size" gradient:"rgba(0,0,0,${top})-rgba(0,0,0,${bottom})" \) \
+        -compose over -composite \
+        -quality 92 "$out"
+    echo "$out"
+
+# Apply a Gaussian blur and a vertical black gradient.
+#
+# `--radius` controls blur strength (see `just blur`). `--top` and `--bottom`
+# control the black overlay opacity at the top and bottom edges (see
+# `just gradient`). Both effects are baked into the background image only.
+#
+# Usage:
+#   just both <src> [-r N] [-t N] [-b N]
+#
+# Arguments:
+#   src        Image under originals/ (required)
+#
+# Options:
+#   -r, --radius   Blur strength in pixels (default: 5; 0 = no blur)
+#   -t, --top      Black overlay opacity at the top edge, 0-1 (default: 0.45)
+#   -b, --bottom   Black overlay opacity at the bottom edge, 0-1 (default: 0.20)
+#
+# Output:
+#   wallpapers/<name>, with the same file name as the source.
+#
+# Example:
+#   just both originals/pixel.png
+#   just both originals/pixel.png -r 8 -t 0.55 -b 0.25
+#   just both originals/pixel.png --radius 8 --top 0.55 --bottom 0.25
+[doc('Blur + black gradient: -r/--radius = blur px; -t/--top, -b/--bottom = black opacity (0-1)')]
+[arg('radius', long, short='r', help='Blur strength in pixels (0 = no blur)')]
+[arg('top', long, short='t', help='Black overlay opacity at the top edge (0-1)')]
+[arg('bottom', long, short='b', help='Black overlay opacity at the bottom edge (0-1)')]
+both src radius="5" top="0.45" bottom="0.20":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    radius="{{radius}}"
+    top="{{top}}"
+    bottom="{{bottom}}"
+    [[ $radius =~ ^([0-9]+(\.[0-9]+)?|\.[0-9]+)$ ]] ||
+        { echo "error: -r/--radius must be a non-negative number in pixels (0 = no blur): $radius" >&2; exit 1; }
+    [[ $top =~ ^(0+(\.[0-9]+)?|\.[0-9]+|1(\.0+)?)$ ]] ||
+        { echo "error: -t/--top is the black overlay opacity at the top edge (0 = none, 1 = black) and must be between 0 and 1: $top" >&2; exit 1; }
+    [[ $bottom =~ ^(0+(\.[0-9]+)?|\.[0-9]+|1(\.0+)?)$ ]] ||
+        { echo "error: -b/--bottom is the black overlay opacity at the bottom edge (0 = none, 1 = black) and must be between 0 and 1: $bottom" >&2; exit 1; }
+    src_path="{{src}}"
+    [[ $src_path = /* ]] || src_path="{{invocation_directory()}}/$src_path"
+    [[ -f $src_path ]] || { echo "error: source image not found: $src_path" >&2; exit 1; }
+    src_dir=$(cd -- "$(dirname -- "$src_path")" && pwd -P)
+    originals=$(cd -- "$PWD/originals" && pwd -P)
+    [[ $src_dir == "$originals" ]] || { echo "error: source must be in $originals" >&2; exit 1; }
+    out="$PWD/$(basename -- "$src_path")"
+    size=$(magick identify -format '%wx%h' "$src_path")
+    magick "$src_path" \
+        -blur "0x${radius}" \
+        \( -size "$size" gradient:"rgba(0,0,0,${top})-rgba(0,0,0,${bottom})" \) \
+        -compose over -composite \
+        -quality 92 "$out"
+    echo "$out"
+
+# Apply today's wallpaper immediately.
+rotate:
+    ./rotate.sh
+
+# Run the wallpaper rotation tests.
+test:
+    ./tests/rotate.test.sh

@@ -14,6 +14,9 @@ background-blur = 100
 background-image-opacity = 1.0
 background-image-fit = cover
 
+# Daily wallpaper selection; see wallpapers/rotate.sh.
+config-file = ?~/.local/state/ghostty/wallpaper.conf
+
 unfocused-split-opacity = 0.90
 unfocused-split-fill = #1e1e2e
 
