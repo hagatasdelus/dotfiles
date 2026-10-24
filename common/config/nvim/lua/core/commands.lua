@@ -52,6 +52,15 @@ vim.api.nvim_create_user_command("Restart", function()
     vim.cmd(string.format("mksession! %s | :restart +xa source %s", session_file, session_file))
 end, { desc = "Restart current Neovim session" })
 
+local function open_url(url)
+    local function supports_kitty_graphics()
+        if vim.env.ALACRITTY_WINDOW_ID then
+            return false
+        end
+        return not (vim.env.TERM or ""):find("alacritty")
+    end
+end
+
 vim.api.nvim_create_user_command("OpenUrl", function(opts)
     local function get_repo_from_cwd()
         local cwd = vim.fs.normalize(vim.fn.getcwd())
@@ -92,7 +101,29 @@ vim.api.nvim_create_user_command("OpenUrl", function(opts)
     end
     local url = build_url(target)
 
-    local ok, ret, err = pcall(vim.ui.open, url)
+    local ok, ret, err = pcall(function()
+        local in_herdr = vim.env.HERDR_ENV ~= nil
+        local function supports_kitty_graphics()
+            if vim.env.KITTY_WINDOW_ID then
+                return true
+            end
+            local term = vim.env.TERM or ""
+            if term:find("kitty", 1, true) or term:find("ghossty", 1, true) then
+                return true
+            end
+            if vim.env.GHOSTTY_RESOURCES_DIR or vim.env.WEZTERM_PANE then
+                return true
+            end
+            return false
+        end
+
+        if in_herdr and supports_kitty_graphics() then
+            vim.fn.system({ "terminal-browser", "open", url, "--split", "right" })
+            return true, nil
+        end
+
+        return vim.ui.open(url)
+    end, url)
     if not ok then
         Snacks.notify.error(
             "An Internal error occurred when opening the browser" .. tostring(ret),
