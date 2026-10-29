@@ -5,10 +5,12 @@ local function unescape(value)
 end
 
 local function default_rule_path()
-    return vim.fs.joinpath(
-        vim.fn.expand("~"),
-        "Library/Containers/net.mtgto.inputmethod.macSKK/Data/Documents/Settings/kana-rule-azik.conf"
-    )
+    local rel = "Library/Containers/net.mtgto.inputmethod.macSKK/Data/Documents/Settings/kana-rule-azik.conf"
+    local primary = vim.fs.joinpath(vim.env.HOME, rel)
+    if vim.uv.fs_stat(primary) then
+        return primary
+    end
+    return vim.fs.joinpath(vim.env.HOME, "ghq/github.com/hagatasdelus/dotfiles/common", rel)
 end
 
 local function parse_rule_line(line)
