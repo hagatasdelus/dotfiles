@@ -46,14 +46,8 @@ return {
                 end
             end,
         })
-
-        -- local custom_actions = require("plugins.oil.custom_actions")
-        -- vim.keymap.set("n", "<Leader>bn", custom_actions.pdfNext, { desc = "PDF Preview Next Page" })
-        -- vim.keymap.set("n", "<Leader>bp", custom_actions.pdfPrev, { desc = "PDF Preview Prev Page" })
-        -- vim.keymap.set("n", "<Leader>bc", custom_actions.pdfClose, { desc = "Close PDF Preview Pane" })
     end,
     opts = function()
-        local custom_actions = require("plugins.oil.custom_actions")
         return {
             keymaps = {
                 ["?"] = "actions.show_help",
@@ -61,14 +55,6 @@ return {
                 ["<CR>"] = "actions.select",
                 ["-"] = "actions.parent",
                 ["<C-p>"] = "actions.preview",
-                ["gp"] = custom_actions.openWithWeztermPreview,
-                -- ["gP"] = custom_actions.openPdfInWezterm,
-                ["gc"] = custom_actions.closeWeztermPreview,
-                ["gl"] = custom_actions.tdfNext,
-                ["gh"] = custom_actions.tdfPrev,
-                ["gs"] = custom_actions.tdfFullScreen,
-                ["gv"] = custom_actions.tdfInvert,
-                ["g<leader>"] = custom_actions.openWithQuickLook,
                 ["<ESC>"] = "actions.close",
                 ["q"] = nil,
                 ["<C-l>"] = "actions.refresh",

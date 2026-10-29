@@ -1,21 +1,10 @@
 local ensure_installed = {
     "efm",
-
-    "yamlls",
-    "jsonls",
-    "taplo",
-    "denols",
     "vtsls",
-
     "html",
-
     "lua_ls",
     "stylua",
-
-    "pyright",
     "ruff",
-
-    "tinymist",
 }
 
 return {

@@ -15,7 +15,6 @@ local M = {
         "https://github.com/saadparwaiz1/cmp_luasnip",
         "https://github.com/L3MON4D3/LuaSnip",
         "https://github.com/rafamadriz/friendly-snippets",
-        "https://github.com/rinx/cmp-skkeleton",
     },
     config = function()
         local cmp = require("cmp")
@@ -61,7 +60,6 @@ local M = {
                 end, { "i", "s" }),
             }),
             sources = cmp.config.sources({
-                { name = "skkeleton" },
                 { name = "nvim_lsp" },
                 { name = "nvim_lua" },
                 { name = "luasnip" }, -- For luasnip users
