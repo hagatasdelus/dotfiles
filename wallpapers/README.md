@@ -46,3 +46,12 @@ To uninstall the LaunchAgent:
 launchctl bootout "gui/$(id -u)/local.ghostty-wallpaper"
 rm ~/Library/LaunchAgents/local.ghostty-wallpaper.plist
 ```
+
+### Wallpaper links
+
+Just put links here.
+
+- https://wall.alphacoders.com/big.php?i=1358524
+- https://wall.alphacoders.com/big.php?i=1357336
+- https://wall.alphacoders.com/big.php?i=1130469
+- https://wall.alphacoders.com/big.php?i=1224149

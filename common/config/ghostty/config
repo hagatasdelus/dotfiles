@@ -10,12 +10,12 @@ shell-integration-features = no-cursor
 window-decoration = none
 
 background-opacity = 0.80
-background-blur = 100
+background-blur = 20
 background-image-opacity = 1.0
 background-image-fit = cover
 
 # Daily wallpaper selection; see wallpapers/rotate.sh.
-config-file = ?~/.local/state/ghostty/wallpaper.conf
+# config-file = ?~/.local/state/ghostty/wallpaper.conf
 
 unfocused-split-opacity = 0.90
 unfocused-split-fill = #1e1e2e
