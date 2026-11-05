@@ -55,19 +55,19 @@ return {
                 databasePath = cache_dir("skkeleton-dictionary.sqlite3"),
                 sources = { "deno_kv" },
                 eggLikeNewline = true,
-                globalDictionaries = {
-                    dict("L"),
-                    dict("emoji"),
-                    dict("law"),
-                    dict("propernoun"),
-                    dict("geo"),
-                    dict("station"),
-                    dict("hukugougo"),
-                    dict("jinmei"),
-                    dict("fullname"),
-                    dict("edict2"),
-                    dict("assoc"),
-                },
+                globalDictionaries = vim.tbl_map(dict, {
+                    "L",
+                    "emoji",
+                    "law",
+                    "propernoun",
+                    "geo",
+                    "station",
+                    "hukugougo",
+                    "jinmei",
+                    "fullname",
+                    "edict2",
+                    "assoc",
+                }),
                 completionRankFile = cache_dir("rank.json"),
                 immediatelyCancel = false,
                 markerHenkan = "",
@@ -97,16 +97,16 @@ return {
                 },
             })
 
-            local function set_indicator_hl(group, link_target)
-                vim.api.nvim_set_hl(0, group, { link = link_target, default = false })
-            end
-
-            set_indicator_hl("SkkeletonIndicatorEiji", "Comment")
-            set_indicator_hl("SkkeletonIndicatorHira", "String")
-            set_indicator_hl("SkkeletonIndicatorKata", "Constant")
-            set_indicator_hl("SkkeletonIndicatorHankata", "Number")
-            set_indicator_hl("SkkeletonIndicatorZenkaku", "Special")
-            set_indicator_hl("SkkeletonIndicatorAbbrev", "Identifier")
+            vim.iter({
+                Eiji = "Comment",
+                Hira = "String",
+                Kata = "Constant",
+                Hankata = "Number",
+                Zenkaku = "Special",
+                Abbrev = "Identifier",
+            }):each(function(mode, link)
+                vim.api.nvim_set_hl(0, "SkkeletonIndicator" .. mode, { link = link })
+            end)
         end,
     },
     {
