@@ -26,45 +26,56 @@ return {
                 return vim.fs.joinpath(lazy_root, "dict", "SKK-JISYO." .. ext)
             end
 
-            local function cache_dir(file)
-                return vim.fs.joinpath(vim.fn.stdpath("cache"), file)
-            end
-
-            local function set_indicator_hl(group, link_target)
-                vim.api.nvim_set_hl(0, group, { link = link_target, default = false })
-            end
-
-            set_indicator_hl("SkkeluaIndicatorEiji", "Comment")
-            set_indicator_hl("SkkeluaIndicatorHira", "String")
-            set_indicator_hl("SkkeluaIndicatorKata", "Constant")
-            set_indicator_hl("SkkeluaIndicatorHankata", "Number")
-            set_indicator_hl("SkkeluaIndicatorZenkaku", "Special")
-            set_indicator_hl("SkkeluaIndicatorAbbrev", "Identifier")
+            vim.iter({
+                Eiji = "Comment",
+                Hira = "String",
+                Kata = "Constant",
+                Hankata = "Number",
+                Zenkaku = "Special",
+                Abbrev = "Identifier",
+            }):each(function(mode, link)
+                vim.api.nvim_set_hl(0, "SkkeluaIndicator" .. mode, { link = link })
+            end)
 
             local azik = require("plugins.skkelua.azik")
             azik.register()
 
+            local keyboard_layout = require("plugins.skkelua.keyboard_layout")
+            vim.keymap.set("n", "<Leader>kl", keyboard_layout.toggle, {
+                desc = "Toggle AZIK US/JIS (Karabiner / macSKK Sync)",
+            })
+            vim.keymap.set("n", "<Leader>kL", keyboard_layout.sync, {
+                desc = "Re-resolve keyboard layout from connected devices",
+            })
+            vim.api.nvim_create_user_command("KeyboardLayoutSync", keyboard_layout.sync, {
+                desc = "Re-resolve keyboard layout from connected devices",
+            })
+            vim.api.nvim_create_user_command("KeyboardLayoutToggle", keyboard_layout.toggle, {
+                desc = "Toggle keyboard layout (US/JIS)",
+            })
+            keyboard_layout.watch()
+
             return {
                 kanaTable = "azik",
-                databasePath = cache_dir("skkelua-dictionary.sqlite3"),
                 eggLikeNewline = true,
-                globalDictionaries = {
-                    dict("L"),
-                    dict("emoji"),
-                    dict("law"),
-                    dict("propernoun"),
-                    dict("geo"),
-                    dict("station"),
-                    dict("hukugougo"),
-                    dict("jinmei"),
-                    dict("fullname"),
-                    dict("edict2"),
-                    dict("assoc"),
-                },
-                completionRankFile = cache_dir("rank.json"),
+                globalDictionaries = vim.tbl_map(dict, {
+                    "L",
+                    "emoji",
+                    "law",
+                    "propernoun",
+                    "geo",
+                    "station",
+                    "hukugougo",
+                    "jinmei",
+                    "fullname",
+                    "edict2",
+                    "assoc",
+                }),
+                completionRankFile = vim.fs.joinpath(vim.fn.stdpath("cache"), "rank.json"),
                 immediatelyCancel = false,
                 markerHenkan = "",
                 markerHenkanSelect = "",
+                completion = { enabled = false }, -- 候補は nvim-cmp が表示する
                 indicator = {
                     border = "none",
                     alwaysShown = true,
@@ -84,6 +95,44 @@ return {
             local skkelua = require("skkelua")
             skkelua.setup(opts)
             skkelua.initialize()
+
+            -- skkelua の <Tab> は direct モードで生のタブを入れるため、
+            -- Neovim 本来の Tab に任せる (変換中は cmp 側で止める)。
+            vim.api.nvim_create_autocmd("User", {
+                group = vim.api.nvim_create_augroup("config.skkelua.cmp", { clear = true }),
+                pattern = "skkelua-enable-pre",
+                callback = function()
+                    local keys = vim.tbl_filter(function(key)
+                        return not vim.tbl_contains({ "<tab>", "<s-tab>" }, key:lower())
+                    end, skkelua.get_default_mapped_keys())
+                    skkelua.config({ mappedKeys = keys })
+                end,
+            })
+
+            -- skkelua は選択中の項目を complete_info() から読む。
+            -- nvim-cmp の選択項目を補って [辞書登録] の判定を成立させる。
+            if not skkelua._cmp_vim_status then
+                skkelua._cmp_vim_status = true
+                local orig_vim_status = skkelua.vim_status
+                skkelua.vim_status = function()
+                    local status = orig_vim_status()
+                    local cmp = package.loaded["cmp"]
+                    if status.completeType == "cmp" and cmp and cmp.visible() then
+                        local entry = cmp.get_active_entry()
+                        if entry then
+                            status.completeInfo.selected = 0
+                            status.completeInfo.items = {
+                                {
+                                    user_data = {
+                                        nvim = { lsp = { completion_item = entry.completion_item } },
+                                    },
+                                },
+                            }
+                        end
+                    end
+                    return status
+                end
+            end
         end,
     },
     { "https://github.com/skk-dev/dict", lazy = true },
