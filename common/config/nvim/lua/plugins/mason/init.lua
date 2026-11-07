@@ -37,12 +37,11 @@ return {
     {
         "https://github.com/neovim/nvim-lspconfig",
         dependencies = {
-            "https://github.com/hrsh7th/cmp-nvim-lsp",
             "https://github.com/b0o/schemastore.nvim",
         },
         event = { "BufReadPre", "BufNewFile" },
         config = function()
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
             vim.lsp.config("*", { capabilities = capabilities })
             vim.lsp.config("tinymist", {
                 settings = {
