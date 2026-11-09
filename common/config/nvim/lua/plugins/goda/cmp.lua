@@ -10,7 +10,11 @@ local function binary()
 end
 
 local function pum_visible()
-    return vim.fn.exists("*pum#visible") == 1 and vim.fn["pum#visible"]() == 1
+    if vim.fn.exists("*pum#visible") ~= 1 then
+        return false
+    end
+    local visible = vim.fn["pum#visible"]()
+    return visible == true or visible == 1
 end
 
 local function pum_selected()
@@ -28,6 +32,29 @@ end
 local function manual_complete(sources)
     local options = sources and { sources = sources } or nil
     return vim.fn["goda_cmp#map#manual_complete"](options)
+end
+
+local function before_cursor_is_space()
+    local col = vim.fn.col(".")
+    if col <= 1 then
+        return true
+    end
+    local line = vim.fn.getline(".")
+    if type(line) ~= "string" then
+        return true
+    end
+    return string.match(vim.fn.strpart(line, col - 2), "%s") ~= nil
+end
+
+local function complete_from_context()
+    if skk_active() then
+        return manual_complete({ "skkelua" })
+    end
+    return manual_complete()
+end
+
+local function notify_item()
+    vim.notify(vim.inspect(vim.fn["pum#current_item"]()))
 end
 
 local function setup_build()
@@ -71,19 +98,16 @@ local function insert_mappings()
     end
 
     map("<Tab>", function()
-        if skk_active() then
-            return ""
-        end
         if pum_visible() then
             return "<Cmd>call pum#map#insert_relative(+1)<CR>"
         end
-        return "<Tab>"
+        if before_cursor_is_space() then
+            return "<Tab>"
+        end
+        return complete_from_context()
     end)
 
     map("<S-Tab>", function()
-        if skk_active() then
-            return ""
-        end
         if pum_visible() then
             return "<Cmd>call pum#map#insert_relative(-1)<CR>"
         end
@@ -174,6 +198,8 @@ local function insert_mappings()
         end
         return "<CR>"
     end)
+
+    vim.keymap.set("i", "<C-X><CR>", notify_item, { silent = true })
 end
 
 local function cmdline_mappings()
@@ -247,6 +273,8 @@ local function cmdline_mappings()
         end
         return "<CR>"
     end)
+
+    vim.keymap.set("c", "<C-X><CR>", notify_item, { silent = true })
 end
 
 local function setup_cmdline()

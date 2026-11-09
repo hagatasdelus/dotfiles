@@ -158,7 +158,7 @@ local skkelua = require("plugins.goda.skkelua")
 skkelua.setup()
 
 local restore_pum = stub_fn("pum#visible", function()
-    return 1
+    return true
 end)
 local restore_item = stub_fn("pum#current_item", function()
     return { abbr = "[辞書登録]", word = "▽かんじ" }
@@ -167,7 +167,12 @@ end)
 local status = skk.vim_status()
 check("complete type", status.completeType, "pum.vim")
 check("selected", status.completeInfo.selected, 0)
-check("register item", status.completeInfo.items[1].user_data.nvim.lsp.completion_item.data.register, true)
+check(
+    "register item",
+    type(status.completeInfo.items) == "table"
+        and status.completeInfo.items[1].user_data.nvim.lsp.completion_item.data.register,
+    true
+)
 
 vim.fn["pum#current_item"] = function()
     return { abbr = "漢字", word = "漢字" }
@@ -348,6 +353,168 @@ check("luasnip condition filtered", #for_items.items, 1)
 check("luasnip condition filtered word", for_items.items[1].word, "for")
 local resolved = luasnip.resolve({ data = { snip_id = 1, filetype = "lua" } })
 check("luasnip resolve", type(resolved) == "table" and resolved.info:match("if doc") ~= nil, true)
+
+print("\n9. completion keymaps")
+local manual_calls = {}
+local restore_manual = stub_fn("goda_cmp#map#manual_complete", function(options)
+    manual_calls[#manual_calls + 1] = { options = options }
+    return "<C-l>"
+end)
+
+local exists_names = {
+    "*pum#visible",
+    "*pum#current_item",
+    "*goda_cmp#complete",
+    "*goda_cmp#hide",
+    "*goda_cmp#_shown",
+}
+local previous_exists = vim.fn.exists
+vim.fn.exists = function(name)
+    for _, candidate in ipairs(exists_names) do
+        if name == candidate then
+            return 1
+        end
+    end
+    return previous_exists(name)
+end
+
+local pum = { visible = true }
+local restore_visible = stub_fn("pum#visible", function()
+    return pum.visible
+end)
+
+local function insert_callback(lhs)
+    local mapping = vim.fn.maparg(lhs, "i", false, true)
+    if type(mapping) == "table" and type(mapping.callback) == "function" then
+        return mapping.callback
+    end
+    return nil
+end
+
+local function call_map(lhs)
+    local callback = insert_callback(lhs)
+    if not callback then
+        return "<missing>"
+    end
+    return callback()
+end
+
+skk.phase = function()
+    return "henkan"
+end
+check("Tab moves selection while converting", call_map("<Tab>"), "<Cmd>call pum#map#insert_relative(+1)<CR>")
+check("S-Tab moves selection while converting", call_map("<S-Tab>"), "<Cmd>call pum#map#insert_relative(-1)<CR>")
+check("C-n selects next while converting", call_map("<C-n>"), "<Cmd>call pum#map#select_relative(+1)<CR>")
+check("C-p selects previous while converting", call_map("<C-p>"), "<Cmd>call pum#map#select_relative(-1)<CR>")
+check("C-y confirms selection", call_map("<C-y>"), "<Cmd>call pum#map#confirm()<CR>")
+
+skk.phase = function()
+    return "input"
+end
+check("C-n inserts next without SKK", call_map("<C-n>"), "<Cmd>call pum#map#insert_relative(+1)<CR>")
+check("C-p inserts previous without SKK", call_map("<C-p>"), "<Cmd>call pum#map#insert_relative(-1)<CR>")
+
+local item = { word = "漢字" }
+local notified
+local restore_item = stub_fn("pum#current_item", function()
+    return item
+end)
+local previous_notify = vim.notify
+vim.notify = function(message)
+    notified = message
+end
+local notify_map = insert_callback("<C-X><CR>")
+check("C-X CR insert mapping", type(notify_map), "function")
+if notify_map then
+    notify_map()
+end
+check("C-X CR notifies current item", notified, vim.inspect(item))
+local cmdline_notify = vim.fn.maparg("<C-X><CR>", "c", false, true)
+check("C-X CR cmdline mapping", type(cmdline_notify) == "table" and type(cmdline_notify.callback), "function")
+vim.notify = previous_notify
+restore_item()
+
+pum.visible = false
+local restore_col = stub_fn("col", function()
+    return 6
+end)
+local restore_getline = stub_fn("getline", function()
+    return "hello"
+end)
+check("Tab completes manually after a word", call_map("<Tab>"), "<C-l>")
+check("Tab manual sources without SKK", manual_calls[#manual_calls].options, nil)
+restore_getline()
+restore_getline = stub_fn("getline", function()
+    return "hello "
+end)
+check("Tab is literal after whitespace", call_map("<Tab>"), "<Tab>")
+restore_getline()
+
+skk.phase = function()
+    return "henkan"
+end
+restore_getline = stub_fn("getline", function()
+    return "hello"
+end)
+check("Tab completes manually while converting", call_map("<Tab>"), "<C-l>")
+check_deep("Tab manual sources while converting", manual_calls[#manual_calls].options, { sources = { "skkelua" } })
+restore_getline()
+restore_col()
+
+check("S-Tab is literal without pum", call_map("<S-Tab>"), "<S-Tab>")
+check("C-n completes manually without pum", call_map("<C-n>"), "<C-l>")
+check_deep("C-n manual sources while converting", manual_calls[#manual_calls].options, { sources = { "skkelua" } })
+
+restore_visible()
+restore_manual()
+
+print("\n10. skkelua handled")
+local hide_count = 0
+local completed_options
+local shown = { items = { { word = "漢字" } }, sources = { "skkelua" }, seq = 1 }
+local restore_hide = stub_fn("goda_cmp#hide", function()
+    hide_count = hide_count + 1
+end)
+local restore_complete = stub_fn("goda_cmp#complete", function(options)
+    completed_options = options
+end)
+local restore_shown = stub_fn("goda_cmp#_shown", function()
+    return shown
+end)
+
+local function fire_handled()
+    vim.api.nvim_exec_autocmds("User", { pattern = "skkelua-handled" })
+end
+
+skk.phase = function()
+    return "input"
+end
+fire_handled()
+vim.wait(100, function()
+    return hide_count == 1
+end)
+check("hides stale popup after conversion", hide_count, 1)
+
+shown = { items = {}, sources = { "nvim_lsp" }, seq = 1 }
+fire_handled()
+vim.wait(50)
+check("keeps popup from other sources", hide_count, 1)
+
+shown = { items = { { word = "漢字" } }, sources = { "skkelua" }, seq = 1 }
+skk.phase = function()
+    return "henkan"
+end
+fire_handled()
+vim.wait(100, function()
+    return completed_options ~= nil
+end)
+check_deep("completes while converting", completed_options, { sources = { "skkelua" } })
+check("does not hide while converting", hide_count, 1)
+
+restore_shown()
+restore_complete()
+restore_hide()
+vim.fn.exists = previous_exists
 
 print("")
 if failures == 0 then

@@ -75,7 +75,7 @@ return {
                 immediatelyCancel = false,
                 markerHenkan = "",
                 markerHenkanSelect = "",
-                completion = { enabled = false }, -- 候補は goda-cmp が表示する
+                completion = { enabled = false },
                 indicator = {
                     border = "none",
                     alwaysShown = true,
@@ -97,7 +97,9 @@ return {
             skkelua.initialize()
 
             -- skkelua の <Tab> は direct モードで生のタブを入れるため、
-            -- Neovim 本来の Tab に任せる (変換中は goda-cmp 側で止める)。
+            -- Neovim 本来の Tab に任せる。:lmap は insert マッピングより
+            -- 優先されるので、SKK 変換中の pum 操作も goda-cmp 側で扱えるよう
+            -- mappedKeys からは外しておく。
             vim.api.nvim_create_autocmd("User", {
                 group = vim.api.nvim_create_augroup("config.skkelua.keys", { clear = true }),
                 pattern = "skkelua-enable-pre",

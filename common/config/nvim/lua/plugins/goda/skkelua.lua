@@ -12,7 +12,7 @@ end
 
 local function pum_item()
     local ok, visible = pcall(vim.fn["pum#visible"])
-    if not ok or visible ~= 1 then
+    if not ok or not (visible == true or visible == 1) then
         return nil
     end
     local item_ok, item = pcall(vim.fn["pum#current_item"])
@@ -20,6 +20,21 @@ local function pum_item()
         return nil
     end
     return item
+end
+
+local function shown_sources()
+    if vim.fn.exists("*goda_cmp#_shown") ~= 1 then
+        return {}
+    end
+    local ok, shown = pcall(vim.fn["goda_cmp#_shown"])
+    if not ok or type(shown) ~= "table" then
+        return {}
+    end
+    return type(shown.sources) == "table" and shown.sources or {}
+end
+
+local function showing_skkelua()
+    return vim.tbl_contains(shown_sources(), "skkelua")
 end
 
 local function is_register_item(item)
@@ -174,8 +189,14 @@ function M.setup()
         pattern = "skkelua-handled",
         callback = function()
             vim.schedule(function()
-                if vim.fn.exists("*goda_cmp#complete") == 1 and M.active() then
-                    vim.fn["goda_cmp#complete"]({ sources = { "skkelua" } })
+                if M.active() then
+                    if vim.fn.exists("*goda_cmp#complete") == 1 then
+                        vim.fn["goda_cmp#complete"]({ sources = { "skkelua" } })
+                    end
+                    return
+                end
+                if vim.fn.exists("*goda_cmp#hide") == 1 and showing_skkelua() then
+                    vim.fn["goda_cmp#hide"]()
                 end
             end)
         end,
