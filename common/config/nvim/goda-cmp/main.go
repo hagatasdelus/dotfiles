@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Shougo/goda-cmp.vim/cmp"
 	"github.com/Shougo/goda-cmp.vim/ext/filter/converterremoveoverlap"
+	"github.com/Shougo/goda-cmp.vim/ext/filter/convertertruncateabbr"
 	"github.com/Shougo/goda-cmp.vim/ext/filter/matcherhead"
 	"github.com/Shougo/goda-cmp.vim/ext/filter/sorterrank"
 	"github.com/Shougo/goda-cmp.vim/ext/filter/sortertext"
@@ -14,7 +15,7 @@ import (
 	"github.com/Shougo/goda-cmp.vim/ext/ui/pum"
 )
 
-func main() {
+func newBuilder() *cmp.Builder {
 	b := cmp.New()
 
 	b.AddUI(pum.New())
@@ -23,7 +24,6 @@ func main() {
 	b.AddSource(newLuaSource("skkelua", true))
 	b.AddSource(newLuaSource("nvim_lsp", false))
 	b.AddSource(newLuaSource("nvim_lua", false))
-	b.AddSource(newLuaSource("luasnip", false))
 	b.AddSource(buffer.New(buffer.Params{}))
 	b.AddSource(file.New(file.Params{}))
 	b.AddSource(cmdline.New())
@@ -33,9 +33,13 @@ func main() {
 	b.AddFilter(sorterrank.New())
 	b.AddFilter(sortertext.New())
 	b.AddFilter(converterremoveoverlap.New())
-	b.AddFilter(converterLspkind{maxWidth: 50, ellipsis: "..."})
+	b.AddFilter(convertertruncateabbr.New(convertertruncateabbr.Params{MaxWidth: 50}))
 	b.AddFilter(skkeluaFirst{})
 
 	configure(b)
-	b.Main()
+	return b
+}
+
+func main() {
+	newBuilder().Main()
 }

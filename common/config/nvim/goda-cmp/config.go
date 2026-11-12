@@ -5,14 +5,14 @@ import "github.com/Shougo/goda-cmp.vim/cmp"
 func configure(b *cmp.Builder) {
 	b.PatchGlobal(cmp.Config{
 		UI:      "pum",
-		Sources: []string{"skkelua", "nvim_lsp", "nvim_lua", "luasnip", "buffer", "file"},
+		Sources: []string{"skkelua", "nvim_lsp", "nvim_lua", "buffer", "file"},
 		SourceOptions: map[string]cmp.SourceOption{
 			"_": {
 				MinAutoCompleteLength: new(1),
 				MaxItems:              new(1000),
 				Matchers:              []string{"matcherhead"},
 				Sorters:               []string{"sorterrank"},
-				Converters:            []string{"converterremoveoverlap", "converterlspkind"},
+				Converters:            []string{"converterremoveoverlap", "convertertruncateabbr"},
 			},
 			"skkelua": {
 				Mark:                  "skk",
@@ -33,10 +33,6 @@ func configure(b *cmp.Builder) {
 				ForceCompletionPattern: `\.\w*`,
 				Matchers:               []string{},
 				Sorters:                []string{},
-			},
-			"luasnip": {
-				Mark:    "Snip",
-				Sorters: []string{},
 			},
 			"buffer": {
 				Mark:                  "B",

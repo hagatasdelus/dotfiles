@@ -4,9 +4,6 @@ return {
     cond = not is_on_vscode(),
     cmd = { "Copilot" },
     event = { "InsertEnter" },
-    dependencies = {
-        { "https://github.com/zbirenbaum/copilot-cmp" },
-    },
     config = function()
         vim.defer_fn(function()
             require("copilot").setup({

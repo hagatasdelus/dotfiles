@@ -59,6 +59,16 @@ check("InsertEnter event", vim.tbl_contains(cmp_spec.event, "InsertEnter"), true
 check("CmdlineEnter event", vim.tbl_contains(cmp_spec.event, "CmdlineEnter"), true)
 check("goda.vim dependency", vim.tbl_contains(cmp_spec.dependencies, "https://github.com/Shougo/goda.vim"), true)
 check("pum.vim dependency", vim.tbl_contains(cmp_spec.dependencies, "https://github.com/Shougo/pum.vim"), true)
+check(
+    "LuaSnip dependency removed",
+    vim.tbl_contains(cmp_spec.dependencies, "https://github.com/L3MON4D3/LuaSnip"),
+    false
+)
+check(
+    "friendly-snippets dependency removed",
+    vim.tbl_contains(cmp_spec.dependencies, "https://github.com/rafamadriz/friendly-snippets"),
+    false
+)
 check("config function", type(cmp_spec.config), "function")
 
 print("\n2. cmp setup")
@@ -241,6 +251,9 @@ local sources = require("plugins.goda.sources")
 local dispatched = sources.gather({ name = "skkelua", context = { input = "abc▽かんじ" } })
 check("dispatch gather", dispatched.start, 3)
 check("dispatch position", sources.position({ name = "skkelua", context = { input = "abc▽かんじ" } }), 3)
+check("luasnip module removed", pcall(require, "plugins.goda.luasnip"), false)
+local removed = sources.gather({ name = "luasnip", context = { input = "if" } })
+check("luasnip source removed", #removed.items, 0)
 
 print("\n6. nvim_lsp conversion")
 local nvim_lsp = require("plugins.goda.nvim_lsp")
@@ -305,56 +318,7 @@ check(
 )
 check("nvim_lua kind", api_items[1].kind ~= nil, true)
 
-print("\n8. luasnip source")
-local if_condition = function(line)
-    return line:match("^if") ~= nil
-end
-package.loaded["luasnip"] = {
-    get_snippets = function(filetype)
-        if filetype ~= "lua" then
-            return {}
-        end
-        return {
-            { trigger = "if", id = 1, effective_priority = 100 },
-            { trigger = "for", id = 2, effective_priority = 50 },
-            { trigger = "hidden", id = 3, hidden = true },
-        }
-    end,
-    get_id_snippet = function(id)
-        if id == 1 then
-            return {
-                trigger = "if",
-                id = 1,
-                name = "if",
-                show_condition = if_condition,
-                get_docstring = function()
-                    return "if doc"
-                end,
-            }
-        end
-        if id == 2 then
-            return { trigger = "for", id = 2, name = "for" }
-        end
-        return nil
-    end,
-}
-package.loaded["luasnip.util.util"] = {
-    get_snippet_filetypes = function()
-        return { "lua" }
-    end,
-}
-local luasnip = require("plugins.goda.luasnip")
-local if_items = luasnip.gather({ context = { input = "if", filetype = "lua" } })
-check("luasnip start", if_items.start, 0)
-check("luasnip condition matched", #if_items.items, 2)
-check("luasnip priority", if_items.items[1].data.priority, 100)
-local for_items = luasnip.gather({ context = { input = "for", filetype = "lua" } })
-check("luasnip condition filtered", #for_items.items, 1)
-check("luasnip condition filtered word", for_items.items[1].word, "for")
-local resolved = luasnip.resolve({ data = { snip_id = 1, filetype = "lua" } })
-check("luasnip resolve", type(resolved) == "table" and resolved.info:match("if doc") ~= nil, true)
-
-print("\n9. completion keymaps")
+print("\n8. completion keymaps")
 local manual_calls = {}
 local restore_manual = stub_fn("goda_cmp#map#manual_complete", function(options)
     manual_calls[#manual_calls + 1] = { options = options }
@@ -468,7 +432,7 @@ check_deep("C-n manual sources while converting", manual_calls[#manual_calls].op
 restore_visible()
 restore_manual()
 
-print("\n10. skkelua handled")
+print("\n9. skkelua handled")
 local hide_count = 0
 local completed_options
 local shown = { items = { { word = "漢字" } }, sources = { "skkelua" }, seq = 1 }

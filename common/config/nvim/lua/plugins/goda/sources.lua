@@ -4,7 +4,6 @@ local modules = {
     skkelua = "plugins.goda.skkelua",
     nvim_lsp = "plugins.goda.nvim_lsp",
     nvim_lua = "plugins.goda.nvim_lua",
-    luasnip = "plugins.goda.luasnip",
 }
 
 local function module(name)
