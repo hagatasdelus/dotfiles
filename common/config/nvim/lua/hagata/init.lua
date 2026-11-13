@@ -1,0 +1,7 @@
+require("hagata.global")
+require("hagata.base")
+require("hagata.options")
+require("hagata.keymaps")
+require("hagata.filetype")
+require("hagata.autocmds")
+require("hagata.commands")

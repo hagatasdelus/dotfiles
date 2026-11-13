@@ -1,6 +1,6 @@
 local M = {}
 
-local debounce = require("core.utils").debounce
+local debounce = require("hagata.utils").debounce
 
 local function getEntryAbsPath()
     local oil = require("oil")
@@ -265,7 +265,7 @@ end
 M.openWithQuickLook = {
     callback = function()
         local abspath = assert(getEntryAbsPath())
-        require("core.utils").open_file_with_quicklook(abspath)
+        require("hagata.utils").open_file_with_quicklook(abspath)
     end,
     desc = "Open Preview with QuickLook",
 }

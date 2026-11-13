@@ -1,6 +1,6 @@
 local M = {}
 
-local debounce = require("core.utils").debounce
+local debounce = require("hagata.utils").debounce
 
 M.show_hidden = true
 
@@ -298,7 +298,7 @@ M.tdfInvert = createTdfNavigationAction("i")
 
 M.openWithQuickLook = function(self)
     local abspath = assert(getEntryAbsPath(self))
-    require("core.utils").open_file_with_quicklook(abspath)
+    require("hagata.utils").open_file_with_quicklook(abspath)
 end
 
 M.open_external = function(self)

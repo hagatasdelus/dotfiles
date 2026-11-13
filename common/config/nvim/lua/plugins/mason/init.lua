@@ -1,23 +1,3 @@
-local ensure_installed = {
-    "efm",
-
-    "yamlls",
-    "jsonls",
-    "taplo",
-    "denols",
-    "vtsls",
-
-    "html",
-
-    "lua_ls",
-    "stylua",
-
-    "pyright",
-    "ruff",
-
-    "tinymist",
-}
-
 return {
     {
         "https://github.com/mason-org/mason.nvim",
@@ -29,7 +9,7 @@ return {
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
-                ensure_installed = ensure_installed,
+                ensure_installed = require("hagata.lsp.servers"),
                 automatic_installation = true,
             })
         end,
@@ -41,31 +21,7 @@ return {
         },
         event = { "BufReadPre", "BufNewFile" },
         config = function()
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            vim.lsp.config("*", { capabilities = capabilities })
-            vim.lsp.config("tinymist", {
-                settings = {
-                    formatterMode = "typstyle",
-                },
-            })
-            vim.lsp.enable(ensure_installed)
-        end,
-        init = function()
-            local auon_attach = require("core.utils").on_attach
-            auon_attach(function(client, bufnr)
-                if vim.tbl_contains({ "oil" }, vim.bo.filetype) then
-                    return
-                end
-
-                local on_attach = require("plugins.mason.on_attach")
-                on_attach(client, bufnr)
-
-                vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
-            end)
-
-            vim.api.nvim_create_user_command("LspDiagnosticReset", function()
-                vim.diagnostic.reset()
-            end, {})
+            require("hagata.lsp").setup()
         end,
     },
 }
