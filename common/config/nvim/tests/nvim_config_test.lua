@@ -1,6 +1,6 @@
 -- Regression tests for the nvim config migration.
 --
---   DOTFILES_DIR=... nvim --headless --clean -l scripts/tests/nvim_config_test.lua
+--   DOTFILES_DIR=... nvim --headless --clean -l common/config/nvim/tests/nvim_config_test.lua
 --
 -- The tests load the config modules directly. Real plugins are stubbed where needed.
 local repo = assert(os.getenv("DOTFILES_DIR"), "DOTFILES_DIR is required")
@@ -109,22 +109,24 @@ if not loaded then
     return
 end
 
-section("2. global helpers")
-check("to_bool nil", to_bool(nil), false)
-check("to_bool true", to_bool(true), true)
-check("to_bool false", to_bool(false), false)
-check("to_bool 0", to_bool(0), false)
-check("to_bool 1", to_bool(1), true)
-check("to_bool string true", to_bool("true"), true)
-check("to_bool string TRUE", to_bool("TRUE"), true)
-check("to_bool string false", to_bool("false"), false)
-check("to_bool table", to_bool({}), false)
-check("is_on_vscode nil", is_on_vscode(), false)
+section("2. env and fn helpers")
+local fn = require("hagata.fn")
+local env = require("hagata.env")
+check("to_bool nil", fn.to_bool(nil), false)
+check("to_bool true", fn.to_bool(true), true)
+check("to_bool false", fn.to_bool(false), false)
+check("to_bool 0", fn.to_bool(0), false)
+check("to_bool 1", fn.to_bool(1), true)
+check("to_bool string true", fn.to_bool("true"), true)
+check("to_bool string TRUE", fn.to_bool("TRUE"), true)
+check("to_bool string false", fn.to_bool("false"), false)
+check("to_bool table", fn.to_bool({}), false)
+check("is_vscode nil", env.is_vscode(), false)
 vim.g.vscode = 1
-check("is_on_vscode 1", is_on_vscode(), true)
+check("is_vscode 1", env.is_vscode(), true)
 vim.g.vscode = nil
-check("is_on_mac", is_on_mac(), vim.uv.os_uname().sysname == "Darwin")
-check("lambda", lambda("a,b:a+b")(2, 3), 5)
+check("is_macos", env.is_macos(), vim.uv.os_uname().sysname == "Darwin")
+check("lambda", fn.lambda("a,b:a+b")(2, 3), 5)
 
 section("3. base")
 check("loaded_2html_plugin", vim.g.loaded_2html_plugin, 1)
@@ -409,100 +411,118 @@ end
 section("13. lsp on_attach")
 local on_attach = require_or_fail("hagata.lsp.on_attach")
 if on_attach then
-local bufnr = vim.api.nvim_create_buf(false, true)
-vim.api.nvim_set_current_buf(bufnr)
-vim.bo[bufnr].filetype = "lua"
-local client = {
-    name = "test-client",
-    server_capabilities = {
-        documentFormattingProvider = true,
-        foldingRangeProvider = true,
-    },
-    supports_method = function(_, method)
-        return method == "textDocument/formatting" or method == "textDocument/foldingRange"
-    end,
-    config = { settings = {} },
-}
-on_attach(client, bufnr)
-check("gd mapping", type(mapping("gd").callback), "function")
-check("gD mapping", type(mapping("gD").callback), "function")
-check("K mapping", type(mapping("K").callback), "function")
-check("signature help mapping", type(mapping("gk").callback), "function")
-check("workspace folder mapping", type(mapping("<leader>wa").callback), "function")
-check("format mapping", type(mapping("<leader><space>").callback), "function")
-check("diagnostic float mapping", type(mapping("<leader>ef").callback), "function")
-check("diagnostic jump mapping", mapping("[d").rhs, "<Cmd>lua vim.diagnostic.jump({count=-1, float=true})<CR>")
-check("diagnostic next mapping", mapping("]d").rhs, "<Cmd>lua vim.diagnostic.jump({count=1, float=true})<CR>")
-check("diagnostic loclist mapping", type(mapping("<leader>q").callback), "function")
-check("lspsaga finder mapping", mapping("<leader>lf").rhs, "<Cmd>Lspsaga finder<cr>")
-check("lspsaga hover mapping", mapping("<leader>lh").rhs, "<Cmd>Lspsaga hover_doc<cr>")
-check("lspsaga outline mapping", mapping("<leader>lo").rhs, "<Cmd>Lspsaga outline<cr>")
-check("lspsaga rename mapping", mapping("<leader>lr").rhs, "<Cmd>Lspsaga rename<cr>")
-check("lspsaga code action mapping", mapping("<leader>la").rhs, "<Cmd>Lspsaga code_action<cr>")
-check_true("Format command", command_exists("Format"))
-check_true("FormatToggle command", command_exists("FormatToggle"))
-check_true("FormatEnable command", command_exists("FormatEnable"))
-check_true("FormatDisable command", command_exists("FormatDisable"))
-check("foldmethod", vim.wo.foldmethod, "expr")
-check("foldexpr", vim.wo.foldexpr, "v:lua.vim.lsp.foldexpr()")
-check("foldlevel", vim.wo.foldlevel, 99)
-check("foldlevelstart", vim.o.foldlevelstart, 99)
-check("foldenable", vim.wo.foldenable, true)
-local format_autocmds = vim.api.nvim_get_autocmds({ group = "LspFormat." .. bufnr })
-check("format autocmd", #format_autocmds, 1)
-check("format autocmd event", format_autocmds[1].event, "BufWritePre")
+    local bufnr = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_set_current_buf(bufnr)
+    vim.bo[bufnr].filetype = "lua"
+    local client = {
+        name = "test-client",
+        server_capabilities = {
+            documentFormattingProvider = true,
+            foldingRangeProvider = true,
+        },
+        supports_method = function(_, method)
+            return method == "textDocument/formatting" or method == "textDocument/foldingRange"
+        end,
+        config = { settings = {} },
+    }
+    on_attach(client, bufnr)
+    check("gd mapping", type(mapping("gd").callback), "function")
+    check("gD mapping", type(mapping("gD").callback), "function")
+    check("K mapping", type(mapping("K").callback), "function")
+    check("signature help mapping", type(mapping("gk").callback), "function")
+    check("workspace folder mapping", type(mapping("<leader>wa").callback), "function")
+    check("format mapping", type(mapping("<leader><space>").callback), "function")
+    check("diagnostic float mapping", type(mapping("<leader>ef").callback), "function")
+    check("diagnostic jump mapping", mapping("[d").rhs, "<Cmd>lua vim.diagnostic.jump({count=-1, float=true})<CR>")
+    check("diagnostic next mapping", mapping("]d").rhs, "<Cmd>lua vim.diagnostic.jump({count=1, float=true})<CR>")
+    check("diagnostic loclist mapping", type(mapping("<leader>q").callback), "function")
+    check("lspsaga finder mapping", mapping("<leader>lf").rhs, "<Cmd>Lspsaga finder<cr>")
+    check("lspsaga hover mapping", mapping("<leader>lh").rhs, "<Cmd>Lspsaga hover_doc<cr>")
+    check("lspsaga outline mapping", mapping("<leader>lo").rhs, "<Cmd>Lspsaga outline<cr>")
+    check("lspsaga rename mapping", mapping("<leader>lr").rhs, "<Cmd>Lspsaga rename<cr>")
+    check("lspsaga code action mapping", mapping("<leader>la").rhs, "<Cmd>Lspsaga code_action<cr>")
+    check_true("Format command", command_exists("Format"))
+    check_true("FormatToggle command", command_exists("FormatToggle"))
+    check_true("FormatEnable command", command_exists("FormatEnable"))
+    check_true("FormatDisable command", command_exists("FormatDisable"))
+    check("foldmethod", vim.wo.foldmethod, "expr")
+    check("foldexpr", vim.wo.foldexpr, "v:lua.vim.lsp.foldexpr()")
+    check("foldlevel", vim.wo.foldlevel, 99)
+    check("foldlevelstart", vim.o.foldlevelstart, 99)
+    check("foldenable", vim.wo.foldenable, true)
+    local format_autocmds = vim.api.nvim_get_autocmds({ group = "LspFormat." .. bufnr })
+    check("format autocmd", #format_autocmds, 1)
+    check("format autocmd event", format_autocmds[1].event, "BufWritePre")
 
-local format = require("hagata.lsp.on_attach.format")
-local format_options
-local restore_format = stub(vim.lsp.buf, "format", function(options)
-    format_options = options
-end)
-local snacks = {
-    notify = {
-        info = function() end,
-        warn = function() end,
-        error = function() end,
-    },
-}
-local previous_snacks = _G.Snacks
-_G.Snacks = snacks
-format.format()
-restore_format()
-check("format bufnr", format_options.bufnr, bufnr)
-check("format timeout", format_options.timeout_ms, 2000)
-check(
-    "format filter accepts formatting client",
-    format_options.filter({ name = "test", supports_method = function() return true end, config = { settings = {} } }),
-    true
-)
-check(
-    "format filter rejects client without capability",
-    format_options.filter({ name = "test", supports_method = function() return false end, config = { settings = {} } }),
-    false
-)
-check(
-    "format filter rejects disabled format",
-    format_options.filter({
-        name = "test",
-        supports_method = function() return true end,
-        config = { settings = { format = false } },
-    }),
-    false
-)
+    local format = require("hagata.lsp.on_attach.format")
+    local format_options
+    local restore_format = stub(vim.lsp.buf, "format", function(options)
+        format_options = options
+    end)
+    local snacks = {
+        notify = {
+            info = function() end,
+            warn = function() end,
+            error = function() end,
+        },
+    }
+    local previous_snacks = _G.Snacks
+    _G.Snacks = snacks
+    format.format()
+    restore_format()
+    check("format bufnr", format_options.bufnr, bufnr)
+    check("format timeout", format_options.timeout_ms, 2000)
+    check(
+        "format filter accepts formatting client",
+        format_options.filter({
+            name = "test",
+            supports_method = function()
+                return true
+            end,
+            config = { settings = {} },
+        }),
+        true
+    )
+    check(
+        "format filter rejects client without capability",
+        format_options.filter({
+            name = "test",
+            supports_method = function()
+                return false
+            end,
+            config = { settings = {} },
+        }),
+        false
+    )
+    check(
+        "format filter rejects disabled format",
+        format_options.filter({
+            name = "test",
+            supports_method = function()
+                return true
+            end,
+            config = { settings = { format = false } },
+        }),
+        false
+    )
 
-format.toggle()
-check("format toggle disables", vim.b.autoformat, false)
-format.enable()
-check("format enable clears buffer flag", vim.b.autoformat, nil)
-format.disable()
-check("format disable", format.autoformat, false)
-_G.Snacks = previous_snacks
+    format.toggle()
+    check("format toggle disables", vim.b.autoformat, false)
+    format.enable()
+    check("format enable clears buffer flag", vim.b.autoformat, nil)
+    format.disable()
+    check("format disable", format.autoformat, false)
+    _G.Snacks = previous_snacks
 
-local fold = require("hagata.lsp.on_attach.fold")
-vim.wo.foldmethod = "manual"
-fold.on_attach({ supports_method = function() return false end }, bufnr)
-check("fold leaves unsupported client unchanged", vim.wo.foldmethod, "manual")
-vim.api.nvim_buf_delete(bufnr, { force = true })
+    local fold = require("hagata.lsp.on_attach.fold")
+    vim.wo.foldmethod = "manual"
+    fold.on_attach({
+        supports_method = function()
+            return false
+        end,
+    }, bufnr)
+    check("fold leaves unsupported client unchanged", vim.wo.foldmethod, "manual")
+    vim.api.nvim_buf_delete(bufnr, { force = true })
 end
 
 section("14. plugin specs")
