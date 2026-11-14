@@ -45,8 +45,12 @@ local function stub_fn(name, fn)
     end
 end
 
-_G.is_on_vscode = function()
-    return false
+package.preload["hagata.env"] = function()
+    return {
+        is_vscode = function()
+            return false
+        end,
+    }
 end
 
 print("1. lazy.nvim spec")

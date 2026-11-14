@@ -1,6 +1,6 @@
 -- Regression tests for the nvim config migration.
 --
---   DOTFILES_DIR=... nvim --headless --clean -l common/config/nvim/tests/nvim_config_test.lua
+--   DOTFILES_DIR=... nvim --headless --clean --cmd 'set noloadplugins' -l common/config/nvim/tests/nvim_config_test.lua
 --
 -- The tests load the config modules directly. Real plugins are stubbed where needed.
 local repo = assert(os.getenv("DOTFILES_DIR"), "DOTFILES_DIR is required")
@@ -88,6 +88,9 @@ check_false("lua/config removed", vim.fn.isdirectory(nvim_dir .. "/lua/config") 
 check_true("lua/hagata exists", vim.fn.isdirectory(nvim_dir .. "/lua/hagata") == 1)
 check_true("hagata/lsp/on_attach exists", vim.fn.isdirectory(nvim_dir .. "/lua/hagata/lsp/on_attach") == 1)
 check_false("plugins/mason/on_attach removed", vim.fn.isdirectory(nvim_dir .. "/lua/plugins/mason/on_attach") == 1)
+check_false("hagata/global.lua removed", vim.fn.filereadable(nvim_dir .. "/lua/hagata/global.lua") == 1)
+check_true("hagata/env.lua exists", vim.fn.filereadable(nvim_dir .. "/lua/hagata/env.lua") == 1)
+check_true("hagata/fn.lua exists", vim.fn.filereadable(nvim_dir .. "/lua/hagata/fn.lua") == 1)
 check_false("lua/plugins.lua not created", vim.fn.filereadable(nvim_dir .. "/lua/plugins.lua") == 1)
 check_false("require core", pcall(require, "core"))
 check_false("require core.utils", pcall(require, "core.utils"))
@@ -127,6 +130,10 @@ check("is_vscode 1", env.is_vscode(), true)
 vim.g.vscode = nil
 check("is_macos", env.is_macos(), vim.uv.os_uname().sysname == "Darwin")
 check("lambda", fn.lambda("a,b:a+b")(2, 3), 5)
+check("_G.to_bool removed", _G.to_bool, nil)
+check("_G.is_on_vscode removed", _G.is_on_vscode, nil)
+check("_G.is_on_mac removed", _G.is_on_mac, nil)
+check("_G.lambda removed", _G.lambda, nil)
 
 section("3. base")
 check("loaded_2html_plugin", vim.g.loaded_2html_plugin, 1)
@@ -608,15 +615,25 @@ section("15. plugin spec modules")
 local spec_files = vim.fn.glob(nvim_dir .. "/lua/plugins/*.lua", false, true)
 vim.list_extend(spec_files, vim.fn.glob(nvim_dir .. "/lua/plugins/*/init.lua", false, true))
 for _, file in ipairs(spec_files) do
-    local module = file
-        :gsub("^" .. vim.pesc(nvim_dir .. "/lua/"), "")
-        :gsub("%.lua$", "")
-        :gsub("/init$", "")
-        :gsub("/", ".")
+    local module =
+        file:gsub("^" .. vim.pesc(nvim_dir .. "/lua/"), ""):gsub("%.lua$", ""):gsub("/init$", ""):gsub("/", ".")
     local ok, error_message = pcall(require, module)
     check_true("load " .. module, ok)
     if not ok then
         print("    " .. tostring(error_message))
+    end
+end
+
+local env_specs = vim.fn.glob(nvim_dir .. "/lua/plugins/**/*.lua", false, true)
+for _, file in ipairs(env_specs) do
+    local contents = table.concat(vim.fn.readfile(file), "\n")
+    local relative = file:gsub("^" .. vim.pesc(nvim_dir .. "/"), "")
+    local uses = select(2, contents:gsub("%.is_vscode%(%)", "")) + select(2, contents:gsub("%.is_macos%(%)", ""))
+    local has_local = contents:find('local env = require("hagata.env")', 1, true) ~= nil
+    if uses >= 2 then
+        check_true(relative .. " shares env", has_local)
+    elseif has_local then
+        check_false(relative .. " has unused env local", has_local)
     end
 end
 
@@ -629,7 +646,12 @@ for _, file in ipairs(lua_files) do
     local relative = file:gsub("^" .. vim.pesc(nvim_dir .. "/"), "")
     check_false(relative .. " has require(core)", contents:find('require("core', 1, true) ~= nil)
     check_false(relative .. " has require(config)", contents:find('require("config', 1, true) ~= nil)
+    check_false(relative .. " has require(hagata.global)", contents:find('require("hagata.global")', 1, true) ~= nil)
     check_false(relative .. " has plugins.mason.on_attach", contents:find("plugins.mason.on_attach", 1, true) ~= nil)
+    check_false(relative .. " has _G.to_bool", contents:find("_G.to_bool", 1, true) ~= nil)
+    check_false(relative .. " has is_on_vscode", contents:find("is_on_vscode", 1, true) ~= nil)
+    check_false(relative .. " has is_on_mac", contents:find("is_on_mac", 1, true) ~= nil)
+    check_false(relative .. " has _G.lambda", contents:find("_G.lambda", 1, true) ~= nil)
 end
 
 print("")

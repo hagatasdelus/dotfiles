@@ -12,7 +12,7 @@ local diagnostics = {
 return {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     cmd = "Mason",
     dependencies = {
         "williamboman/mason.nvim",

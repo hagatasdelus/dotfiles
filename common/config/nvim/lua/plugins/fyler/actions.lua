@@ -1,6 +1,7 @@
 local M = {}
 
 local debounce = require("hagata.utils").debounce
+local fn = require("hagata.fn")
 
 M.show_hidden = true
 
@@ -53,7 +54,7 @@ local function listPanes()
     local cli_result = vim.system({ "wezterm", "cli", "list", ("--format=%s"):format("json") }, { text = true }):wait()
     local json = vim.json.decode(cli_result.stdout)
     local panes_list = vim.iter(json)
-        :map(lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
+        :map(fn.lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
     return panes_list
 end
 

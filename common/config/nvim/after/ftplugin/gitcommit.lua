@@ -1,4 +1,5 @@
 -- ref: https://raw.githubusercontent.com/ryoppippi/dotfiles/refs/heads/main/nvim/after/ftplugin/gitcommit.lua
+local fn = require("hagata.fn")
 local Path = require("plenary.path")
 
 local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1] or ""
@@ -12,7 +13,7 @@ local commit_win_id = vim.fn.win_getid()
 local abs_buffer_filename = vim.fn.expand("%:p")
 
 vim.schedule(function()
-    if to_bool(vim.fn.executable(pre_commit_path)) then
+    if fn.to_bool(vim.fn.executable(pre_commit_path)) then
         vim.b.is_pre_commit_pass = false
 
         -- create buffer
@@ -56,13 +57,13 @@ end)
 vim.api.nvim_create_autocmd("BufWritePost", {
     buffer = commit_bufnr,
     callback = function()
-        if not to_bool(vim.b.is_pre_commit_pass) then
+        if not fn.to_bool(vim.b.is_pre_commit_pass) then
             local err_msg = "Please wait for pre-commit hook."
             vim.notify(err_msg, vim.log.levels.ERROR)
             vim.api.nvim_err_writeln(err_msg)
         end
 
-        if to_bool(vim.fn.executable(commit_msg_path)) then
+        if fn.to_bool(vim.fn.executable(commit_msg_path)) then
             vim.b.is_commit_msg_pass = false
 
             vim.fn.jobstart(commit_msg_path .. " " .. abs_buffer_filename, {

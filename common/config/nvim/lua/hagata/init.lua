@@ -1,4 +1,3 @@
-require("hagata.global")
 require("hagata.base")
 require("hagata.options")
 require("hagata.keymaps")
