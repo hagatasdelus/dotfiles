@@ -131,13 +131,21 @@ check("lambda", fn.lambda("a,b:a+b")(2, 3), 5)
 section("3. base")
 check("loaded_2html_plugin", vim.g.loaded_2html_plugin, 1)
 check("loaded_getscript", vim.g.loaded_getscript, 1)
-check("loaded_matchparen", vim.g.loaded_matchparen, 1)
 check("loaded_netrw", vim.g.loaded_netrw, 1)
 check("loaded_tar", vim.g.loaded_tar, 1)
 check("loaded_zip", vim.g.loaded_zip, 1)
 check("loaded_gtags", vim.g.loaded_gtags, 1)
 check("did_indent_on", vim.g.did_indent_on, 1)
 check("did_install_default_menus", vim.g.did_install_default_menus, 1)
+check("loaded_gzip delegated to lazy", vim.g.loaded_gzip, nil)
+check("loaded_matchparen delegated to lazy", vim.g.loaded_matchparen, nil)
+check("loaded_netrwPlugin delegated to lazy", vim.g.loaded_netrwPlugin, nil)
+check("loaded_remote_plugins delegated to lazy", vim.g.loaded_remote_plugins, nil)
+check("loaded_shada_plugin delegated to lazy", vim.g.loaded_shada_plugin, nil)
+check("loaded_spellfile_plugin delegated to lazy", vim.g.loaded_spellfile_plugin, nil)
+check("loaded_tarPlugin delegated to lazy", vim.g.loaded_tarPlugin, nil)
+check("loaded_tutor_mode_plugin delegated to lazy", vim.g.loaded_tutor_mode_plugin, nil)
+check("loaded_zipPlugin delegated to lazy", vim.g.loaded_zipPlugin, nil)
 
 section("4. options")
 check("mapleader", vim.g.mapleader, " ")
@@ -342,9 +350,22 @@ if lazy_module then
     check("lazy checker.enabled", lazy_options.checker.enabled, false)
     check("lazy performance.cache.enabled", lazy_options.performance.cache.enabled, false)
     check("lazy performance.cache typo removed", lazy_options.performance.cache.enalbed, nil)
-    check_true("lazy disabled gzip", vim.tbl_contains(lazy_options.performance.rtp.disabled_plugins, "gzip"))
-    check_true("lazy disabled matchparen", vim.tbl_contains(lazy_options.performance.rtp.disabled_plugins, "matchparen"))
-    check_true("lazy disabled netrwPlugin", vim.tbl_contains(lazy_options.performance.rtp.disabled_plugins, "netrwPlugin"))
+    local disabled_plugins = vim.tbl_get(lazy_options.performance, "rtp", "disabled_plugins") or {}
+    check_deep("lazy rtp.disabled_plugins", disabled_plugins, {
+        "gzip",
+        "matchparen",
+        "netrwPlugin",
+        "rplugin",
+        "shada",
+        "spellfile",
+        "tarPlugin",
+        "tutor",
+        "zipPlugin",
+    })
+    for _, name in ipairs(disabled_plugins) do
+        local files = vim.fn.globpath(vim.env.VIMRUNTIME .. "/plugin", name .. ".*", false, true)
+        check_true("lazy disabled plugin exists: " .. name, #files > 0)
+    end
 end
 
 section("11. lsp servers")

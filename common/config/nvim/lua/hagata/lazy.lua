@@ -42,16 +42,17 @@ function M.setup()
         performance = {
             cache = { enabled = false },
             rtp = {
+                -- Only $VIMRUNTIME/plugin entries; base.lua handles the rest.
                 disabled_plugins = {
                     "gzip",
                     "matchparen",
                     "netrwPlugin",
+                    "rplugin",
+                    "shada",
+                    "spellfile",
                     "tarPlugin",
-                    "tar",
-                    "tohtml",
                     "tutor",
                     "zipPlugin",
-                    "zip",
                 },
             },
         },
