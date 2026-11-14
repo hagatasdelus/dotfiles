@@ -7,7 +7,7 @@ local M = {}
 local POLL_INTERVAL = 500
 local FALLBACK_LAYOUT = "us"
 
-M.enabled = is_on_mac()
+M.enabled = require("hagata.env").is_macos()
 
 --- The CLI writes state.json to $XDG_STATE_HOME/keyboard-layout, so read that
 --- base directly: stdpath("state") returns ~/.local/state/nvim, which differs

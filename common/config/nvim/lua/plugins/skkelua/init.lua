@@ -3,7 +3,7 @@ return {
         "https://github.com/kjuq/skkelua.nvim",
         enabled = true,
         event = "VeryLazy",
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         keys = {
             {
                 "<C-j>",
@@ -75,7 +75,7 @@ return {
                 immediatelyCancel = false,
                 markerHenkan = "",
                 markerHenkanSelect = "",
-                completion = { enabled = false }, -- 候補は nvim-cmp が表示する
+                completion = { enabled = false },
                 indicator = {
                     border = "none",
                     alwaysShown = true,
@@ -96,10 +96,10 @@ return {
             skkelua.setup(opts)
             skkelua.initialize()
 
-            -- skkelua の <Tab> は direct モードで生のタブを入れるため、
-            -- Neovim 本来の Tab に任せる (変換中は cmp 側で止める)。
+            -- skkelua maps <Tab> to a literal tab in direct mode. Leave Tab
+            -- to Neovim so goda-cmp handles the popup during conversion.
             vim.api.nvim_create_autocmd("User", {
-                group = vim.api.nvim_create_augroup("config.skkelua.cmp", { clear = true }),
+                group = vim.api.nvim_create_augroup("config.skkelua.keys", { clear = true }),
                 pattern = "skkelua-enable-pre",
                 callback = function()
                     local keys = vim.tbl_filter(function(key)
@@ -109,30 +109,9 @@ return {
                 end,
             })
 
-            -- skkelua は選択中の項目を complete_info() から読む。
-            -- nvim-cmp の選択項目を補って [辞書登録] の判定を成立させる。
-            if not skkelua._cmp_vim_status then
-                skkelua._cmp_vim_status = true
-                local orig_vim_status = skkelua.vim_status
-                skkelua.vim_status = function()
-                    local status = orig_vim_status()
-                    local cmp = package.loaded["cmp"]
-                    if status.completeType == "cmp" and cmp and cmp.visible() then
-                        local entry = cmp.get_active_entry()
-                        if entry then
-                            status.completeInfo.selected = 0
-                            status.completeInfo.items = {
-                                {
-                                    user_data = {
-                                        nvim = { lsp = { completion_item = entry.completion_item } },
-                                    },
-                                },
-                            }
-                        end
-                    end
-                    return status
-                end
-            end
+            -- skkelua reads the selected item from complete_info(). Patch in
+            -- the pum.vim selection so dictionary registration is detected.
+            require("plugins.goda.skkelua").setup()
         end,
     },
     { "https://github.com/skk-dev/dict", lazy = true },

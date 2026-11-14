@@ -1,6 +1,7 @@
 local M = {}
 
-local debounce = require("core.utils").debounce
+local debounce = require("hagata.utils").debounce
+local fn = require("hagata.fn")
 
 local function getEntryAbsPath()
     local oil = require("oil")
@@ -19,7 +20,7 @@ local function listPanes()
     local cli_result = vim.system({ "wezterm", "cli", "list", ("--format=%s"):format("json") }, { text = true }):wait()
     local json = vim.json.decode(cli_result.stdout)
     local panes_list = vim.iter(json)
-        :map(lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
+        :map(fn.lambda("obj: {pane_id = obj.pane_id, tab_id = obj.tab_id, title = obj.title }"))
     return panes_list
 end
 
@@ -265,7 +266,7 @@ end
 M.openWithQuickLook = {
     callback = function()
         local abspath = assert(getEntryAbsPath())
-        require("core.utils").open_file_with_quicklook(abspath)
+        require("hagata.utils").open_file_with_quicklook(abspath)
     end,
     desc = "Open Preview with QuickLook",
 }

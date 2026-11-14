@@ -1,3 +1,5 @@
+local fn = require("hagata.fn")
+
 local M = {}
 
 M.autoformat = true
@@ -76,7 +78,7 @@ function M.on_attach(client, bufnr)
             group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
             buffer = bufnr,
             callback = function()
-                if vim.b.autoformat ~= false and not to_bool(vim.v.cmdbang) then
+                if vim.b.autoformat ~= false and not fn.to_bool(vim.v.cmdbang) then
                     M.format()
                 end
             end,

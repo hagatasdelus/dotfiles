@@ -106,3 +106,5 @@ flycheck_*.el
 .direnv/*
 
 .antigravitycli
+AGENTS.local.md
+*.local.md
