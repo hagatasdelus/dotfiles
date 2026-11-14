@@ -17,10 +17,6 @@ function M.setup()
         end,
     })
 
-    vim.api.nvim_create_user_command("LspDiagnosticReset", function()
-        vim.diagnostic.reset()
-    end, {})
-
     vim.lsp.enable(require("hagata.lsp.servers"))
 end
 

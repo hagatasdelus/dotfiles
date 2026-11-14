@@ -90,6 +90,7 @@ func (s luaSource) OnCompleteDone(ctx context.Context, h sdk.Host, a cmp.DoneArg
 	_, err := s.call(ctx, h, "complete", map[string]any{
 		"context": a.Context,
 		"data":    a.Item.UserData,
+		"word":    a.Item.Word,
 	})
 	return err
 }

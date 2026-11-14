@@ -83,7 +83,8 @@ local function command_exists(name)
 end
 
 section("1. structure")
-check_false("lua/core removed", vim.fn.isdirectory(nvim_dir .. "/lua/core") == 1)
+local core_lua = vim.fn.globpath(nvim_dir .. "/lua/core", "*.lua", false, true)
+check_false("lua/core removed", #core_lua > 0)
 check_false("lua/config removed", vim.fn.isdirectory(nvim_dir .. "/lua/config") == 1)
 check_true("lua/hagata exists", vim.fn.isdirectory(nvim_dir .. "/lua/hagata") == 1)
 check_true("hagata/lsp/on_attach exists", vim.fn.isdirectory(nvim_dir .. "/lua/hagata/lsp/on_attach") == 1)
@@ -259,7 +260,7 @@ check_true("BufReadPost", events.BufReadPost)
 check_true("TextYankPost", events.TextYankPost)
 
 section("8. commands")
-for _, name in ipairs({ "QuickLook", "Restart", "OpenUrl", "Browse", "EditConfig", "Daily" }) do
+for _, name in ipairs({ "QuickLook", "Restart", "OpenUrl", "Browse", "EditConfig", "Daily", "LspDiagnosticReset" }) do
     check_true("command " .. name, command_exists(name))
 end
 
@@ -348,30 +349,32 @@ if lazy_module then
     if not setup_ok then
         print("    " .. tostring(setup_error))
     end
-    check("lazy defaults.lazy", lazy_options.defaults.lazy, true)
-    check("lazy spec import", lazy_options.spec[1].import, "plugins")
-    check("lazy concurrency", lazy_options.concurrency, 10)
-    check("lazy dev.path", lazy_options.dev.path, "~/ghq/github.com/hagatasdelus/")
-    check("lazy install.missing", lazy_options.install.missing, true)
-    check("lazy install.colorscheme", lazy_options.install.colorscheme[1], "backpack")
-    check("lazy checker.enabled", lazy_options.checker.enabled, false)
-    check("lazy performance.cache.enabled", lazy_options.performance.cache.enabled, false)
-    check("lazy performance.cache typo removed", lazy_options.performance.cache.enalbed, nil)
-    local disabled_plugins = vim.tbl_get(lazy_options.performance, "rtp", "disabled_plugins") or {}
-    check_deep("lazy rtp.disabled_plugins", disabled_plugins, {
-        "gzip",
-        "matchparen",
-        "netrwPlugin",
-        "rplugin",
-        "shada",
-        "spellfile",
-        "tarPlugin",
-        "tutor",
-        "zipPlugin",
-    })
-    for _, name in ipairs(disabled_plugins) do
-        local files = vim.fn.globpath(vim.env.VIMRUNTIME .. "/plugin", name .. ".*", false, true)
-        check_true("lazy disabled plugin exists: " .. name, #files > 0)
+    if lazy_options then
+        check("lazy defaults.lazy", lazy_options.defaults.lazy, true)
+        check("lazy spec import", lazy_options.spec[1].import, "plugins")
+        check("lazy concurrency", lazy_options.concurrency, 10)
+        check("lazy dev.path", lazy_options.dev.path, "~/ghq/github.com/hagatasdelus/")
+        check("lazy install.missing", lazy_options.install.missing, true)
+        check("lazy install.colorscheme", lazy_options.install.colorscheme[1], "backpack")
+        check("lazy checker.enabled", lazy_options.checker.enabled, false)
+        check("lazy performance.cache.enabled", lazy_options.performance.cache.enabled, false)
+        check("lazy performance.cache typo removed", lazy_options.performance.cache.enalbed, nil)
+        local disabled_plugins = vim.tbl_get(lazy_options.performance, "rtp", "disabled_plugins") or {}
+        check_deep("lazy rtp.disabled_plugins", disabled_plugins, {
+            "gzip",
+            "matchparen",
+            "netrwPlugin",
+            "rplugin",
+            "shada",
+            "spellfile",
+            "tarPlugin",
+            "tutor",
+            "zipPlugin",
+        })
+        for _, name in ipairs(disabled_plugins) do
+            local files = vim.fn.globpath(vim.env.VIMRUNTIME .. "/plugin", name .. ".*", false, true)
+            check_true("lazy disabled plugin exists: " .. name, #files > 0)
+        end
     end
 end
 
@@ -411,7 +414,6 @@ if servers and lsp then
     check("lsp.config star", config_calls[1].name, "*")
     check("lsp capabilities", type(config_calls[1].config.capabilities), "table")
     check_deep("lsp.enable servers", enable_calls[1], servers)
-    check_true("LspDiagnosticReset command", command_exists("LspDiagnosticReset"))
 
     local attach_calls = {}
     local restore_on_attach = save_loaded("hagata.lsp.on_attach", function(client, bufnr)

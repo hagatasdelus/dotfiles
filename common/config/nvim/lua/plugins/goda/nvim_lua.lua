@@ -59,7 +59,7 @@ function M.gather(opts)
         return { start = #input, items = {}, incomplete = false }
     end
 
-    local head, tail = input:match("^(.*)%.([%w_]*)$")
+    local head, tail = input:match("([%w_%.]*)%.([%w_]*)$")
     if head == nil then
         return { start = #input, items = {}, incomplete = false }
     end

@@ -25,13 +25,12 @@ func configure(b *cmp.Builder) {
 				Mark:                   "LSP",
 				ForceCompletionPattern: `\.\w*`,
 				IsVolatile:             new(true),
-				Matchers:               []string{},
+				Matchers:               []string{}, // The server filters; keep its answer.
 				Sorters:                []string{"sortertext"},
 			},
 			"nvim_lua": {
 				Mark:                   "Lua",
 				ForceCompletionPattern: `\.\w*`,
-				Matchers:               []string{},
 				Sorters:                []string{},
 			},
 			"buffer": {

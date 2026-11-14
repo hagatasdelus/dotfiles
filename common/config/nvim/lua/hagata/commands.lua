@@ -200,3 +200,7 @@ vim.api.nvim_create_user_command("Daily", function(opts)
         vim.api.nvim_buf_set_lines(0, 0, -1, false, template)
     end
 end, { nargs = "?", desc = "Open daily note" })
+
+vim.api.nvim_create_user_command("LspDiagnosticReset", function()
+    vim.diagnostic.reset()
+end, {})

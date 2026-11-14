@@ -305,6 +305,43 @@ local astral = nvim_lsp._convert_item({
 }, "😀ab", "utf-16")
 check("lsp utf16 start", astral.start, 5)
 
+local edited = nvim_lsp._convert_item({
+    label = "label",
+    insertText = "insert",
+    textEdit = {
+        range = { start = { line = 0, character = 0 }, ["end"] = { line = 0, character = 0 } },
+        newText = "edit",
+    },
+}, "hello.", "utf-16")
+check("lsp textEdit wins over insertText", edited.word, "edit")
+check("lsp keyword start ascii", nvim_lsp._keyword_start("foo.bar"), 4)
+check("lsp keyword start non-ascii", nvim_lsp._keyword_start("変数"), 0)
+check("lsp keyword start empty", nvim_lsp._keyword_start("foo."), 4)
+
+local previous_buf = vim.api.nvim_get_current_buf()
+local complete_buf = vim.api.nvim_create_buf(false, true)
+vim.api.nvim_set_current_buf(complete_buf)
+vim.api.nvim_buf_set_lines(complete_buf, 0, -1, false, { "fooBar" })
+vim.api.nvim_win_set_cursor(0, { 1, 3 })
+local expanded
+local previous_expand = vim.snippet.expand
+vim.snippet.expand = function(text)
+    expanded = text
+end
+nvim_lsp.complete({
+    word = "foo",
+    data = {
+        completion_item = { label = "foobar" },
+        word = "foobar",
+        snippet = "foobar",
+    },
+})
+vim.snippet.expand = previous_expand
+check("complete deletes final word", vim.api.nvim_buf_get_lines(complete_buf, 0, 1, false)[1], "Bar")
+check("complete expands snippet", expanded, "foobar")
+vim.api.nvim_set_current_buf(previous_buf)
+vim.api.nvim_buf_delete(complete_buf, { force = true })
+
 print("\n7. nvim_lua source")
 local nvim_lua = require("plugins.goda.nvim_lua")
 local api_items = nvim_lua._items("vim", "vim.api")
@@ -321,6 +358,14 @@ check(
     true
 )
 check("nvim_lua kind", api_items[1].kind ~= nil, true)
+
+local prefixed = nvim_lua.gather({ context = { input = "local x = vim.", filetype = "lua" } })
+check("nvim_lua ignores leading code", #prefixed.items > 0, true)
+check("nvim_lua start after dot", prefixed.start, #"local x = vim.")
+
+local dotted = nvim_lua.gather({ context = { input = "local x = vim.api.nvim_", filetype = "lua" } })
+check("nvim_lua resolves trailing path", #dotted.items > 0, true)
+check("nvim_lua start at tail", dotted.start, #"local x = vim.api.")
 
 print("\n8. completion keymaps")
 local manual_calls = {}
@@ -403,8 +448,9 @@ vim.notify = previous_notify
 restore_item()
 
 pum.visible = false
+local col = 6
 local restore_col = stub_fn("col", function()
-    return 6
+    return col
 end)
 local restore_getline = stub_fn("getline", function()
     return "hello"
@@ -412,10 +458,17 @@ end)
 check("Tab completes manually after a word", call_map("<Tab>"), "<C-l>")
 check("Tab manual sources without SKK", manual_calls[#manual_calls].options, nil)
 restore_getline()
+col = 7
 restore_getline = stub_fn("getline", function()
     return "hello "
 end)
 check("Tab is literal after whitespace", call_map("<Tab>"), "<Tab>")
+restore_getline()
+col = 6
+restore_getline = stub_fn("getline", function()
+    return "hello world"
+end)
+check("Tab ignores whitespace after cursor", call_map("<Tab>"), "<C-l>")
 restore_getline()
 
 skk.phase = function()

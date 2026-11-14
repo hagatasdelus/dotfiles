@@ -51,6 +51,12 @@ end
 
 M._character = character
 
+local function keyword_start(input)
+    return vim.fn.match(input, [[\k*$]])
+end
+
+M._keyword_start = keyword_start
+
 local function byte_offset(text, position, encoding)
     if encoding == "utf-8" then
         return math.min(position, #text)
@@ -72,7 +78,7 @@ end
 
 local function item_word(item)
     local edit = text_edit(item)
-    local text = item.insertText or (edit and edit.newText) or item.label or ""
+    local text = (edit and edit.newText) or item.insertText or item.label or ""
     if item.insertTextFormat == 2 then
         return first_line(snippet_plain(text))
     end
@@ -163,8 +169,7 @@ end
 function M.gather(opts)
     local context = opts.context or {}
     local input = context.input or ""
-    local default_start = #(input:match("[%w_]*$") or "")
-    default_start = #input - default_start
+    local default_start = keyword_start(input)
     if context.mode ~= "i" then
         return { start = default_start, items = {}, incomplete = false }
     end
@@ -218,7 +223,7 @@ function M.complete(opts)
     end
 
     if data.snippet and vim.snippet then
-        local word = data.word or ""
+        local word = opts.word or data.word or ""
         local cursor = vim.api.nvim_win_get_cursor(0)
         local row = cursor[1] - 1
         local col = cursor[2]

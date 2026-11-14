@@ -43,7 +43,7 @@ local function before_cursor_is_space()
     if type(line) ~= "string" then
         return true
     end
-    return string.match(vim.fn.strpart(line, col - 2), "%s") ~= nil
+    return string.match(vim.fn.strpart(line, col - 2, 1), "%s") ~= nil
 end
 
 local function complete_from_context()
