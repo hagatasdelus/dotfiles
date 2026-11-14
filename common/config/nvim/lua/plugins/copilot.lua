@@ -1,7 +1,7 @@
 return {
     "https://github.com/zbirenbaum/copilot.lua",
     enabled = true,
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     cmd = { "Copilot" },
     event = { "InsertEnter" },
     config = function()

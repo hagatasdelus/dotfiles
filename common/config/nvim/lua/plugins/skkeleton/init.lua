@@ -7,7 +7,7 @@ return {
             "https://github.com/delphinus/skkeleton_indicator.nvim",
             "https://hagatasdelus/skkeleton-for-pickers.nvim",
         },
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         keys = {
             {
                 "<C-j>",

@@ -1,7 +1,7 @@
 return {
     "https://github.com/Mitch1000/backpack.nvim",
     event = { "UiEnter", "ColorScheme" },
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     priority = 1000,
     build = ":BackpackCompile",
     opts = function()

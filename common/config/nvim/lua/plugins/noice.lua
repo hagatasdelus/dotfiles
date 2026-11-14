@@ -1,7 +1,7 @@
 return {
     "https://github.com/folke/noice.nvim",
     event = "VeryLazy",
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     dependencies = {
         "MunifTanjim/nui.nvim",
     },

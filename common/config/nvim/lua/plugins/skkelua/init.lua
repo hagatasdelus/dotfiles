@@ -3,7 +3,7 @@ return {
         "https://github.com/kjuq/skkelua.nvim",
         enabled = true,
         event = "VeryLazy",
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         keys = {
             {
                 "<C-j>",
@@ -96,10 +96,8 @@ return {
             skkelua.setup(opts)
             skkelua.initialize()
 
-            -- skkelua の <Tab> は direct モードで生のタブを入れるため、
-            -- Neovim 本来の Tab に任せる。:lmap は insert マッピングより
-            -- 優先されるので、SKK 変換中の pum 操作も goda-cmp 側で扱えるよう
-            -- mappedKeys からは外しておく。
+            -- skkelua maps <Tab> to a literal tab in direct mode. Leave Tab
+            -- to Neovim so goda-cmp handles the popup during conversion.
             vim.api.nvim_create_autocmd("User", {
                 group = vim.api.nvim_create_augroup("config.skkelua.keys", { clear = true }),
                 pattern = "skkelua-enable-pre",
@@ -111,8 +109,8 @@ return {
                 end,
             })
 
-            -- skkelua は選択中の項目を complete_info() から読む。
-            -- pum.vim の選択項目を補って [辞書登録] の判定を成立させる。
+            -- skkelua reads the selected item from complete_info(). Patch in
+            -- the pum.vim selection so dictionary registration is detected.
             require("plugins.goda.skkelua").setup()
         end,
     },

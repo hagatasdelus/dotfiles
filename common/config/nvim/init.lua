@@ -1,9 +1,4 @@
 vim.loader.enable()
-require("core.global")
-require("core.base")
-require("core.options")
-require("core.keymaps")
-require("core.filetype")
-require("core.autocmds")
-require("core.commands")
-require("config")
+
+require("hagata")
+require("hagata.lazy").setup()

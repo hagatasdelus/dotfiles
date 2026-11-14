@@ -2,7 +2,7 @@ return {
     {
         "https://github.com/Shougo/goda-cmp.vim",
         enabled = true,
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             "https://github.com/Shougo/goda.vim",

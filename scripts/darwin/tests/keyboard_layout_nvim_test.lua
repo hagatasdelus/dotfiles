@@ -18,19 +18,10 @@ local function check(name, actual, expected)
     end
     failures = failures + 1
     print(
-        string.format(
-            "  FAIL %s\n       expected: %s\n       actual:   %s",
-            name,
-            tostring(expected),
-            tostring(actual)
-        )
+        string.format("  FAIL %s\n       expected: %s\n       actual:   %s", name, tostring(expected), tostring(actual))
     )
 end
 
--- Reproduce the dotfiles globals
-_G.is_on_mac = function()
-    return vim.uv.os_uname().sysname == "Darwin"
-end
 _G.Snacks = {
     notify = {
         info = function() end,

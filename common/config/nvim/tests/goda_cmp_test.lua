@@ -1,6 +1,6 @@
 -- Tests the goda-cmp migration without loading the real plugins.
 --
---   DOTFILES_DIR=... nvim --headless --clean -c "luafile scripts/tests/goda_cmp_test.lua"
+--   DOTFILES_DIR=... nvim --headless --clean -c "luafile common/config/nvim/tests/goda_cmp_test.lua"
 --
 -- goda.vim, goda-cmp.vim, pum.vim and skkelua are stubbed.
 local repo = assert(os.getenv("DOTFILES_DIR"), "DOTFILES_DIR is required")
@@ -45,8 +45,12 @@ local function stub_fn(name, fn)
     end
 end
 
-_G.is_on_vscode = function()
-    return false
+package.preload["hagata.env"] = function()
+    return {
+        is_vscode = function()
+            return false
+        end,
+    }
 end
 
 print("1. lazy.nvim spec")
