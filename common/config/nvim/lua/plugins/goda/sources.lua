@@ -6,6 +6,20 @@ local modules = {
     nvim_lua = "plugins.goda.nvim_lua",
 }
 
+-- gather runs on every keystroke, so report each failure only once.
+local reported = {}
+
+local function report(name, method, err)
+    local message = string.format("goda-cmp: %s.%s failed: %s", name, method, tostring(err))
+    if reported[message] then
+        return
+    end
+    reported[message] = true
+    vim.schedule(function()
+        vim.notify(message, vim.log.levels.ERROR)
+    end)
+end
+
 local function module(name)
     local path = modules[name]
     if not path then
@@ -13,57 +27,59 @@ local function module(name)
     end
     local ok, loaded = pcall(require, path)
     if not ok then
+        report(name, "require", loaded)
         return nil
     end
     return loaded
+end
+
+local function input_length(opts)
+    return #((opts.context or {}).input or "")
 end
 
 local function empty(start)
     return { start = start or 0, items = {}, incomplete = false }
 end
 
-function M.gather(opts)
+local function is_table(value)
+    return type(value) == "table"
+end
+
+local function is_number(value)
+    return type(value) == "number"
+end
+
+local function call(opts, method, fallback, valid)
     local source = module(opts.name)
-    if not source or type(source.gather) ~= "function" then
-        return empty(#((opts.context or {}).input or ""))
+    if not source or type(source[method]) ~= "function" then
+        return fallback
     end
-    local ok, gathered = pcall(source.gather, opts)
-    if not ok or type(gathered) ~= "table" then
-        return empty(#((opts.context or {}).input or ""))
+    local ok, result = pcall(source[method], opts)
+    if not ok then
+        report(opts.name, method, result)
+        return fallback
     end
-    return gathered
+    if valid and not valid(result) then
+        report(opts.name, method, "returned " .. type(result))
+        return fallback
+    end
+    return result
+end
+
+function M.gather(opts)
+    return call(opts, "gather", empty(input_length(opts)), is_table)
 end
 
 function M.position(opts)
-    local source = module(opts.name)
-    if not source or type(source.position) ~= "function" then
-        return -1
-    end
-    local ok, position = pcall(source.position, opts)
-    if not ok or type(position) ~= "number" then
-        return -1
-    end
-    return position
+    return call(opts, "position", -1, is_number)
 end
 
 function M.complete(opts)
-    local source = module(opts.name)
-    if not source or type(source.complete) ~= "function" then
-        return
-    end
-    pcall(source.complete, opts)
+    call(opts, "complete", nil, nil)
 end
 
 function M.resolve(opts)
-    local source = module(opts.name)
-    if not source or type(source.resolve) ~= "function" then
-        return nil
-    end
-    local ok, resolved = pcall(source.resolve, opts)
-    if not ok or type(resolved) ~= "table" then
-        return nil
-    end
-    return resolved
+    return call(opts, "resolve", nil, is_table)
 end
 
 return M

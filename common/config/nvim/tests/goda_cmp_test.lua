@@ -259,6 +259,63 @@ check("luasnip module removed", pcall(require, "plugins.goda.luasnip"), false)
 local removed = sources.gather({ name = "luasnip", context = { input = "if" } })
 check("luasnip source removed", #removed.items, 0)
 
+print("\n5b. sources errors")
+local notified = {}
+local previous_notify = vim.notify
+local previous_schedule = vim.schedule
+vim.notify = function(message, level)
+    notified[#notified + 1] = { message = message, level = level }
+end
+vim.schedule = function(fn)
+    fn()
+end
+
+local loaded_nvim_lua = package.loaded["plugins.goda.nvim_lua"]
+package.loaded["plugins.goda.nvim_lua"] = nil
+package.preload["plugins.goda.nvim_lua"] = function()
+    error("require boom")
+end
+local missing = sources.gather({ name = "nvim_lua", context = { input = "abc" } })
+package.preload["plugins.goda.nvim_lua"] = nil
+package.loaded["plugins.goda.nvim_lua"] = loaded_nvim_lua
+check("require error returns empty", #missing.items, 0)
+check("require error start", missing.start, 3)
+check("require error notified", #notified, 1)
+check("require error message", notified[1].message:find("nvim_lua.require", 1, true) ~= nil, true)
+check("require error level", notified[1].level, vim.log.levels.ERROR)
+
+local skkelua_source = require("plugins.goda.skkelua")
+for _, case in ipairs({
+    { method = "gather", fallback = "table" },
+    { method = "position", fallback = "number" },
+    { method = "complete", fallback = "nil" },
+    { method = "resolve", fallback = "nil" },
+}) do
+    local method = case.method
+    local original = skkelua_source[method]
+    local before = #notified
+    skkelua_source[method] = function()
+        error(method .. " boom")
+    end
+    local result = sources[method]({ name = "skkelua", context = { input = "abc" } })
+    skkelua_source[method] = original
+    check(method .. " error fallback", type(result), case.fallback)
+    check(method .. " error notified", #notified, before + 1)
+end
+check("method errors notified", #notified, 5)
+
+local restore_gather = skkelua_source.gather
+skkelua_source.gather = function()
+    error("gather boom")
+end
+sources.gather({ name = "skkelua", context = { input = "abc" } })
+sources.gather({ name = "skkelua", context = { input = "abc" } })
+check("gather error not repeated", #notified, 6)
+skkelua_source.gather = restore_gather
+
+vim.notify = previous_notify
+vim.schedule = previous_schedule
+
 print("\n6. nvim_lsp conversion")
 local nvim_lsp = require("plugins.goda.nvim_lsp")
 local conversion = nvim_lsp._convert_item({
