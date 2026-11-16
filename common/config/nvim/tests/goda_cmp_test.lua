@@ -437,6 +437,16 @@ local dotted = nvim_lua.gather({ context = { input = "local x = vim.api.nvim_", 
 check("nvim_lua resolves trailing path", #dotted.items > 0, true)
 check("nvim_lua start at tail", dotted.start, #"local x = vim.api.")
 
+local partial = nvim_lua.gather({ context = { input = "vim.ap", filetype = "lua" } })
+local has_notify = false
+for _, item in ipairs(partial.items) do
+    if item.word == "notify" then
+        has_notify = true
+    end
+end
+check("nvim_lua keeps the full member set", has_notify, true)
+check("nvim_lua partial start", partial.start, #"vim.")
+
 local syntax_group = ""
 local restore_syn_id = stub_fn("synID", function()
     return 1

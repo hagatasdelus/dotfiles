@@ -79,13 +79,7 @@ function M.gather(opts)
     end
 
     local items = M._items(nil, head)
-    local filtered = {}
-    for _, candidate in ipairs(items) do
-        if vim.startswith(candidate.word, tail) then
-            filtered[#filtered + 1] = candidate
-        end
-    end
-    return { start = #input - #tail, items = filtered, incomplete = false }
+    return { start = #input - #tail, items = items, incomplete = false }
 end
 
 return M
