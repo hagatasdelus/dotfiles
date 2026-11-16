@@ -69,7 +69,7 @@ export PATH="${DENO_INSTALL}/bin:$PATH"
 ### Mise ###
 export PATH="${HOME}/.local/share/mise/shims:$PATH"
 
-export GHROOT="$(git config ghq.root)/github.com"
+export GHROOT="${HOME}/ghq/github.com"
 
 ### terminal color settings ###
 export CLICOLOR=1
