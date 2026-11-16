@@ -1,7 +1,7 @@
 return {
     {
         "https://github.com/nvim-telescope/telescope.nvim",
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         dependencies = {
             { "https://github.com/nvim-lua/plenary.nvim" },
             { "https://github.com/nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -57,7 +57,7 @@ return {
             local themes = require("telescope.themes")
             local previewers = require("telescope.previewers")
 
-            -- 大きなファイルのプレビューを制限
+            -- Limit previews for large files.
             local new_maker = function(filepath, bufnr, opts)
                 opts = opts or {}
                 local expand_filepath = vim.fn.expand(filepath)
@@ -69,7 +69,7 @@ return {
                     return
                 end
 
-                -- 100KB以上のファイルはプレビューしない
+                -- Do not preview files larger than 100 KB.
                 if stat.size > 100000 then
                     vim.schedule(function()
                         vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "File too large to preview" })

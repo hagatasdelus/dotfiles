@@ -2,7 +2,7 @@ return {
     {
         "https://github.com/rebelot/kanagawa.nvim",
         event = { "UiEnter", "ColorScheme" },
-        cond = not is_on_vscode(),
+        cond = not require("hagata.env").is_vscode(),
         priority = 1000,
         build = ":KanagawaCompile",
         opts = function()

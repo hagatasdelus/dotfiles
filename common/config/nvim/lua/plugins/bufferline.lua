@@ -90,7 +90,7 @@ highlights.yg_wt = {
 return {
     "https://github.com/akinsho/bufferline.nvim",
     event = { "BufAdd", "TabEnter" },
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     config = function()
         require("bufferline").setup({
             options = {

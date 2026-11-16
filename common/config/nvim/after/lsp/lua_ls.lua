@@ -55,7 +55,6 @@ return {
                     "lazy.nvim",
                     "plenary.nvim",
                     "noice.nvim",
-                    "nvim-cmp",
                     "nvim-lspconfig",
                     "snacks.nvim",
                     "oil.nvim",

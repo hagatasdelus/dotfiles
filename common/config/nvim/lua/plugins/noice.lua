@@ -1,7 +1,7 @@
 return {
     "https://github.com/folke/noice.nvim",
     event = "VeryLazy",
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     dependencies = {
         "MunifTanjim/nui.nvim",
     },
@@ -11,7 +11,6 @@ return {
                 override = {
                     ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                     ["vim.lsp.util.stylize_markdown"] = true,
-                    ["cmp.entry.get_documentation"] = true,
                 },
             },
             presets = {

@@ -1,6 +1,6 @@
 return {
     "https://github.com/kat0h/bufpreview.vim",
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     build = "deno task prepare",
     ft = {
         "markdown",

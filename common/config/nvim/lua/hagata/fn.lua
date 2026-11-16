@@ -1,4 +1,8 @@
-_G.to_bool = function(value)
+local M = {}
+
+---@param value any
+---@return boolean
+function M.to_bool(value)
     if value == nil then
         return false
     elseif type(value) == "boolean" then
@@ -12,15 +16,9 @@ _G.to_bool = function(value)
     end
 end
 
-_G.is_on_vscode = function()
-    return to_bool(vim.g.vscode)
-end
-
-_G.is_on_mac = function()
-    return vim.uv.os_uname().sysname == "Darwin"
-end
-
-_G.lambda = function(str)
+---@param str string
+---@return function
+function M.lambda(str)
     local chunk = [[
     return function(%s)
         return %s
@@ -29,3 +27,5 @@ _G.lambda = function(str)
     local arg, body = str:match("(.*):(.*)")
     return assert(load(chunk:format(arg, body)))()
 end
+
+return M

@@ -32,7 +32,7 @@ end
 vim.api.nvim_create_user_command("QuickLook", function()
     -- get current buffer absolute path
     local current_bf_abspath = vim.fn.expand("%:p")
-    require("core.utils").open_file_with_quicklook(current_bf_abspath)
+    require("hagata.utils").open_file_with_quicklook(current_bf_abspath)
 end, { nargs = 0, force = true })
 
 vim.api.nvim_create_user_command("Restart", function()
@@ -200,3 +200,7 @@ vim.api.nvim_create_user_command("Daily", function(opts)
         vim.api.nvim_buf_set_lines(0, 0, -1, false, template)
     end
 end, { nargs = "?", desc = "Open daily note" })
+
+vim.api.nvim_create_user_command("LspDiagnosticReset", function()
+    vim.diagnostic.reset()
+end, {})

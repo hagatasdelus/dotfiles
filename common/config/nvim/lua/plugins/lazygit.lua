@@ -1,7 +1,7 @@
 return {
     "https://github.com/kdheepak/lazygit.nvim",
     lazy = true,
-    cond = not is_on_vscode(),
+    cond = not require("hagata.env").is_vscode(),
     cmd = {
         "LazyGit",
         "LazyGitConfig",
@@ -21,11 +21,11 @@ return {
             pattern = "*",
             callback = function()
                 local filetype = vim.bo.filetype
-                -- filetypeにはlazygitが渡る。空文字ではない
+                -- The terminal buffer's filetype is "lazygit", not empty.
                 if filetype == "lazygit" then
-                    -- このkeymapが肝。なんでこれで動くのかは謎
+                    -- This mapping is required; the reason it works is unclear.
                     vim.api.nvim_buf_set_keymap(0, "t", "<ESC>", "<ESC>", { silent = true })
-                    -- <C-\><C-n>がNeovimとしてのESC。<ESC>はLazygitが奪う
+                    -- <C-\><C-n> is Neovim's Escape; Lazygit consumes <ESC>.
                     vim.api.nvim_buf_set_keymap(0, "t", "<C-v><ESC>", [[<C-\><C-n>]], { silent = true })
                 end
             end,
