@@ -45,6 +45,10 @@ local function is_table(value)
     return type(value) == "table"
 end
 
+local function is_table_or_nil(value)
+    return value == nil or type(value) == "table"
+end
+
 local function is_number(value)
     return type(value) == "number"
 end
@@ -79,7 +83,7 @@ function M.complete(opts)
 end
 
 function M.resolve(opts)
-    return call(opts, "resolve", nil, is_table)
+    return call(opts, "resolve", nil, is_table_or_nil)
 end
 
 return M

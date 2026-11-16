@@ -313,6 +313,19 @@ sources.gather({ name = "skkelua", context = { input = "abc" } })
 check("gather error not repeated", #notified, 6)
 skkelua_source.gather = restore_gather
 
+local restore_resolve = skkelua_source.resolve
+skkelua_source.resolve = function()
+    return nil
+end
+check("resolve nil is valid", sources.resolve({ name = "skkelua", context = { input = "abc" } }), nil)
+check("resolve nil not notified", #notified, 6)
+skkelua_source.resolve = function()
+    return "invalid"
+end
+check("resolve invalid is nil", sources.resolve({ name = "skkelua", context = { input = "abc" } }), nil)
+check("resolve invalid notified", #notified, 7)
+skkelua_source.resolve = restore_resolve
+
 vim.notify = previous_notify
 vim.schedule = previous_schedule
 
@@ -423,6 +436,31 @@ check("nvim_lua start after dot", prefixed.start, #"local x = vim.")
 local dotted = nvim_lua.gather({ context = { input = "local x = vim.api.nvim_", filetype = "lua" } })
 check("nvim_lua resolves trailing path", #dotted.items > 0, true)
 check("nvim_lua start at tail", dotted.start, #"local x = vim.api.")
+
+local syntax_group = ""
+local restore_syn_id = stub_fn("synID", function()
+    return 1
+end)
+local restore_syn_trans = stub_fn("synIDtrans", function(id)
+    return id
+end)
+local restore_syn_attr = stub_fn("synIDattr", function()
+    return syntax_group
+end)
+
+syntax_group = "String"
+local in_string = nvim_lua.gather({ context = { input = 'print("vim.', filetype = "lua", lnum = 1 } })
+check("nvim_lua skips strings", #in_string.items, 0)
+syntax_group = "Comment"
+local in_comment = nvim_lua.gather({ context = { input = "-- vim.", filetype = "lua", lnum = 1 } })
+check("nvim_lua skips comments", #in_comment.items, 0)
+syntax_group = ""
+local in_code = nvim_lua.gather({ context = { input = "local x = vim.", filetype = "lua", lnum = 1 } })
+check("nvim_lua keeps code", #in_code.items > 0, true)
+
+restore_syn_attr()
+restore_syn_trans()
+restore_syn_id()
 
 print("\n8. completion keymaps")
 local manual_calls = {}

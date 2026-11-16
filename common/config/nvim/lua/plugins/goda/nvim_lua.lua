@@ -51,11 +51,25 @@ function M._items(_, path)
     return items
 end
 
+local function in_string_or_comment(context)
+    local lnum = context.lnum
+    local col = #(context.input or "")
+    if not lnum or col == 0 then
+        return false
+    end
+    local id = vim.fn.synID(lnum, col, 1)
+    local name = vim.fn.synIDattr(vim.fn.synIDtrans(id), "name")
+    return name:find("String", 1, true) ~= nil or name:find("Comment", 1, true) ~= nil
+end
+
 function M.gather(opts)
     local context = opts.context or {}
     local input = context.input or ""
     local filetype = context.filetype or vim.bo.filetype
     if filetype ~= "lua" and filetype ~= "vim" then
+        return { start = #input, items = {}, incomplete = false }
+    end
+    if context.mode ~= "c" and in_string_or_comment(context) then
         return { start = #input, items = {}, incomplete = false }
     end
 
