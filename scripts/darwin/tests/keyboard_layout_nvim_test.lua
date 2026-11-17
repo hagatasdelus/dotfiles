@@ -1,9 +1,9 @@
--- Tests plugins.skkeleton.keyboard_layout state watching
+-- Tests plugins.skkelua.keyboard_layout state watching
 --
 --   DOTFILES_DIR=... XDG_STATE_HOME=$(mktemp -d) \
 --   nvim --headless --clean -c "luafile scripts/darwin/tests/keyboard_layout_nvim_test.lua"
 --
--- plugins/skkeleton/azik and Snacks are stubbed, so the real config is untouched.
+-- plugins/skkelua/azik and Snacks are stubbed, so the real config is untouched.
 local repo = assert(os.getenv("DOTFILES_DIR"), "DOTFILES_DIR is required")
 
 package.path = string.format("%s/common/config/nvim/lua/?.lua;%s/common/config/nvim/lua/?/init.lua;", repo, repo)
@@ -31,7 +31,7 @@ _G.Snacks = {
 
 -- Stub azik, recording register() calls
 local registered = {}
-package.preload["plugins.skkeleton.azik"] = function()
+package.preload["plugins.skkelua.azik"] = function()
     return {
         register = function(layout)
             table.insert(registered, layout)
@@ -64,7 +64,7 @@ local function write_state(azik)
     os.rename(tmp, state_file)
 end
 
-local keyboard_layout = require("plugins.skkeleton.keyboard_layout")
+local keyboard_layout = require("plugins.skkelua.keyboard_layout")
 
 print("1. state.json path and reading")
 check("state_dir", keyboard_layout.state_dir(), state_dir)
