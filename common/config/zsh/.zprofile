@@ -11,6 +11,10 @@ export TERMINFO="/usr/share/terminfo/"
 export SQLITE_HISTORY="${XDG_STATE_HOME}/sqlite_history"
 export PYTHON_HISTORY="${XDG_STATE_HOME}/python_history"
 
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
+export BUN_INSTALL="${HOME}/.bun"
+
 typeset arch
 arch="$(uname -m)"
 typeset brew_bin=""
