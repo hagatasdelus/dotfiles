@@ -3,7 +3,7 @@
 #
 
 alias ls='eza'
-alias eza='eza -l --header --icons'
+alias eza='eza -l --header --icons=auto'
 alias la='ls -laO'
 alias ll='ls -l'
 

@@ -127,9 +127,9 @@ function _ghq_fzf_render_preview() {
 
   if (( $+commands[eza] )); then
     if (( preview_cols >= min_cols_for_table )); then
-      eza --color=always -la --icons --time-style=long-iso "${full_path}"
+      eza --color=always -la --icons=auto --time-style=long-iso "${full_path}"
     else
-      eza --color=always -1a --icons "${full_path}"
+      eza --color=always -1a --icons=auto "${full_path}"
     fi
   else
     ls -la "${full_path}"
